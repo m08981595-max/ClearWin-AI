@@ -63,7 +63,7 @@ namespace ClearWin.WebInstaller
 
     public class InstallerForm : Form
     {
-        private const string ExpectedSha256 = "DD4EEE6AFA4DCC773F48DE1287B303BD87BC2FF14ADE573C6B26B8D2F1F9A822";
+        private const string ExpectedSha256 = "D2552BBE5DD439176B343F66A23770546FD5E563E9CBED11F15EF64FDF8C74CA";
         private const string DefaultDownloadUrl = "https://github.com/m08981595-max/ClearWin-AI/releases/download/v2.7.7/ClearWin-Setup-2.7.7.exe";
 
         // Dragging support

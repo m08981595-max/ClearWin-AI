@@ -128,8 +128,8 @@ Write-Host "WebView2 Core: $($wvCore.FullName)"
 Write-Host "WebView2 Loader: $($wvLoader.FullName)"
 
 
-# Find all .cs files (exclude test files and AdminHelperProgram)
-$csFiles = Get-ChildItem -Path $srcDir -Filter "*.cs" -Recurse | Where-Object { $_.Name -ne "TestEntry.cs" -and $_.Name -ne "UnitTests.cs" -and $_.Name -ne "AIDecisionDemo.cs" -and $_.Name -ne "NeuralNetworkTest.cs" -and $_.Name -ne "OptimizationAITest.cs" -and $_.Name -ne "AdminHelperProgram.cs" } | ForEach-Object { $_.FullName }
+# Find all .cs files (exclude test files and AdminHelperProgram and WebInstallerProgram)
+$csFiles = Get-ChildItem -Path $srcDir -Filter "*.cs" -Recurse | Where-Object { $_.Name -ne "TestEntry.cs" -and $_.Name -ne "UnitTests.cs" -and $_.Name -ne "AIDecisionDemo.cs" -and $_.Name -ne "NeuralNetworkTest.cs" -and $_.Name -ne "OptimizationAITest.cs" -and $_.Name -ne "AdminHelperProgram.cs" -and $_.Name -ne "WebInstallerProgram.cs" } | ForEach-Object { $_.FullName }
 
 $iconArg = if (Test-Path $iconPath) { "/win32icon:$iconPath" } else { $null }
 
@@ -165,6 +165,20 @@ Write-Host "Compiling ClearWin.AdminHelper.exe..."
 if ($LASTEXITCODE -ne 0) {
     Write-Error "Admin Helper compilation failed with exit code $LASTEXITCODE."
     exit $LASTEXITCODE
+}
+
+# Compile ClearWin-Setup.exe / WebBootstrapper
+$installerSrc = Join-Path $srcDir "WebInstaller\WebInstallerProgram.cs"
+if (Test-Path $installerSrc) {
+    Write-Host "Compiling ClearWin-Setup.exe (Web Bootstrapper)..."
+    $installerOut = Join-Path $projectRoot "ClearWin-Setup.exe"
+    $installerArgs = @("/target:winexe", "/platform:x64", "/langversion:$langVersion", "/out:$installerOut", "/r:System.dll", "/r:System.Core.dll", "/r:System.Windows.Forms.dll", "/r:System.Drawing.dll", "/r:System.Net.Http.dll", $installerSrc)
+    if ($iconArg) { $installerArgs += $iconArg }
+    & $csc @installerArgs
+    if (Test-Path $installerOut) {
+        Copy-Item $installerOut (Join-Path $projectRoot "ClearWin-WebInstaller.exe") -Force
+        Copy-Item $installerOut (Join-Path $projectRoot "release\v2.7.7\ClearWin-WebInstaller.exe") -Force -ErrorAction SilentlyContinue
+    }
 }
 
 if (Test-Path $exePath) {
