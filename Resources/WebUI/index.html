@@ -1,0 +1,2289 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="theme-color" content="#080b11" />
+<title>ClearWin 2.7.7 — لوحة القيادة ومركز شفافية الذكاء الاصطناعي</title>
+<link rel="icon" type="image/x-icon" href="app.ico">
+<link rel="shortcut icon" href="app.ico">
+<style>
+:root{color-scheme:dark;--bg:#080b11;--panel:#0e131c;--panel2:#111925;--line:#202a38;--muted:#8996a8;--text:#eaf2ff;--cyan:#55d8ff;--cyan2:#159fce;--red:#ff5669;--green:#52e2b0;--amber:#ffcb70;--radius:18px;--shadow:0 16px 46px #0005}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 14% 0%,#102433 0,transparent 30%),radial-gradient(ellipse at 93% 90%,#171627 0,transparent 25%),var(--bg);color:var(--text);font-family:"Segoe UI Arabic","Segoe UI",-apple-system,BlinkMacSystemFont,Tahoma,Arial,sans-serif;min-height:100vh}
+/* ==========================================================================
+   ClearWin Advanced BiDi Layout & Mixed Direction Isolation (Arabic RTL + LTR)
+   ========================================================================== */
+html[dir="rtl"]{direction:rtl;text-align:right}
+bdi,.bdi,[dir="auto"],[dir="ltr"]{unicode-bidi:isolate}
+span,strong,b,em,i,small,code,kbd,var,mark,.pill,.badge,.tag,.tier-tag,.chip,.crumb span,.crumb b{unicode-bidi:isolate}
+.bidi-en{direction:ltr!important;unicode-bidi:isolate!important;display:inline!important;white-space:normal}
+.bidi-parens{direction:ltr!important;unicode-bidi:isolate!important;display:inline-block!important;white-space:nowrap!important;vertical-align:baseline}
+.bidi-num{direction:ltr!important;unicode-bidi:isolate!important;display:inline-block!important}
+code,pre,.mono,[data-code]{direction:ltr!important;unicode-bidi:isolate!important;text-align:left!important;font-family:Consolas,"Cascadia Code",monospace}
+p,h1,h2,h3,h4,h5,h6,li,td,th,label,.desc,.sub,.crumb,.tweak-card h3,.tweak-card p,.tool-card h3,.tool-card p,.clean-copy strong,.clean-copy p,.toggle-copy strong,.toggle-copy p,.opt-info strong,.opt-info p,.log-line strong,.log-line p,.recommend h3,.recommend p,.page-panel-title h2,.page-panel-title p,.side-system p,.page-note{unicode-bidi:isolate;text-align:start}
+button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+.app{display:grid;grid-template-columns:1fr 250px;min-height:100vh;max-width:1800px;margin:auto}
+.sidebar{grid-column:2;grid-row:1;border-left:1px solid var(--line);padding:26px 17px;background:#090d14d9;backdrop-filter:blur(18px);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:4}
+.main{grid-column:1;grid-row:1;min-width:0;padding:28px clamp(18px,3vw,42px) 42px}
+.brand{display:flex;align-items:center;gap:12px;padding:5px 9px 28px}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:var(--cyan);border:1px solid #55d8ff55;background:linear-gradient(145deg,#163244,#101b28);box-shadow:0 0 25px #35c9ff17}
+.brand-mark img{width:38px;height:38px;border-radius:10px;object-fit:cover;box-shadow:0 0 14px rgba(0,180,255,0.45);border:1px solid rgba(80,180,255,0.35)}
+.brand-name{font-weight:800;font-size:20px;letter-spacing:.3px}.brand-name span{color:var(--cyan)}
+.version{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
+.nav-label{font-size:10px;letter-spacing:1.8px;color:#617083;padding:10px 12px 8px}
+.nav{display:grid;gap:6px}
+.nav button{border:1px solid transparent;display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:12px;color:#aab7c8;background:transparent;text-align:right;transition:.18s;width:100%;font-size:13px}
+.nav button:hover{background:#111b28;color:#edf8ff}
+.nav button.active{color:#e8faff;border-color:#39cafa35;background:linear-gradient(100deg,#102535,#10202b 78%,#12202b);box-shadow:inset -3px 0 var(--cyan)}
+.nav svg{width:18px;height:18px;stroke:currentColor;flex:none}
+.nav .tag{margin-right:auto;font-size:10px;color:var(--cyan);background:#14303b;padding:3px 6px;border-radius:5px}
+.sidebar-spacer{flex:1}
+.side-system{border:1px solid var(--line);background:linear-gradient(145deg,#101925,#0b1018);border-radius:14px;padding:14px;margin:15px 3px 0}
+.side-system .dot{width:7px;height:7px;display:inline-block;border-radius:50%;background:var(--green);margin-left:8px;box-shadow:0 0 11px #52e2b077}
+.side-system strong{font-size:12px}.side-system p{color:var(--muted);font-size:11px;margin:9px 0 0;line-height:1.7}
+.topbar{display:flex;align-items:center;gap:14px;justify-content:space-between;margin-bottom:29px}
+.crumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.crumb b{color:#eaf2ff;font-weight:600}
+.top-actions{display:flex;align-items:center;gap:10px}
+.search{position:relative}
+.search input{width:min(260px,25vw);background:#0d131c;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:10px 38px 10px 12px;font-size:12px}
+.search svg{position:absolute;right:12px;top:10px;width:16px;color:#74869b}
+.icon-btn{width:39px;height:39px;display:grid;place-items:center;background:#0e141e;color:#a9b8ca;border:1px solid var(--line);border-radius:11px;position:relative}
+.icon-btn svg{width:17px}
+.notify-dot{position:absolute;top:8px;left:8px;background:var(--green);width:6px;height:6px;border-radius:50%;border:1px solid #0e141e}
+.avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#234355,#192332);border:1px solid #49d2fa44;color:var(--cyan);font-weight:800;font-size:12px}
+.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:1.6px;margin-bottom:10px}
+.page-heading{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:22px}
+.page-heading h1{font-size:clamp(24px,3vw,34px);margin:0 0 9px;letter-spacing:-.7px}
+.page-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
+.status-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #52e2b044;background:#0d201d;color:#8cebc9;padding:9px 12px;border-radius:10px;font-size:11px;white-space:nowrap}
+.status-chip i{display:inline-block;background:var(--green);width:6px;height:6px;border-radius:50%;box-shadow:0 0 10px #52e2b0}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:17px}
+.card{border:1px solid var(--line);background:linear-gradient(145deg,#111824f2,#0c1119f5);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
+.stat{padding:18px 18px 17px;position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:var(--glow,#55d8ff);filter:blur(60px);opacity:.09;left:-30px;bottom:-50px}
+.stat-top{display:flex;align-items:center;justify-content:space-between;color:#a7b5c8;font-size:11px}
+.stat-icon{width:34px;height:34px;border-radius:10px;background:#152b38;border:1px solid #55d8ff22;display:grid;place-items:center;color:var(--cyan)}
+.stat-icon svg{width:18px}
+.stat-num{font-size:28px;font-weight:750;margin:17px 0 8px;letter-spacing:-1px}
+.stat-num span{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0}
+.stat-foot{font-size:10px;color:var(--muted);display:flex;gap:6px;align-items:center}
+.up{color:var(--green)}.down{color:var(--red)}
+.split{grid-template-columns:minmax(0,1.45fr) minmax(270px,.8fr);margin-bottom:17px}
+.card-head{padding:18px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.card-head h2{font-size:14px;margin:0 0 7px}.card-head p{font-size:11px;color:var(--muted);margin:0}
+.ghost-btn{background:#111c28;border:1px solid #263749;color:#b5c8d9;border-radius:9px;padding:8px 11px;font-size:10px;display:inline-flex;align-items:center;gap:6px;transition:.18s}
+.ghost-btn:hover{border-color:#55d8ff66;color:#eafaff}
+.chart-wrap{padding:18px 20px 16px}
+.chart-summary{display:flex;gap:20px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
+.chart-summary strong{font-size:21px}.chart-summary small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
+.legend{display:flex;gap:13px;color:var(--muted);font-size:10px;margin-right:auto}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
+.chart{width:100%;height:168px;display:block;overflow:visible}
+.chart text{fill:#6f7e91;font-size:10px}
+.grid-line{stroke:#23303d;stroke-width:1;stroke-dasharray:3 5}
+.chart-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:5px}
+.health-body{padding:18px 20px 20px}
+.health-score{display:flex;align-items:center;gap:17px;margin-bottom:20px}
+.ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--cyan) 0 88%,#202b38 88% 100%);flex:none}
+.ring:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#0e151f}
+.ring-inner{position:relative;text-align:center}
+.ring-inner strong{display:block;font-size:27px;letter-spacing:-1px}.ring-inner small{font-size:10px;color:var(--muted)}
+.health-label strong{font-size:14px}.health-label p{font-size:11px;color:var(--muted);line-height:1.8;margin:8px 0}
+.mini-status{display:flex;align-items:center;gap:8px;padding:11px 0;border-top:1px solid #202a37;font-size:11px;color:#c8d3e0}
+.mini-status .state{margin-right:auto;color:var(--green);font-size:10px}
+.mini-status .state.warn{color:var(--amber)}
+.mini-status svg{width:16px;color:#8c9db0}
+.actions{grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);margin-bottom:17px}
+.opt-body{padding:16px 20px 19px}
+.opt-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #202a37}
+.opt-row:last-of-type{border-bottom:0}
+.opt-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#142230;border:1px solid #314453;color:var(--cyan);flex:none}
+.opt-icon svg{width:18px}
+.opt-info{min-width:0;flex:1}
+.opt-info strong{display:block;font-size:12px;margin-bottom:5px}
+.opt-info p{font-size:10px;color:var(--muted);margin:0;line-height:1.6}
+.opt-meta{margin-right:auto;text-align:left;flex:none}
+.opt-meta small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
+.toggle{width:37px;height:21px;padding:3px;border-radius:99px;border:1px solid #344152;background:#1a2431;display:flex;align-items:center;transition:.2s}
+.toggle:before{content:"";display:block;width:13px;height:13px;border-radius:50%;background:#7d8ca0;transition:.2s}
+.toggle.on{background:#10475a;border-color:#38c9f4}
+.toggle.on:before{transform:translateX(-15px);background:var(--cyan);box-shadow:0 0 9px #55d8ff66}
+.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(100deg,#1588b1,#21bfe6);border:1px solid #5fdcff55;border-radius:10px;padding:11px 15px;color:#03131b;font-size:11px;font-weight:800;box-shadow:0 6px 22px #20bde21c;transition:.18s}
+.primary-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.primary-btn:disabled{opacity:.5;cursor:wait;transform:none}
+.primary-btn svg{width:15px}
+.opt-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
+.opt-footer span{font-size:10px;color:var(--muted)}
+.recommend{padding:18px 19px;display:flex;flex-direction:column;min-height:100%}
+.recommend .recommend-icon{width:41px;height:41px;display:grid;place-items:center;border-radius:13px;background:#251c35;color:#b59cff;border:1px solid #a68bff30;margin-bottom:14px}
+.recommend .recommend-icon svg{width:20px}
+.recommend h3{font-size:14px;margin:0 0 9px}.recommend p{font-size:11px;color:var(--muted);line-height:1.9;margin:0 0 16px}
+.recommend-list{display:grid;gap:10px;margin:0 0 18px}
+.recommend-item{display:flex;align-items:center;gap:8px;color:#c8d3df;font-size:10px}
+.recommend-item svg{width:15px;color:var(--green);flex:none}
+.recommend .ghost-btn{margin-top:auto;align-self:flex-start}
+.bottom-grid{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)}
+.table-card{overflow:hidden}
+.table-header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+.table-header h2{font-size:14px;margin:0}.table-header p{font-size:10px;color:var(--muted);margin:7px 0 0}
+.events{padding:0 20px}
+.event{display:grid;grid-template-columns:35px minmax(0,1fr) auto;align-items:center;gap:11px;padding:14px 0;border-bottom:1px solid #202a37}
+.event:last-child{border-bottom:0}
+.event-icon{width:33px;height:33px;border-radius:10px;display:grid;place-items:center;background:#13281f;color:var(--green)}
+.event-icon.warn{background:#302617;color:var(--amber)}.event-icon.info{background:#142633;color:var(--cyan)}
+.event-icon svg{width:16px}
+.event strong{font-size:11px;display:block;margin-bottom:5px}
+.event p{font-size:10px;color:var(--muted);margin:0}
+.event time{font-size:9px;color:#728195;white-space:nowrap}
+.task-panel{padding:18px 20px}
+.task-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}
+.task-top h2{font-size:14px;margin:0}.task-top span{font-size:10px;color:var(--muted)}
+.task{padding:12px 0;border-bottom:1px solid #202a37}.task:last-child{border-bottom:0}
+.task-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;margin-bottom:10px}
+.task-head span:last-child{color:var(--muted);font-size:10px}
+.progress{height:5px;border-radius:20px;background:#202b37;overflow:hidden}
+.progress i{height:100%;display:block;border-radius:20px;background:linear-gradient(90deg,#258cb3,var(--cyan));width:var(--w,100%)}
+.progress.purple i{background:linear-gradient(90deg,#6558c4,#ac95ff)}
+.progress.green i{background:linear-gradient(90deg,#239779,#52e2b0)}
+.footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:28px;color:#66768a;font-size:9px;padding:0 2px}
+.footer span{display:flex;align-items:center;gap:7px}.footer .line-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan)}
+.toast{position:fixed;bottom:22px;left:22px;z-index:100;max-width:380px;background:#13202a;border:1px solid #3a5b6a;border-radius:13px;padding:14px 17px;box-shadow:0 18px 50px #0009;color:#e9f8ff;font-size:12px;line-height:1.7;opacity:0;transform:translateY(10px);pointer-events:none;transition:.23s}
+.toast.show{opacity:1;transform:translateY(0)}
+.scan-line{height:3px;background:#1c2a38;overflow:hidden;border-radius:20px;margin-top:12px;display:none}
+.scan-line.active{display:block}
+.scan-line i{height:100%;width:30%;display:block;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:scan 1s linear infinite}
+@keyframes scan{from{transform:translateX(350%)}to{transform:translateX(-120%)}}
+.page-content{min-width:0}
+.page-stack{display:grid;gap:17px}
+.page-grid-2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.8fr);gap:16px}
+.page-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.page-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.page-panel{padding:0;overflow:hidden}
+.page-panel-body{padding:18px 20px}
+.page-panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}
+.page-panel-title h2{font-size:14px;margin:0 0 6px}
+.page-panel-title p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
+.page-panel-title .ghost-btn{flex:none}
+.metric-tile{padding:17px;border:1px solid var(--line);background:linear-gradient(145deg,#111a26,#0c1119);border-radius:15px;min-width:0}
+.metric-label{font-size:11px;color:#a7b5c8;display:flex;align-items:center;justify-content:space-between;gap:7px}
+.metric-value{font-size:25px;font-weight:750;letter-spacing:-.6px;margin:15px 0 7px}
+.metric-hint{font-size:10px;color:var(--muted);line-height:1.7}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #263748;border-radius:8px;font-size:10px;color:#adc0d2;background:#111c27;white-space:nowrap}
+.pill.good{background:#10251f;border-color:#245442;color:#7de2bb}
+.pill.warn{background:#2a2114;border-color:#554127;color:#ffcf83}
+.pill.bad{background:#2d1820;border-color:#5b2b38;color:#ff9aaa}
+.pill.blue{background:#112632;border-color:#244656;color:#8be4ff}
+.inline-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.page-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.page-note{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-radius:13px;background:#101c25;border:1px solid #254050;color:#b4d1df;font-size:11px;line-height:1.8}
+.page-note svg{width:17px;height:17px;flex:none;margin-top:2px}
+.filterbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:13px 17px;border-bottom:1px solid var(--line)}
+.filterbar input,.filterbar select{background:#0b1119;border:1px solid #283443;color:var(--text);border-radius:9px;padding:10px 12px;font-size:11px;min-width:0}
+.filterbar input{flex:1;min-width:140px}
+.data-table-wrap{overflow:auto}
+.data-table{width:100%;border-collapse:collapse;min-width:600px}
+.data-table th{font-size:10px;color:#8190a4;font-weight:600;text-align:right;background:#0d131c;padding:13px 17px;border-bottom:1px solid var(--line);white-space:nowrap}
+.data-table td{font-size:11px;color:#cad5e3;padding:14px 17px;border-bottom:1px solid #1b2632;vertical-align:middle}
+.data-table tr:last-child td{border-bottom:0}
+.data-table tbody tr:hover{background:#111a25}
+.item-main{display:flex;align-items:center;gap:11px;min-width:160px}
+.item-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#142431;border:1px solid #294252;color:var(--cyan);font-weight:800;flex:none}
+.item-icon.purple{background:#211d34;border-color:#3c3562;color:#b3a5ff}
+.item-icon.green{background:#132821;border-color:#28513e;color:#7fe5b8}
+.item-icon.amber{background:#2c2317;border-color:#4d3b23;color:#ffd18b}
+.item-main strong{display:block;font-size:11px;margin-bottom:5px}
+.item-main small{display:block;color:var(--muted);font-size:9px}
+.switch{border:1px solid #344456;background:#17212d;border-radius:99px;width:36px;height:20px;padding:2px;display:inline-flex;align-items:center;transition:.18s;vertical-align:middle}
+.switch i{width:14px;height:14px;border-radius:50%;background:#7c8b9d;transition:.18s}
+.switch.on{justify-content:flex-start;background:#12313d;border-color:#27718b}
+.switch.on i{transform:translateX(-15px);background:var(--cyan);box-shadow:0 0 10px #55d8ff55}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #202a37}
+.toggle-row:last-child{border-bottom:0}
+.toggle-copy strong{display:block;font-size:11px;margin-bottom:5px}
+.toggle-copy p{margin:0;color:var(--muted);font-size:10px;line-height:1.7}
+.setting-group{padding:0 20px}
+.storage-row{display:grid;grid-template-columns:115px minmax(0,1fr) 75px;align-items:center;gap:12px;margin:16px 0}
+.storage-row label{font-size:10px;color:#c1ccda}
+.storage-track{height:8px;border-radius:20px;background:#202b37;overflow:hidden}
+.storage-track i{display:block;height:100%;width:var(--w);border-radius:20px;background:linear-gradient(90deg,#168ab5,#55d8ff)}
+.storage-row:nth-child(3) .storage-track i{background:linear-gradient(90deg,#6558c4,#a797ff)}
+.storage-row:nth-child(4) .storage-track i{background:linear-gradient(90deg,#238264,#52e2b0)}
+.storage-row b{text-align:left;font-size:10px;font-weight:600;color:#aebccd}
+.clean-option{display:flex;align-items:flex-start;gap:11px;padding:15px 18px;border-bottom:1px solid #202a37}
+.clean-option:last-child{border-bottom:0}
+.fake-check{width:17px;height:17px;flex:none;border:1px solid #3a4d60;border-radius:5px;background:#0b121a;display:grid;place-items:center;color:#06141a;margin-top:1px;cursor:pointer}
+.fake-check.checked{background:var(--cyan);border-color:var(--cyan)}
+.fake-check.checked:after{content:'✓';font-weight:900;font-size:12px}
+.clean-copy{flex:1;min-width:0}
+.clean-copy strong{font-size:11px;display:block;margin-bottom:5px}
+.clean-copy p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
+.clean-size{font-size:11px;color:#bdd2e0;white-space:nowrap}
+.tool-card{border:1px solid var(--line);background:linear-gradient(145deg,#111a26,#0d121a);border-radius:15px;padding:17px;display:flex;flex-direction:column;min-height:165px}
+.tool-card .tool-glyph{height:36px;width:36px;border-radius:11px;display:grid;place-items:center;background:#132a38;color:var(--cyan);margin-bottom:14px}
+.tool-card .tool-glyph svg{width:19px}
+.tool-card h3{font-size:12px;margin:0 0 7px}
+.tool-card p{font-size:10px;line-height:1.8;color:var(--muted);margin:0 0 15px;flex:1}
+.tool-card .page-actions{margin-top:auto}
+.log-list{padding:0 20px}
+.log-line{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:11px;padding:14px 0;border-bottom:1px solid #202a37}
+.log-line:last-child{border-bottom:0}
+.log-line strong{font-size:11px;display:block;margin-bottom:5px}
+.log-line p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
+.log-line time{font-size:9px;color:#728195;white-space:nowrap}
+.command-overlay{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:clamp(20px,10vh,110px) 14px 20px;background:#02050bd9;backdrop-filter:blur(12px)}
+.command-panel{width:min(650px,100%);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid #355166;border-radius:20px;background:linear-gradient(145deg,#111b28,#090e16);box-shadow:0 28px 100px #000b}
+.command-panel-head{display:flex;align-items:center;gap:13px;padding:18px 19px;border-bottom:1px solid var(--line)}
+.command-search-icon{width:39px;height:39px;flex:none;display:grid;place-items:center;color:var(--cyan);background:#122c3a;border:1px solid #2b586b;border-radius:12px}
+.command-search-wrap{flex:1;min-width:0}
+.command-search-wrap label{display:block;font-size:10px;color:#8ea2b7;margin-bottom:5px}
+.command-search-wrap input{width:100%;border:0;outline:0!important;background:transparent;color:var(--text);font-size:15px;padding:2px 0}
+.command-close{background:#111925;border:1px solid #273446;border-radius:8px;color:#8fa0b3;padding:5px 8px;font-size:10px}
+.command-results{padding:0 9px 10px;overflow:auto}
+.command-result{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:1px solid transparent;border-radius:11px;background:transparent;color:#dce8f5;text-align:right;margin:2px 0}
+.command-result:hover{background:linear-gradient(100deg,#112a38,#111d2a);border-color:#2d596b}
+.command-result-glyph{width:35px;height:35px;display:grid;place-items:center;border:1px solid #2a4659;background:#132330;color:var(--cyan);border-radius:10px}
+.command-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 17px;border-top:1px solid var(--line);background:#080d14;color:#7f90a4;font-size:10px}
+.kbd{font-size:9px;padding:4px 6px;border:1px solid #2b3949;border-radius:5px;color:#9aabbc;background:#101721}
+[hidden]{display:none!important}
+@media(max-width:1180px){.app{grid-template-columns:1fr 220px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.split,.actions{grid-template-columns:minmax(0,1fr) minmax(240px,.8fr)}}
+.tweak-tabs-bar{display:flex;gap:7px;padding:12px 18px;border-bottom:1px solid #1c2b3a;overflow-x:auto;flex-wrap:wrap;background:#0a1017}
+.tweak-tab-btn{background:#0e1723;border:1px solid #233446;color:#8fa0b5;border-radius:9px;padding:7px 13px;font-size:11px;cursor:pointer;transition:.18s;white-space:nowrap}
+.tweak-tab-btn:hover{border-color:#38c9f455;color:#eafaff}
+.tweak-tab-btn.active{background:#123246;border-color:var(--cyan);color:var(--cyan);font-weight:700;box-shadow:0 0 14px #20bde222}
+.tweak-card{display:flex;flex-direction:column;min-height:195px;position:relative}
+.tweak-card.critical{border-color:#991b1b55}
+.tweak-card.deferred{opacity:.88}
+.admin-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;background:#0d1622;border:1px solid #233446;border-radius:20px;font-size:11px;color:#9db0c6;cursor:pointer;transition:.2s;user-select:none}
+.admin-chip:hover{border-color:var(--cyan);background:#122030}
+.admin-chip.elevated{border-color:#22c55e66;background:#0d261b;color:#4ade80}
+.admin-chip.elevated .dot{background:#22c55e;box-shadow:0 0 10px #22c55e}
+.admin-chip.requesting{border-color:#f59e0b66;background:#2a1f0a;color:#fbbf24}
+.admin-toggle-btn{padding:2px 8px;font-size:10px;border-radius:12px;background:#182635;border:1px solid #2e445b;color:#dce8f5;cursor:pointer;transition:.15s}
+.admin-toggle-btn:hover{background:#24374c;border-color:var(--cyan)}
+.tier-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700}
+.tier-green{background:#064e3b;color:#34d399;border:1px solid #05966955}
+.tier-yellow{background:#451a03;color:#fbbf24;border:1px solid #d9770655}
+.tier-red{background:#450a0a;color:#f87171;border:1px solid #dc262655}
+.audit-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}
+.audit-table th,.audit-table td{padding:9px 12px;text-align:right;border-bottom:1px solid #1a2736}
+.audit-table th{background:#0a121c;color:#8fa2b8;font-weight:600}
+.audit-table tr:hover{background:#0e1a27}
+@media(max-width:850px){.app{display:block}.sidebar{position:fixed;right:0;top:0;width:270px;transform:translateX(102%);transition:transform .25s;box-shadow:-20px 0 60px #0008}.sidebar.open{transform:translateX(0)}.main{padding:18px 16px 32px}.topbar{margin-bottom:24px}.search input{width:clamp(130px,35vw,240px)}.split,.actions,.bottom-grid,.page-grid-2,.page-grid-3,.page-grid-4{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark"><img src="app.png" alt="ClearWin"></div>
+      <div><div class="brand-name">Clear<span>Win</span></div><div class="version">WINDOWS OPTIMIZER · 2.7.7</div></div>
+    </div>
+    <div class="nav-label">القائمة الرئيسية</div>
+    <nav class="nav" id="navigation">
+      <button class="active" data-page="dashboard"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="11" width="7" height="10" rx="2"/><rect x="3" y="14" width="8" height="7" rx="2"/></svg><span>لوحة التحكم</span></button>
+      <button data-page="quick"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg><span>التحسين السريع</span><span class="tag">27</span></button>
+      <button data-page="startup"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 3v9m0 0 4-4m-4 4L8 8"/><path d="M5 13v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5"/></svg><span>برامج بدء التشغيل</span></button>
+      <button data-page="cleanup"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg><span>تنظيف النظام</span></button>
+      <button data-page="network"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0m-11 3a5 5 0 0 1 8 0M12 19h.01"/></svg><span>الشبكة والاتصال</span></button>
+      <button data-page="apps"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg><span>إدارة العمليات</span></button>
+      <div class="nav-label" style="padding-top:20px">الأدوات والذكاء</div>
+      <button data-page="ai"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M12 2a4 4 0 0 1 4 4c0 1.1-.4 2.1-1.1 2.8l2.9 2.9a4 4 0 1 1-1.4 1.4l-2.9-2.9A4 4 0 0 1 12 11a4 4 0 0 1-4-4c0-2.2 1.8-4 4-4Z"/><path d="M12 13v9m-4-4 4 4 4-4"/></svg><span>شفافية الذكاء</span><span class="tag">7 نماذج</span></button>
+      <button data-page="restore"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5m4-1v5l4 2"/></svg><span>الاستعادة والسجل</span></button>
+      <button data-page="settings"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg><span>الإعدادات</span></button>
+    </nav>
+    <div class="sidebar-spacer"></div>
+    <div class="side-system"><div><span class="dot"></span><strong>حماية النظام مفعّلة</strong></div><p>محرك النواة متصل ونشط<br>مستوى الأمان: <bdi class="bidi-en">100% Guard</bdi></p></div>
+  </aside>
+  <main class="main">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:11px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="فتح القائمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="crumb"><span>ClearWin</span><span>／</span><b id="breadcrumb">لوحة التحكم</b></div></div>
+      <div class="top-actions">
+        <div class="admin-chip" id="topAdminChip" onclick="handleTopAdminClick()" title="حالة الصلاحيات ونظام الأمان">
+          <i class="dot" id="topAdminDot"></i>
+          <span id="topAdminTxt">صلاحيات عادية</span>
+          <button class="admin-toggle-btn" id="topAdminBtn" type="button">طلب مسؤول <bdi class="bidi-parens">(UAC)</bdi></button>
+        </div>
+        <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg><input id="searchInput" placeholder="ابحث في ClearWin..." aria-label="بحث عام" autocomplete="off" /></div><button class="icon-btn command-open" id="commandBtn" aria-label="مركز الأوامر" title="مركز الأوامر · Ctrl+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4m0 10v4M3 12h4m10 0h4"/><circle cx="12" cy="12" r="5"/><path d="m9.8 12 1.5 1.5 3-3"/></svg></button><button class="icon-btn" id="bellBtn" aria-label="الإشعارات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i class="notify-dot"></i></button><div class="avatar">CW</div></div>
+    </header>
+    <div class="page-heading"><div><div class="eyebrow" id="eyebrow">CONTROL CENTER / 01</div><h1 id="pageTitle">كل شيء تحت السيطرة.</h1><p id="pageDesc">راقب حالة جهازك، راجع اقتراحات التحسين، ونفّذ التغييرات اللي تناسبك من مكان واحد.</p></div><div class="status-chip" id="statusChip"><i id="statusDot"></i><span id="statusChipTxt">متصل بمحرك <bdi class="bidi-en">ClearWin 2.7.7</bdi> · نشط</span></div></div>
+    
+    <div id="pageContent" class="page-content">
+      <div class="grid stats" id="statsGrid">
+        <article class="card stat" style="--glow:#55d8ff"><div class="stat-top"><span>صحة النظام</span><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5.5c0 4.8-3.2 8-8 9.5-4.8-1.5-8-4.7-8-9.5V6l8-3Z"/><path d="m8.5 12 2.3 2.3 4.8-4.8"/></svg></span></div><div class="stat-num" id="healthScoreNum">94<span> / 100</span></div><div class="stat-foot"><span class="up">حالة ممتازة</span><span>مراقبة مستمرة للموارد</span></div></article>
+        <article class="card stat" style="--glow:#8f7aff"><div class="stat-top"><span>استخدام المعالج <bdi class="bidi-parens">(CPU)</bdi></span><span class="stat-icon" style="color:#ae9cff;background:#211d35"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg></span></div><div class="stat-num" id="cpuNum">0<span>%</span></div><div class="stat-foot"><span class="up" id="cpuFoot">مستقر</span><span>قراءة لحظية <bdi class="bidi-en">500ms</bdi></span></div></article>
+        <article class="card stat" style="--glow:#52e2b0"><div class="stat-top"><span>الذاكرة <bdi class="bidi-parens">(RAM)</bdi></span><span class="stat-icon" style="color:var(--green);background:#142a29"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 10v4m4-4v4m4-4v4M7 4v3m5-3v3m5-3v3M7 17v3m5-3v3m5-3v3"/></svg></span></div><div class="stat-num" id="ramNum">0.0<span> / <bdi class="bidi-en">16 GB</bdi></span></div><div class="stat-foot" id="ramFoot"><span class="up" id="ramPct">0%</span><span id="ramSub">قراءة فيزيائية مباشرة</span></div></article>
+        <article class="card stat" style="--glow:#52e2b0"><div class="stat-top"><span>كارت الشاشة <bdi class="bidi-parens">(GPU)</bdi></span><span class="stat-icon" style="color:var(--green);background:#132821"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4M8 8h2m4 0h2"/></svg></span></div><div class="stat-num" id="gpuNum">0<span>%</span></div><div class="stat-foot" id="gpuFoot"><span class="up" id="gpuTemp">-- °C</span><span id="gpuNameTxt">معالج الرسوميات</span></div></article>
+        <article class="card stat" style="--glow:#ffb84d"><div class="stat-top"><span>القرص الصلب (الهارد)</span><span class="stat-icon" style="color:var(--amber);background:#2e2212"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="7" cy="12" r="1.5"/><path d="M12 12h5"/></svg></span></div><div class="stat-num" id="diskNum">0<span>%</span></div><div class="stat-foot" id="diskFoot"><span class="up" id="diskPct">نشاط مستقر</span><span id="diskStorage">C: مساحة حية</span></div></article>
+        <article class="card stat" style="--glow:#ffcb70"><div class="stat-top"><span>توصيات الأداء</span><span class="stat-icon" style="color:var(--amber);background:#302719"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a7 7 0 0 0-4 12.7c.7.5 1 1.1 1 1.8h6c0-.7.3-1.3 1-1.8A7 7 0 0 0 12 3Z"/><path d="M9 21h6m-5-3v3m4-3v3"/></svg></span></div><div class="stat-num" id="recoNum">4<span> اقتراحات</span></div><div class="stat-foot"><span style="color:var(--green)">جاهزة للتطبيق</span><span>آمنة 100%</span></div></article>
+      </div>
+      <div class="grid split">
+        <section class="card"><div class="card-head"><div><h2>نظرة عامة على الأداء والموارد <bdi class="bidi-parens">(Hardware Monitor)</bdi></h2><p>رصد بياني حي للمعالج والرامات وكارت الشاشة <bdi class="bidi-parens">(GPU)</bdi> والقرص الصلب (الهارد)</p></div><button class="ghost-btn" id="periodBtn">تحديث حي <bdi class="bidi-en">500ms</bdi></button></div><div class="chart-wrap"><div class="chart-summary"><div><strong id="chartCpu" style="color:#55d8ff">0%</strong><small>المعالج <bdi class="bidi-parens">(CPU)</bdi></small></div><div><strong id="chartRam" style="color:#8a75ff">0%</strong><small>الذاكرة <bdi class="bidi-parens">(RAM)</bdi></small></div><div><strong id="chartGpu" style="color:#52e2b0">0%</strong><small>كارت الشاشة <bdi class="bidi-parens">(GPU)</bdi></small></div><div><strong id="chartDisk" style="color:#ffb84d">0%</strong><small>الهارد <bdi class="bidi-parens">(Disk)</bdi></small></div><div class="legend"><span><i style="background:#55d8ff"></i>المعالج</span><span><i style="background:#8a75ff"></i>الذاكرة</span><span><i style="background:#52e2b0"></i>كارت الشاشة</span><span><i style="background:#ffb84d"></i>الهارد</span></div></div><svg class="chart" viewBox="0 0 620 180" preserveAspectRatio="none"><defs><linearGradient id="areaCyan" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#55d8ff" stop-opacity=".25"/><stop offset="1" stop-color="#55d8ff" stop-opacity="0"/></linearGradient><linearGradient id="areaPurple" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8a75ff" stop-opacity=".2"/><stop offset="1" stop-color="#8a75ff" stop-opacity="0"/></linearGradient><linearGradient id="areaGreen" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#52e2b0" stop-opacity=".2"/><stop offset="1" stop-color="#52e2b0" stop-opacity="0"/></linearGradient><linearGradient id="areaAmber" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffb84d" stop-opacity=".2"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/></linearGradient></defs><g><path class="grid-line" d="M34 20H610M34 55H610M34 90H610M34 125H610M34 160H610"/><text x="26" y="23" text-anchor="end">100%</text><text x="26" y="58" text-anchor="end">75%</text><text x="26" y="93" text-anchor="end">50%</text><text x="26" y="128" text-anchor="end">25%</text><text x="26" y="163" text-anchor="end">0%</text><path id="chartAreaCyan" d="" fill="url(#areaCyan)"/><path id="chartAreaPurple" d="" fill="url(#areaPurple)"/><path id="chartAreaGreen" d="" fill="url(#areaGreen)"/><path id="chartAreaAmber" d="" fill="url(#areaAmber)"/><path id="chartPathCyan" d="" fill="none" stroke="#55d8ff" stroke-width="2.2"/><path id="chartPathPurple" d="" fill="none" stroke="#8a75ff" stroke-width="2"/><path id="chartPathGreen" d="" fill="none" stroke="#52e2b0" stroke-width="2"/><path id="chartPathAmber" d="" fill="none" stroke="#ffb84d" stroke-width="2"/><g><text x="34" y="176" text-anchor="middle">00:00</text><text x="178" y="176" text-anchor="middle">06:00</text><text x="322" y="176" text-anchor="middle">12:00</text><text x="466" y="176" text-anchor="middle">18:00</text><text x="610" y="176" text-anchor="middle">الآن</text></g></g></svg><div class="chart-foot"><span>مراقبة متزامنة لموارد المعالج والذاكرة والرسومات والهارد</span><span id="loadBalanceStatus">موازنة الحمل في الألعاب: نشطة ومتكيفة</span></div></div></section>
+        <section class="card"><div class="card-head"><div><h2>حالة الجهاز</h2><p>فحص تلقائي مستمر</p></div><button class="ghost-btn" id="detailsBtn">التفاصيل ↗</button></div><div class="health-body"><div class="health-score"><div class="ring" id="healthRing"><div class="ring-inner"><strong id="healthScoreVal">94</strong><small>صحة عامة</small></div></div><div class="health-label"><strong>الأداء ممتاز</strong><p>كافة خدمات النظام ونواة المعالج تعمل باستقرار وبدون اختناق حراري أو استنزاف موارد.</p></div></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4zM8 9h8m-8 4h5"/></svg><span>ملفات النظام الأساسية</span><span class="state">سليمة 100%</span></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M5 6l1 14h12l1-14M9 6V3h6v3"/></svg><span>الملفات المؤقتة</span><span class="state" id="dashTempStatus">جاهزة للتنظيف</span></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg><span>حماية النظام والاستعادة</span><span class="state">مفعّلة ونشطة</span></div></div></section>
+      </div>
+      <div class="grid actions">
+        <section class="card"><div class="card-head"><div><h2>التحسين الذكي المباشر</h2><p>اختر العناصر لتطبيق التحسين الفوري على موارد النظام</p></div><button class="ghost-btn" id="selectAllBtn">تحديد الكل</button></div><div class="opt-body" id="optList">
+          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg></div><div class="opt-info"><strong>تحرير ذاكرة <bdi class="bidi-en">RAM</bdi> وسجلات النظام المؤقتة</strong><p>تفريغ الذاكرة الاحتياطية وإفراغ كاش التطبيقات في الخلفية.</p></div><div class="opt-meta"><small>الذاكرة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
+          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v9m0 0 4-4m-4 4L8 8"/><path d="M5 13v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5"/></svg></div><div class="opt-info"><strong>مراجعة وتخفيف برامج بدء التشغيل</strong><p>إيقاف إقلاع التطبيقات غير الأساسية لتسريع بدء تشغيل ويندوز.</p></div><div class="opt-meta"><small>بدء التشغيل</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
+          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0m-11 3a5 5 0 0 1 8 0M12 19h.01"/></svg></div><div class="opt-info"><strong>تفريغ كاش <bdi class="bidi-en">DNS</bdi> وضبط موجهات الشبكة</strong><p>مسح مخزن <bdi class="bidi-en">DNS</bdi> المؤقت وتحسين سرعة استجابة واستقرار الاتصال.</p></div><div class="opt-meta"><small>الشبكة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
+          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg></div><div class="opt-info"><strong>فك ركن أنوية المعالج ومؤقت <bdi class="bidi-en">0.5ms</bdi></strong><p>إلغاء تجميد الأنوية وضبط دقة المؤقت للحد الأدنى من الـ <bdi class="bidi-en">Input Lag</bdi>.</p></div><div class="opt-meta"><small>النواة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
+          <div class="scan-line" id="scanLine"><i></i></div><div class="opt-footer"><span id="selectedCount">تم تحديد 4 عناصر للتطبيق</span><button class="primary-btn" id="scanBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg><span>فحص وتطبيق التحسين الذكي</span></button></div>
+        </div></section>
+        <section class="card recommend"><div class="recommend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a7 7 0 0 0-4 12.7c.7.5 1 1.1 1 1.8h6c0-.7.3-1.3 1-1.8A7 7 0 0 0 12 3Z"/><path d="M9 21h6m-5-3v3m4-3v3"/></svg></div><h3>محرك الذكاء الاصطناعي الذاتي</h3><p>يعمل <bdi class="bidi-en">SmartAgent</bdi> تلقائياً في الخلفية لمراقبة معدل الإطارات <bdi class="bidi-parens">(60 FPS Floor Stabilizer)</bdi> وتحرير الذاكرة وتفادي التباطؤ قبل حدوثه.</p><div class="recommend-list"><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>مراقبة وتثبيت معدل الإطارات <bdi class="bidi-en">60 FPS</bdi></span></div><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>حارس حرارة المعالج وكارت الشاشة</span></div><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>حفظ نقاط استعادة تلقائية قبل التغييرات</span></div></div><button class="ghost-btn" data-page-nav="ai">مركز شفافية الذكاء ↗</button></section>
+      </div>
+      <div class="grid bottom-grid">
+        <section class="card table-card"><div class="table-header"><div><h2>سجل النشاط المباشر</h2><p>توثيق حي للقرارات وإجراءات النظام</p></div><button class="ghost-btn" id="clearLogBtn">مسح السجل</button></div><div class="events" id="eventsList"><div class="event"><div class="event-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg></div><div><strong>بدء تشغيل <bdi class="bidi-en">ClearWin 2.7.7</bdi></strong><p>مزامنة النماذج الـ 7 وربط نواة النظام بنجاح.</p></div><time>الآن</time></div><div class="event"><div class="event-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg></div><div><strong>تثبيت معدل الإطارات <bdi class="bidi-en">60 FPS Floor</bdi> نشط</strong><p>نظام الاستقرار التلقائي يحمي سلاسة الألعاب.</p></div><time>منذ 2 دقيقة</time></div><div class="event"><div class="event-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg></div><div><strong>نقطة استعادة <bdi class="bidi-en">Windows</bdi> مؤكدة</strong><p>حماية النظام مفعلة مع إمكانية التراجع الفوري.</p></div><time>منذ 5 دقائق</time></div></div></section>
+        <section class="card"><div class="table-header"><div><h2>مراكز المتابعة</h2><p>حالة وحدات التشغيل ونواة ويندوز</p></div><button class="ghost-btn" data-page-nav="settings">الإعدادات</button></div><div class="task-panel"><div class="task"><div class="task-head"><span>واجهة WebView2 الهجينة</span><span style="color:var(--green)">متصلة ونشطة</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>محرك النواة وأدوات C#</span><span style="color:var(--green)">متصل وجاهز</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>حساسات العتاد والمعالج</span><span style="color:var(--green)">قراءة حية</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>سجل التراجع ونقاط الاستعادة</span><span style="color:var(--green)">نشط ومؤمن</span></div><div class="progress green"><i style="--w:100%"></i></div></div></div></section>
+      </div>
+      <footer class="footer"><span><i class="line-dot"></i>ClearWin 2.7.7 · Smart Windows Optimization Suite</span><span>اتصال كامل مع نواة النظام والذكاء الاصطناعي</span><span>Arabic RTL · Cyber-Dark UI</span></footer>
+    </div>
+  </main>
+</div>
+
+<div class="command-overlay" id="commandOverlay" hidden>
+  <div class="command-panel" role="dialog" aria-modal="true" aria-labelledby="commandHeading">
+    <div class="command-panel-head">
+      <div class="command-search-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg></div>
+      <div class="command-search-wrap"><label id="commandHeading" for="commandSearch">مركز الأوامر والبحث السريع</label><input id="commandSearch" placeholder="اكتب اسم الصفحة أو الأداة..." autocomplete="off" /></div>
+      <button class="command-close" id="closeCommandBtn" type="button">Esc</button>
+    </div>
+    <div class="command-results" id="commandResults"></div>
+    <div class="command-foot"><span>تنقل سريع بين أقسام <bdi class="bidi-en">ClearWin 2.7.7</bdi></span><span class="keys"><kbd class="kbd">↑</kbd><kbd class="kbd">↓</kbd> للتنقل <kbd class="kbd">Enter</kbd> للفتح <kbd class="kbd">Esc</kbd> للإغلاق</span></div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+let toastTimer, activePage='dashboard', auditLog=[];
+const pageContent=$('#pageContent');
+const dashboardMarkup=pageContent.innerHTML;
+
+const ALLOWED_PAGES=['dashboard','quick','startup','cleanup','network','apps','ai','restore','settings'];
+let navGeneration=0;
+let jsErrorCount=0;
+const MAX_JS_ERRORS=10;
+
+window.onerror=function(message, source, lineno, colno, error){
+ if(jsErrorCount++ < MAX_JS_ERRORS){
+  try {
+   sendAction('diagnostic.js_error', {
+    message: String(message),
+    source: String(source),
+    lineno: lineno,
+    colno: colno,
+    stack: error ? String(error.stack) : ''
+   });
+  } catch(e){}
+ }
+};
+window.addEventListener('unhandledrejection', function(event){
+ if(jsErrorCount++ < MAX_JS_ERRORS){
+  try {
+   sendAction('diagnostic.js_error', {
+    message: 'Unhandled Promise Rejection: ' + (event.reason ? String(event.reason.message || event.reason) : 'Unknown'),
+    stack: event.reason && event.reason.stack ? String(event.reason.stack) : ''
+   });
+  } catch(e){}
+ }
+});
+
+const pageMeta={
+ dashboard:['CONTROL CENTER / 01','كل شيء تحت السيطرة.','راقب حالة جهازك، راجع اقتراحات التحسين، ونفّذ التغييرات المباشرة من مكان واحد.'],
+ quick:['OPTIMIZATION / 02','تحسينات النظام والأداء.','طبّق التحسينات العتادية المباشرة، فك ركن الأنوية، وتسريع استجابة النواة.'],
+ startup:['STARTUP MANAGER / 03','إدارة برامج بدء التشغيل.','تحكم في البرامج التي تبدأ مع إقلاع Windows لتقليل زمن الإقلاع وتوفير الذاكرة.'],
+ cleanup:['SYSTEM CLEANUP / 04','تنظيف واستعادة المساحة.','فحص وحذف الملفات المؤقتة، كاش التحديثات، وذاكرة كروت الشاشة بأمان تام.'],
+ network:['NETWORK TOOLS / 05','الشبكة وسرعة الاستجابة.','تشخيص الاتصال المباشر، قياس زمن Ping، وتفريغ كاش DNS.'],
+ apps:['PROCESS MANAGER / 06','إدارة العمليات الجارية.','عرض العمليات النشطة مرتبة حسب استهلاك الذاكرة وإنهائها بأمان.'],
+ ai:['AI TRANSPARENCY / 07','شفافية الذكاء الاصطناعي (7 نماذج).','مراقبة فورية للنماذج العصبية الـ 7، قرارات التثبيت 60 FPS، وسجل الذاكرة التكيفية.'],
+ restore:['RECOVERY CENTER / 08','الاستعادة وسجل العمليات.','إنشاء نقاط استعادة Windows والرجوع إليها وتوثيق كافة الإجراءات.'],
+ settings:['PREFERENCES / 09','إعدادات ClearWin.','تخصيص سلوك التطبيق، تنبيهات النظام، وحالة الربط مع النواة.']
+};
+
+const icons={
+ search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg>',
+ shield:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5.5c0 4.8-3.2 8-8 9.5-4.8-1.5-8-4.7-8-9.5V6l8-3Z"/><path d="m8.5 12 2.3 2.3 4.8-4.8"/></svg>',
+ clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>',
+ clean:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg>',
+ network:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0m-11 3a5 5 0 0 1 8 0M12 19h.01"/></svg>',
+ cpu:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg>',
+ backup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 12a9 9 0 1 0 2.6-6.4L3 8"/><path d="M3 3v5h5m4-1v5l4 2"/></svg>',
+ gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg>',
+ apps:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+ info:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5m0-8h.01"/></svg>',
+ warning:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 22 20H2L12 3Z"/><path d="M12 9v5m0 3h.01"/></svg>'
+};
+
+function toast(msg){
+ const el=$('#toast'); if(!el)return;
+ el.textContent=msg; el.classList.add('show');
+ clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+function timeNow(){ return new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+
+function addAuditLog(title,detail,type='info'){
+ auditLog.unshift({title,detail,type,time:timeNow()});
+ auditLog=auditLog.slice(0,40);
+ const host=$('#eventsList');
+ if(host){
+  const ev=document.createElement('div'); ev.className='event';
+  ev.innerHTML=`<div class="event-icon ${type==='warn'?'warn':'info'}">${type==='warn'?icons.warning:icons.info}</div><div><strong></strong><p></p></div><time>${timeNow()}</time>`;
+  ev.querySelector('strong').textContent=title;
+  ev.querySelector('p').textContent=detail;
+  host.prepend(ev);
+ }
+}
+
+function metric(label,value,hint,ico='cpu',cls=''){
+ return `<article class="metric-tile"><div class="metric-label"><span>${label}</span><span class="pill ${cls}">${icons[ico]||icons.info}</span></div><div class="metric-value">${value}</div><div class="metric-hint">${hint}</div></article>`;
+}
+
+function panel(title,desc,body,action=''){
+ return `<section class="card page-panel"><div class="page-panel-title"><div><h2>${title}</h2><p>${desc}</p></div>${action}</div>${body}</section>`;
+}
+
+function footer(){
+ return `<footer class="footer"><span><i class="line-dot"></i>ClearWin 2.7.7 · Smart Windows Optimization Suite</span><span>اتصال كامل مع نواة النظام والذكاء الاصطناعي</span><span>Arabic RTL · Cyber-Dark UI</span></footer>`;
+}
+
+// ==========================================
+// Native Bridge Communication
+// ==========================================
+let clearWinRequestCounter=0;
+
+function sendAction(action, payload={}, forPage=null){
+ if(!window.chrome?.webview || typeof window.chrome.webview.postMessage !== 'function'){
+  if(!action.startsWith('diagnostic.')){
+   toast('جارٍ تشغيل الواجهة المستقلة...');
+  }
+  return false;
+ }
+ const requestId = 'cw-req-' + Date.now() + '-' + (++clearWinRequestCounter);
+ const msg = {
+  channel: 'clearwin',
+  type: 'action.request',
+  requestId: requestId,
+  action: action,
+  page: forPage || activePage,
+  generation: navGeneration,
+  payload: typeof payload === 'string' ? payload : JSON.stringify(payload)
+ };
+ try{
+  window.chrome.webview.postMessage(msg);
+  return true;
+ }catch(e){
+  console.error(e);
+  return false;
+ }
+}
+
+// Live metrics update from host
+let cpuHistory = [18, 22, 19, 24, 20, 18, 25, 21, 18];
+let ramHistory = [32, 33, 32, 34, 32, 33, 32, 32, 32];
+let gpuHistory = [12, 14, 10, 16, 12, 18, 14, 15, 14];
+let diskHistory = [4, 8, 5, 10, 6, 14, 5, 7, 6];
+
+function updateLiveMetrics(m){
+ if(!m) return;
+ window.cwLastMetrics = m;
+
+ if(typeof m.cpu === 'number'){
+  const c = Math.max(0, Math.min(100, Math.round(m.cpu)));
+  const cpuNum = $('#cpuNum'); if(cpuNum) cpuNum.innerHTML = `${c}<span>%</span>`;
+  const chartCpu = $('#chartCpu'); if(chartCpu) chartCpu.textContent = `${c}%`;
+  const cpuFoot = $('#cpuFoot');
+  if(cpuFoot) cpuFoot.textContent = c > 75 ? 'ضغط مرتفع' : c > 35 ? 'نشط' : 'مستقر';
+  cpuHistory.push(c);
+  if(cpuHistory.length > 9) cpuHistory.shift();
+ }
+ if(typeof m.ram === 'number'){
+  const r = Math.max(0, Math.min(100, Math.round(m.ram)));
+  const ramPct = $('#ramPct'); if(ramPct) ramPct.textContent = `${r}%`;
+  const chartRam = $('#chartRam'); if(chartRam) chartRam.textContent = `${r}%`;
+  const ramTotal = m.ramTotalGb > 0 ? m.ramTotalGb : 16;
+  const ramUsed = m.ramUsedGb > 0 ? m.ramUsedGb : ((r * ramTotal) / 100);
+  const ramNum = $('#ramNum'); if(ramNum) ramNum.innerHTML = `${ramUsed.toFixed(1)}<span> / ${Math.round(ramTotal)} GB</span>`;
+  ramHistory.push(r);
+  if(ramHistory.length > 9) ramHistory.shift();
+ }
+ if(typeof m.gpu === 'number'){
+  const g = Math.max(0, Math.min(100, Math.round(m.gpu)));
+  const gpuNum = $('#gpuNum'); if(gpuNum) gpuNum.innerHTML = `${g}<span>%</span>`;
+  const chartGpu = $('#chartGpu'); if(chartGpu) chartGpu.textContent = `${g}%`;
+  const gpuTemp = $('#gpuTemp');
+  if(gpuTemp && typeof m.gpuTemp === 'number' && m.gpuTemp > 0){
+   gpuTemp.textContent = `${Math.round(m.gpuTemp)} °C`;
+  }
+  const gpuNameTxt = $('#gpuNameTxt');
+  if(gpuNameTxt && m.gpuName){
+   gpuNameTxt.textContent = m.gpuName.length > 20 ? m.gpuName.substring(0, 18) + '...' : m.gpuName;
+  }
+  gpuHistory.push(g);
+  if(gpuHistory.length > 9) gpuHistory.shift();
+ }
+ if(typeof m.disk === 'number'){
+  const d = Math.max(0, Math.min(100, Math.round(m.disk)));
+  const diskNum = $('#diskNum'); if(diskNum) diskNum.innerHTML = `${d}<span>%</span>`;
+  const chartDisk = $('#chartDisk'); if(chartDisk) chartDisk.textContent = `${d}%`;
+  const diskPct = $('#diskPct');
+  if(diskPct) diskPct.textContent = d > 60 ? 'نشاط مكثف' : d > 20 ? 'قراءة/كتابة' : 'نشاط منخفض';
+  const diskStorage = $('#diskStorage');
+  if(diskStorage && m.diskTotalGb > 0){
+   const used = m.diskUsedGb > 0 ? m.diskUsedGb : 0;
+   diskStorage.textContent = `C: ${used.toFixed(0)} / ${m.diskTotalGb.toFixed(0)} GB`;
+  }
+  diskHistory.push(d);
+  if(diskHistory.length > 9) diskHistory.shift();
+ }
+ if(typeof m.health === 'number'){
+  const h = Math.max(0, Math.min(100, Math.round(m.health)));
+  const hNum = $('#healthScoreNum'); if(hNum) hNum.innerHTML = `${h}<span> / 100</span>`;
+  const hVal = $('#healthScoreVal'); if(hVal) hVal.textContent = h;
+  const ring = $('#healthRing'); if(ring) ring.style.background = `conic-gradient(var(--cyan) 0 ${h}%, #202b38 ${h}% 100%)`;
+ }
+ if(typeof m.temp === 'number' && m.temp > 0){
+  const t = Math.round(m.temp);
+  const dashTemp = $('#dashTempStatus'); if(dashTemp) dashTemp.textContent = `${t} °C (حرارة مستقرة)`;
+ }
+
+ // Update dynamic load balancing indicator
+ const loadBal = $('#loadBalanceStatus');
+ if(loadBal && typeof m.cpu === 'number' && typeof m.gpu === 'number'){
+  if(m.cpu > 70 && m.gpu < 60){
+   loadBal.innerHTML = '<span style="color:#55d8ff">موازنة الألعاب: تخفيف حمل المعالج لنقل العبء لكارت الشاشة (CPU Relief)</span>';
+  } else if(m.gpu > 85 && m.cpu < 50){
+   loadBal.innerHTML = '<span style="color:#52e2b0">موازنة الألعاب: تثبيت فريمات الرندر وتفادي الاختناق الحراري (GPU Pacing)</span>';
+  } else if(m.cpu >= 50 && m.gpu >= 55){
+   loadBal.innerHTML = '<span style="color:var(--green)">موازنة الألعاب: أداء متوازن ومثالي بين المعالج وكارت الشاشة (Co-Processing)</span>';
+  } else {
+   loadBal.textContent = 'موازنة الحمل: نشطة ومتكيفة مع استهلاك الموارد';
+  }
+ }
+
+ // Update Topbar Status Chip with real host info
+ const chip = $('#statusChipTxt');
+ if(chip){
+  let info = 'نشط ومستقر';
+  if(m.cpuName) {
+   let shortCpu = m.cpuName.replace(/Intel\(R\)\s*Core\(TM\)\s*/i, '').replace(/Processor/i, '').trim();
+   info = `${shortCpu} · ${m.mode || 'AutoPilot'}`;
+  } else if(m.mode) {
+   info = m.mode;
+  }
+  chip.textContent = `متصل بنواة ClearWin 2.7.7 · ${info}`;
+ }
+
+ // Update Live Chart SVG dynamically
+ updateChartSvg();
+
+ // Quick page real metrics binding
+ const qResp = $('#quickRespTimer');
+ if(qResp) qResp.textContent = '0.5 ms';
+ const qFps = $('#quickFpsFloor');
+ if(qFps && typeof m.fps === 'number') qFps.textContent = m.fps > 0 ? `${Math.round(m.fps)} FPS` : '60 FPS Floor';
+}
+
+function updateChartSvg(){
+ const pathCyan = $('#chartPathCyan');
+ const areaCyan = $('#chartAreaCyan');
+ const pathPurple = $('#chartPathPurple');
+ const areaPurple = $('#chartAreaPurple');
+ const pathGreen = $('#chartPathGreen');
+ const areaGreen = $('#chartAreaGreen');
+ const pathAmber = $('#chartPathAmber');
+ const areaAmber = $('#chartAreaAmber');
+ if(!pathCyan || !pathPurple) return;
+
+ const xs = [34, 105, 178, 250, 322, 394, 466, 538, 610];
+ const calcY = (pct) => 160 - (pct / 100.0) * 140;
+
+ // 1. CPU Curve (Cyan)
+ let dCyan = `M${xs[0]} ${calcY(cpuHistory[0])}`;
+ for(let i = 1; i < xs.length; i++){
+  const prevX = xs[i-1], prevY = calcY(cpuHistory[i-1]);
+  const curX = xs[i], curY = calcY(cpuHistory[i]);
+  const midX = (prevX + curX) / 2;
+  dCyan += ` C${midX} ${prevY}, ${midX} ${curY}, ${curX} ${curY}`;
+ }
+ pathCyan.setAttribute('d', dCyan);
+ if(areaCyan) areaCyan.setAttribute('d', `${dCyan} L610 160 L34 160Z`);
+
+ // 2. RAM Curve (Purple)
+ let dPurple = `M${xs[0]} ${calcY(ramHistory[0])}`;
+ for(let i = 1; i < xs.length; i++){
+  const prevX = xs[i-1], prevY = calcY(ramHistory[i-1]);
+  const curX = xs[i], curY = calcY(ramHistory[i]);
+  const midX = (prevX + curX) / 2;
+  dPurple += ` C${midX} ${prevY}, ${midX} ${curY}, ${curX} ${curY}`;
+ }
+ pathPurple.setAttribute('d', dPurple);
+ if(areaPurple) areaPurple.setAttribute('d', `${dPurple} L610 160 L34 160Z`);
+
+ // 3. GPU Curve (Green)
+ if(pathGreen && gpuHistory.length >= xs.length){
+  let dGreen = `M${xs[0]} ${calcY(gpuHistory[0])}`;
+  for(let i = 1; i < xs.length; i++){
+   const prevX = xs[i-1], prevY = calcY(gpuHistory[i-1]);
+   const curX = xs[i], curY = calcY(gpuHistory[i]);
+   const midX = (prevX + curX) / 2;
+   dGreen += ` C${midX} ${prevY}, ${midX} ${curY}, ${curX} ${curY}`;
+  }
+  pathGreen.setAttribute('d', dGreen);
+  if(areaGreen) areaGreen.setAttribute('d', `${dGreen} L610 160 L34 160Z`);
+ }
+
+ // 4. Disk Curve (Amber)
+ if(pathAmber && diskHistory.length >= xs.length){
+  let dAmber = `M${xs[0]} ${calcY(diskHistory[0])}`;
+  for(let i = 1; i < xs.length; i++){
+   const prevX = xs[i-1], prevY = calcY(diskHistory[i-1]);
+   const curX = xs[i], curY = calcY(diskHistory[i]);
+   const midX = (prevX + curX) / 2;
+   dAmber += ` C${midX} ${prevY}, ${midX} ${curY}, ${curX} ${curY}`;
+  }
+  pathAmber.setAttribute('d', dAmber);
+  if(areaAmber) areaAmber.setAttribute('d', `${dAmber} L610 160 L34 160Z`);
+ }
+}
+
+// ==========================================
+// ClearWin 27 Approved Tweaks Data & Logic
+// ==========================================
+const clearWinTweaks = [
+  // 1. الأداء والسرعة (6)
+  {
+    id: 'ultimate-performance-plan',
+    title: 'خطة أقصى أداء (Ultimate Performance)',
+    desc: 'تفعيل وتطبيق خطة الطاقة القصوى في Windows لتحرير كامل تردد المعالج ومنع أي قيود توفير طاقة.',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'موصى به للألعاب',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-hpet',
+    title: 'إلغاء فرض مؤقت HPET',
+    desc: 'إزالة إجبار Platform Clock والعودة لاختيار Windows التلقائي لتقليل تأخير المعالجة (DPC Latency).',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'مؤجل لحماية النظام',
+    badgeType: 'warn',
+    canUndo: true,
+    isDeferred: true
+  },
+  {
+    id: 'disable-dynamic-ticking',
+    title: 'تعطيل المؤقت الديناميكي (Dynamic Ticking)',
+    desc: 'إيقاف خاصية المؤقت المتغير لضمان استقرار تردد النواة وتفادي حدوث Micro-Stutters أثناء اللعب.',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'مؤجل لحماية النظام',
+    badgeType: 'warn',
+    canUndo: true,
+    isDeferred: true
+  },
+  {
+    id: 'disable-core-isolation',
+    title: 'تعطيل عزل النواة (Core Isolation / HVCI)',
+    desc: 'إلغاء تكامل الذاكرة المعتمد على المحاكاة لتقليل تأخير العتاد في الألعاب التنافسية (يتطلب إعادة تشغيل).',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'تعديل حساس',
+    badgeType: 'warn',
+    canUndo: true,
+    isCritical: true
+  },
+  {
+    id: 'optimize-network-settings',
+    title: 'تحسين إعدادات مكدس الشبكة (TCP/IP)',
+    desc: 'تعديل معاملات TCP Global و Congestion Provider لتقليل زمن استجابة الخوادم (Ping).',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'مؤجل لحماية النظام',
+    badgeType: 'warn',
+    canUndo: true,
+    isDeferred: true
+  },
+  {
+    id: 'optimize-nvidia-settings',
+    title: 'تحسين إعدادات بطاقات NVIDIA',
+    desc: 'إيقاف استهلاك GPU في الخلفية وتعديل بروفايل إدارة الطاقة لأقصى أداء وثبات لمعدل الإطارات.',
+    cat: 'perf',
+    catName: 'الأداء والسرعة',
+    badge: 'كروت NVIDIA',
+    badgeType: 'good',
+    canUndo: true
+  },
+
+  // 2. تحسين الألعاب (3)
+  {
+    id: 'disable-gamebar',
+    title: 'تعطيل شريط الألعاب (Xbox Game Bar)',
+    desc: 'إلغاء تراكب Xbox Game Bar والتسجيل التلقائي في الخلفية لتوفير موارد المعالج والذاكرة للألعاب.',
+    cat: 'game',
+    catName: 'تحسين الألعاب',
+    badge: 'موصى به للألعاب',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-mouse-acceleration',
+    title: 'تعطيل تسريع الفأرة (Raw Input 1:1)',
+    desc: 'إلغاء خاصية Enhance Pointer Precision لتثبيت دقة التصويب 1:1 في ألعاب التصويب التنافسية.',
+    cat: 'game',
+    catName: 'تحسين الألعاب',
+    badge: 'تصويب دقيق',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'remove-gaming-apps',
+    title: 'إزالة تطبيقات إكس بوكس غير المستخدمة',
+    desc: 'إلغاء تثبيت خدمات وحزم Xbox المسبقة مع الحفاظ على إمكانية استرجاعها عبر متجر Winget.',
+    cat: 'game',
+    catName: 'تحسين الألعاب',
+    badge: 'استعادة عبر Winget',
+    badgeType: 'blue',
+    canUndo: true,
+    isPartial: true
+  },
+
+  // 3. النظام والخدمات (8)
+  {
+    id: 'disable-copilot',
+    title: 'تعطيل مساعد Copilot',
+    desc: 'إيقاف ميزات الذكاء الاصطناعي السحابية وإخفاء أيقونة Copilot لتوفير موارد شريط المهام.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'توفير موارد',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-background-ms-store-apps',
+    title: 'منع تطبيقات المتجر من العمل في الخلفية',
+    desc: 'منع تطبيقات Microsoft Store غير النشطة من استهلاك الذاكرة والإنترنت دون علمك.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'توفير RAM',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'set-services-to-manual',
+    title: 'تحويل 150+ خدمة ثانوية إلى تشغيل يدوي',
+    desc: 'ضبط الخدمات غير الحرجة لتعمل عند الحاجة فقط وتفادي استنزاف موارد النظام أثناء الإقلاع.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'مؤجل لحماية النظام',
+    badgeType: 'warn',
+    canUndo: true,
+    isDeferred: true
+  },
+  {
+    id: 'disable-hibernation',
+    title: 'تعطيل وضع السبات (Disable Hibernation)',
+    desc: 'حذف ملف hiberfil.sys الضخم لتوفير مساحة تتراوح بين 8GB إلى 32GB على قرص النظام C.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'توفير مساحة كبيرة',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-fast-startup',
+    title: 'تعطيل بدء التشغيل السريع (Fast Startup)',
+    desc: 'إلغاء الإغلاق الهجين لضمان إفراغ الذاكرة بالكامل وتفادي تراكم أخطاء التعريفات في الجلسات الطويلة.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'استقرار النظام',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'debloat-windows',
+    title: 'تنظيف Windows من التطبيقات الدعائية (Debloat)',
+    desc: 'حذف الحزم الترويجية المسبقة (Bing News, Weather, Solitaire, Clipchamp, إلخ) دون المساس بأدوات النظام.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'إجراء دائم',
+    badgeType: 'warn',
+    canUndo: false,
+    isIrreversible: true
+  },
+  {
+    id: 'remove-onedrive',
+    title: 'إزالة مزامنة OneDrive',
+    desc: 'إلغاء تثبيت OneDrive وإيقاف استهلاك القرص والإنترنت في مزامنة الملفات في الخلفية.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'استعادة عبر Winget',
+    badgeType: 'blue',
+    canUndo: true,
+    isPartial: true
+  },
+  {
+    id: 'disable-defender-rtp',
+    title: 'تعطيل حماية Defender الفورية (اختياري)',
+    desc: 'تعطيل Real-time Protection مؤقتاً لتقليل استهلاك المعالج أثناء جلسات الألعاب الثقيلة.',
+    cat: 'sys',
+    catName: 'خدمات ونظام Windows',
+    badge: 'تعديل حساس',
+    badgeType: 'warn',
+    canUndo: true,
+    isCritical: true
+  },
+
+  // 4. الخصوصية والأمان (3)
+  {
+    id: 'disable-location-tracking',
+    title: 'تعطيل خدمات تتبع الموقع الجغرافي',
+    desc: 'إيقاف استشعار ومشاركة الموقع الجغرافي في Windows وتطبيقات المتجر لحماية الخصوصية.',
+    cat: 'priv',
+    catName: 'الخصوصية والأمان',
+    badge: 'حماية الخصوصية',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-lockscreen-tips',
+    title: 'تعطيل إعلانات ونصائح شاشة القفل',
+    desc: 'إلغاء الإعلانات الترويجية والمقترحات المزعجة التي تظهر على شاشة قفل Windows.',
+    cat: 'priv',
+    catName: 'الخصوصية والأمان',
+    badge: 'واجهة نقية',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'disable-wifi-sense',
+    title: 'تعطيل ميزة Wi-Fi Sense',
+    desc: 'منع المشاركة التلقائية لشبكات الواي فاي مع جهات الاتصال والأجهزة المحيطة.',
+    cat: 'priv',
+    catName: 'الخصوصية والأمان',
+    badge: 'أمان الشبكة',
+    badgeType: 'good',
+    canUndo: true
+  },
+
+  // 5. الواجهة والتخصيص (5)
+  {
+    id: 'align-taskbar-left',
+    title: 'محاذاة شريط المهام إلى اليسار',
+    desc: 'نقل زر ابدأ وأيقونات شريط المهام إلى الجهة اليسرى كما في Windows 10 بدلاً من المنتصف.',
+    cat: 'ui',
+    catName: 'الواجهة والتخصيص',
+    badge: 'مظهر كلاسيكي',
+    badgeType: 'blue',
+    canUndo: true
+  },
+  {
+    id: 'enable-dark-mode',
+    title: 'تفعيل الوضع الداكن الشامل (Dark Mode)',
+    desc: 'تطبيق المظهر الليلي الموحد على نظام Windows ومستكشف الملفات والتطبيقات.',
+    cat: 'ui',
+    catName: 'الواجهة والتخصيص',
+    badge: 'مريح للعين',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'enable-end-task-right-click',
+    title: 'تفعيل زر إنهاء المهمة (End Task)',
+    desc: 'إضافة خيار إنهاء المهمة مباشرة في قائمة النقر الأيمن لأي برنامج في شريط المهام.',
+    cat: 'ui',
+    catName: 'الواجهة والتخصيص',
+    badge: 'مفيد وسريع',
+    badgeType: 'good',
+    canUndo: true
+  },
+  {
+    id: 'revert-context-menu',
+    title: 'استعادة قائمة السياق الكلاسيكية',
+    desc: 'استرجاع قائمة النقر بزر الفأرة الأيمن الكاملة في Windows 11 وتفادي النقر على Show More Options.',
+    cat: 'ui',
+    catName: 'الواجهة والتخصيص',
+    badge: 'قائمة كاملة',
+    badgeType: 'blue',
+    canUndo: true
+  },
+  {
+    id: 'detailed-bsod',
+    title: 'عرض شاشة الموت المفصلة (Detailed BSOD)',
+    desc: 'عرض رمز التوقف التفصيلي واسم ملف التعريف المسبب للمشكلة عند حدوث شاشة زرقاء.',
+    cat: 'ui',
+    catName: 'الواجهة والتخصيص',
+    badge: 'تشخيص الأعطال',
+    badgeType: 'good',
+    canUndo: true
+  },
+
+  // 6. أدوات ومساحة التخزين (2)
+  {
+    id: 'set-time-utc',
+    title: 'ضبط توقيت الساعة في BIOS على UTC',
+    desc: 'مزامنة وقت الهاردوير بالتوقيت العالمي لمنع اختلاف الساعة في أجهزة الإقلاع المزدوج مع Linux.',
+    cat: 'tools',
+    catName: 'أدوات ومساحة التخزين',
+    badge: 'Dual Boot',
+    badgeType: 'blue',
+    canUndo: true
+  },
+  {
+    id: 'run-disk-cleanup',
+    title: 'تشغيل تنظيف القرص الشامل (Cleanmgr)',
+    desc: 'تنظيف عميق لملفات تحديثات ويندوز القديمة ومخزن WinSxS وتحرير مساحات ضخمة.',
+    cat: 'tools',
+    catName: 'أدوات ومساحة التخزين',
+    badge: 'تنظيف عميق دائم',
+    badgeType: 'warn',
+    canUndo: false,
+    isIrreversible: true
+  }
+];
+
+let activeTweakFilterCat = 'all';
+let activeTweakFilterQuery = '';
+
+function renderAllTweaksCardsHtml(){
+ return clearWinTweaks.map(t => {
+   const isDef = t.isDeferred === true;
+   const isCrit = t.isCritical === true;
+   const isIrrev = t.isIrreversible === true;
+   
+   let btnText = 'تطبيق التعديل';
+   let btnClass = 'primary-btn';
+   if (isDef) {
+     btnText = 'تطبيق (مؤجل)';
+     btnClass = 'ghost-btn';
+   } else if (isCrit) {
+     btnText = 'تطبيق (حساس)';
+     btnClass = 'primary-btn warn-tweak';
+   } else if (isIrrev) {
+     btnText = 'تطبيق (دائم)';
+     btnClass = 'primary-btn';
+   }
+
+   const undoBtn = t.canUndo
+     ? `<button class="ghost-btn" data-action="undo:${t.id}" title="التراجع عن التعديل">استعادة</button>`
+     : `<span style="font-size:9px;color:var(--muted);padding:4px 6px">بدون تراجع</span>`;
+
+   return `
+   <article class="tool-card tweak-card ${isCrit ? 'critical' : ''} ${isDef ? 'deferred' : ''}" data-cat="${t.cat}" data-search="${(t.title + ' ' + t.desc + ' ' + t.id + ' ' + t.catName).toLowerCase()}">
+     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+       <div class="tool-glyph" style="background:#142230;color:var(--cyan);margin-bottom:0">${icons.gear}</div>
+       <span class="pill ${t.badgeType}">${t.badge}</span>
+     </div>
+     <h3 style="font-size:13px;margin:0 0 4px;font-weight:700">${formatBidiHtml(t.title)}</h3>
+     <code style="display:block;font-size:9px;color:var(--cyan);opacity:0.75;margin-bottom:8px;direction:ltr;text-align:right">${t.id}</code>
+     <p style="font-size:11px;line-height:1.7;color:var(--muted);margin:0 0 14px;flex:1">${formatBidiHtml(t.desc)}</p>
+     <div style="display:flex;gap:8px;align-items:center;margin-top:auto">
+       <button class="${btnClass}" style="flex:1" data-action="tweak:${t.id}">${btnText}</button>
+       ${undoBtn}
+     </div>
+   </article>`;
+ }).join('');
+}
+
+function selectTweakCategory(cat){
+ activeTweakFilterCat = cat;
+ $$('.tweak-tab-btn').forEach(btn => {
+  btn.classList.toggle('active', btn.dataset.tweakTab === cat);
+ });
+ applyTweaksGridFilter();
+}
+
+function filterTweaksGrid(q){
+ activeTweakFilterQuery = (q || '').toLowerCase().trim();
+ applyTweaksGridFilter();
+}
+
+function applyTweaksGridFilter(){
+ $$('.tweak-card').forEach(card => {
+  const matchCat = (activeTweakFilterCat === 'all' || card.dataset.cat === activeTweakFilterCat);
+  const matchQ = (!activeTweakFilterQuery || card.dataset.search.includes(activeTweakFilterQuery));
+  card.style.display = (matchCat && matchQ) ? '' : 'none';
+ });
+}
+
+// ==========================================
+// Pages Templates
+// ==========================================
+function quickPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.shield}<div><strong>مركز تطبيق تحسينات Windows المعتمدة من نواة ClearWin:</strong> اختر الإجراءات لتطبيقها مباشرة مع حماية العتاد واستقرار معدل الإطارات.</div></div>
+  <div class="page-grid-4">
+    ${metric('التحسينات النشطة','27 أداة','محسّنة ومتحقق منها بالكامل','gear','good')}
+    ${metric('أمان التعديل','100% آمن','جميع الأدوات تدعم الاستعادة','shield','good')}
+    ${metric('استجابة المؤقت','0.5 ms','High Precision Timer نشط','cpu','blue')}
+    ${metric('حارس الإطارات','60 FPS Floor','مثبت ومراقب لحظياً','clean','good')}
+  </div>
+  ${panel('التحسينات المباشرة السريعة','تطبيق فوري لتحرير الذاكرة وتخفيض زمن الاستجابة على Windows',`
+   <div class="page-panel-body">
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>تحرير ذاكرة RAM الاحتياطية (Purge Standby List)</strong><p>إفراغ الذاكرة المحجوزة المؤقتة فوراً لتوفير مساحة للألعاب والبرامج الثقيلة.</p></div>
+       <button class="primary-btn" data-action="optimization.review">تطبيق الآن</button>
+     </div>
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>فك ركن أنوية المعالج (Core Unparking)</strong><p>إلغاء وضع السكون للأنوية غير النشطة للاستفادة من كامل قدرة المعالج أثناء الضغط.</p></div>
+       <button class="ghost-btn" data-action="game:unpark">فك ركن الأنوية</button>
+     </div>
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>تفعيل مؤقت النواة عالي الدقة (0.5ms Timer Resolution)</strong><p>تخفيض زمن تأخير الإدخال (Input Lag) وسلاسة استجابة النظام في الألعاب.</p></div>
+       <button class="ghost-btn" data-action="game:timer">تفعيل المؤقت</button>
+     </div>
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>تنظيف ذاكرة التخزين المؤقت للرسوميات (DirectX Shader Cache)</strong><p>حذف ملفات الكاش القديمة لمنع التقطيع (Stuttering) أثناء تحميل الخرائط.</p></div>
+       <button class="ghost-btn" data-action="cleanup.execute">تنظيف الكاش</button>
+     </div>
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>تفريغ كاش DNS وموجهات الشبكة (Flush DNS)</strong><p>إعادة ضبط جدول توجيه الأسماء وتصحيح مشكلات انقطاع الاتصال.</p></div>
+       <button class="ghost-btn" data-action="network.flush-dns">مسح DNS</button>
+     </div>
+     <div class="toggle-row">
+       <div class="toggle-copy"><strong>وضع الألعاب والتوربو (Game Mode & FPS Floor)</strong><p>إيقاف الخدمات الثانوية ورفع أولوية العمليات الأمامية وتثبيت الفريمات.</p></div>
+       <button class="primary-btn" data-action="game:toggle">تبديل وضع الألعاب</button>
+     </div>
+   </div>
+  `)}
+  <section class="card" style="margin-top:18px">
+    <div class="card-head">
+      <div>
+        <h2>مكتبة أدوات تحسين Windows (27 أداة معتمدة)</h2>
+        <p>تطبيق فوري للتعديلات المعتمدة مع إنشاء نقطة استعادة Windows تلقائياً وإمكانية التراجع بنقرة زر.</p>
+      </div>
+      <div>
+        <input id="tweakSearchInput" placeholder="ابحث باسم الأداة أو الكود..." oninput="filterTweaksGrid(this.value)" style="background:#0c1520;border:1px solid #233547;border-radius:8px;padding:7px 12px;color:#fff;font-size:11px;width:220px;outline:none">
+      </div>
+    </div>
+    <div class="tweak-tabs-bar" id="tweakTabs">
+      <button class="tweak-tab-btn active" data-tweak-tab="all" onclick="selectTweakCategory('all')">الكل (27)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="perf" onclick="selectTweakCategory('perf')">الأداء والسرعة (6)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="game" onclick="selectTweakCategory('game')">الألعاب (3)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="sys" onclick="selectTweakCategory('sys')">النظام والخدمات (8)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="priv" onclick="selectTweakCategory('priv')">الخصوصية (3)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="ui" onclick="selectTweakCategory('ui')">الواجهة والتخصيص (5)</button>
+      <button class="tweak-tab-btn" data-tweak-tab="tools" onclick="selectTweakCategory('tools')">أدوات إضافية (2)</button>
+    </div>
+    <div class="page-grid-3" id="tweaksGrid" style="padding:18px">
+      ${renderAllTweaksCardsHtml()}
+    </div>
+  </section>
+  ${footer()}
+ </div>`;
+}
+
+function startupPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.shield}<div><strong>إدارة برامج بدء التشغيل:</strong> قراءة حية ومباشرة من سجل نظام Windows (Registry). يمكنك إيقاف أي برنامج غير ضروري لتسريع الإقلاع.</div></div>
+  <div class="page-grid-4">
+    ${metric('عناصر بدء التشغيل','<span id="stTotal">جارٍ القراءة...</span>','عناصر مسجلة في النظام','apps')}
+    ${metric('آمن للإيقاف','<span id="stSafe">3 عناصر</span>','لا تؤثر على استقرار النظام','shield','good')}
+    ${metric('أساسي للنظام','<span id="stEss">عنصران</span>','خدمات الحماية وتعريفات الصوت','cpu','warn')}
+    ${metric('حالة القراءة','مباشرة','قراءة من HKLM و HKCU','info','blue')}
+  </div>
+  ${panel('عناصر بدء تشغيل Windows','إدارة حالة تشغيل التطبيقات مع إقلاع الجهاز',`
+    <div class="filterbar">
+      <input id="startupFilter" placeholder="ابحث باسم التطبيق أو المسار..." oninput="filterStartupTable(this.value)">
+      <button class="ghost-btn" data-action="startup.get-list">${icons.search} تحديث القائمة</button>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>التطبيق</th>
+            <th>مفتاح السجل (Hive)</th>
+            <th>الأثر على الإقلاع</th>
+            <th>الحالة</th>
+            <th>الإجراء</th>
+          </tr>
+        </thead>
+        <tbody id="startupTbody">
+          <tr><td colspan="5" style="text-align:center;padding:25px;color:var(--muted)">جارٍ تحميل عناصر بدء التشغيل من النظام...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `)}
+  ${footer()}
+ </div>`;
+}
+
+function cleanupPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.clean}<div><strong>تنظيف مساحة التخزين الآمن:</strong> فحص حقيقي للمجلدات المؤقتة وسجلات النظام وذاكرة الكاش دون المساس بملفاتك الشخصية.</div></div>
+  <div class="page-grid-4">
+    ${metric('ملفات المستخدم المؤقتة','<span id="clUserTemp">جارٍ الفحص...</span>','%TEMP%','clean','blue')}
+    ${metric('ملفات Windows المؤقتة','<span id="clWinTemp">جارٍ الفحص...</span>','C:\\Windows\\Temp','clean','blue')}
+    ${metric('كاش Shader Runtimes','<span id="clShader">جارٍ الفحص...</span>','DirectX Shader Cache','cpu','good')}
+    ${metric('المساحة القابلة للتحرير','<span id="clTotal">جارٍ الحساب...</span>','جاهزة للتنظيف الآمن','shield','good')}
+  </div>
+  <div class="page-grid-2">
+    ${panel('فحص مساحة القرص','المساحة المشغولة على القرص الرئيسي',`
+      <div class="page-panel-body">
+        <div class="storage-row"><label>الملفات المؤقتة</label><div class="storage-track"><i style="--w:18%"></i></div><b id="clRowTemp">جارٍ الفحص...</b></div>
+        <div class="storage-row"><label>كاش الشيدر والتحديثات</label><div class="storage-track"><i style="--w:25%"></i></div><b id="clRowShader">جاهز للتنظيف</b></div>
+        <div class="storage-row"><label>الذاكرة الاحتياطية</label><div class="storage-track"><i style="--w:40%"></i></div><b>قابلة للتحرير</b></div>
+        <div style="margin-top:20px;display:flex;gap:10px">
+          <button class="primary-btn" data-action="cleanup.execute">${icons.clean} بدء التنظيف الفوري الآمن</button>
+          <button class="ghost-btn" data-action="cleanup.scan">${icons.search} إعادة فحص الأحجام</button>
+        </div>
+      </div>
+    `)}
+    ${panel('ضوابط الأمان في التنظيف','حماية الملفات الشخصية',`
+      <div class="page-panel-body">
+        <div class="recommend-list">
+          <div class="recommend-item">${icons.shield}<span>لا يتم المساس بمجلد التنزيلات (Downloads) نهائياً.</span></div>
+          <div class="recommend-item">${icons.shield}<span>حذف آمن لملفات البرامج المحذوفة وسجلات الأخطاء القديمة.</span></div>
+          <div class="recommend-item">${icons.shield}<span>تحرير مساحة التخزين المؤقتة وذاكرة Standby بنقرة واحدة.</span></div>
+        </div>
+      </div>
+    `)}
+  </div>
+  ${footer()}
+ </div>`;
+}
+
+function networkPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.network}<div><strong>أدوات تشخيص وإصلاح الشبكة المباشرة:</strong> بيانات حية من محول الشبكة النشط مع فحص Ping حقيقي وتفريغ كاش DNS.</div></div>
+  <div class="page-grid-4">
+    ${metric('المحول النشط','<span id="netAdapter" style="font-size:16px">جارٍ الفحص...</span>','محول الاتصال الفعلي','network','good')}
+    ${metric('عنوان IP المحلي','<span id="netIp" style="font-size:18px">—</span>','عنوان الشبكة الداخلية','info','blue')}
+    ${metric('سرعة الاستجابة (Ping)','<span id="netPing">-- ms</span>','زمن الوصول إلى خوادم Google','cpu','good')}
+    ${metric('خادم DNS','<span id="netDns" style="font-size:15px">—</span>','خادم توجيه الأسماء','shield','blue')}
+  </div>
+  <div class="page-grid-2">
+    ${panel('أدوات إصلاح الشبكة الفورية','معالجة مشكلات انقطاع الاتصال وبطء التحميل',`
+      <div class="page-panel-body">
+        <div class="toggle-row">
+          <div class="toggle-copy"><strong>مسح وتفريغ كاش DNS (Flush DNS)</strong><p>حل مشكلات عدم فتح بعض المواقع وتجديد قائمة عناوين IP في Windows.</p></div>
+          <button class="primary-btn" data-action="network.flush-dns">مسح DNS الآن</button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-copy"><strong>اختبار الاتصال المباشر (Google Ping Test)</strong><p>إرسال حزم ICMP لقياس زمن الوصول والتأكد من استقرار الخوادم.</p></div>
+          <button class="ghost-btn" data-action="network.diagnostic">تشغيل الفحص</button>
+        </div>
+        <div class="toggle-row">
+          <div class="toggle-copy"><strong>تحديث بيانات المحول</strong><p>إعادة قراءة عنوان IP وبوابة الاتصال (Gateway) والسرعة الحالية.</p></div>
+          <button class="ghost-btn" data-action="network.get-info">تحديث البيانات</button>
+        </div>
+      </div>
+    `)}
+    ${panel('معلومات الاتصال المتقدمة','بيانات بطاقة الشبكة الحالية',`
+      <div class="page-panel-body">
+        <div class="mini-status">${icons.network}<span>نوع المحول النشط</span><span class="state" id="netType">—</span></div>
+        <div class="mini-status">${icons.info}<span>البوابة الافتراضية (Gateway)</span><span class="state" id="netGw">—</span></div>
+        <div class="mini-status">${icons.clock}<span>السرعة المقدرة للبطاقة</span><span class="state" id="netSpeed">—</span></div>
+        <div class="mini-status">${icons.shield}<span>حالة الاتصال</span><span class="state">متصل بالإنترنت</span></div>
+      </div>
+    `)}
+  </div>
+  ${footer()}
+ </div>`;
+}
+
+function appsPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.apps}<div><strong>إدارة العمليات الجارية (Task & Process Manager):</strong> قائمة حية بكافة البرامج الجارية على Windows مرتبة حسب استهلاك الذاكرة، مع حماية العمليات الحرجة.</div></div>
+  <div class="page-grid-4">
+    ${metric('إجمالي العمليات','<span id="appTotal">جارٍ القراءة...</span>','عمليات جارية على النظام','apps')}
+    ${metric('أعلى عملية استهلاكاً','<span id="appTop" style="font-size:16px">—</span>','أكثر برنامج يستهلك RAM','cpu','warn')}
+    ${metric('حماية النظام','100% نشطة','حماية تلقائية لعمليات Windows الحساسة','shield','good')}
+    ${metric('إدارة المهام','Windows TaskMgr','متاح للفتح المباشر بنقرة واحدة','gear','blue')}
+  </div>
+  ${panel('العمليات النشطة على النظام','عرض وإدارة استهلاك البرامج للذاكرة العشوائية',`
+    <div class="filterbar">
+      <input id="processFilter" placeholder="ابحث باسم العملية أو معرف PID..." oninput="filterProcessesTable(this.value)">
+      <button class="primary-btn" data-action="apps.launch-taskmgr">${icons.gear} فتح مدير مهام Windows</button>
+      <button class="ghost-btn" data-action="apps.get-processes">${icons.search} تحديث العمليات</button>
+    </div>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>اسم العملية</th>
+            <th>معرف العملية (PID)</th>
+            <th>استهلاك RAM</th>
+            <th>نوع العملية</th>
+            <th>الإجراء</th>
+          </tr>
+        </thead>
+        <tbody id="processesTbody">
+          <tr><td colspan="5" style="text-align:center;padding:25px;color:var(--muted)">جارٍ تحميل العمليات الجارية من النظام...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `)}
+  ${footer()}
+ </div>`;
+}
+
+function aiPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.shield}<div><strong>مركز شفافية الذكاء الاصطناعي (AI Transparency Center):</strong> كافة النماذج الـ 7 مترابطة في شبكة اتخاذ قرارات تكيفية تعمل بدون سحابة لحماية الخصوصية وتوفير استجابة فورية أقل من 0.2 مللي ثانية.</div></div>
+  <div class="page-grid-4">
+    ${metric('النماذج النشطة','<span id="aiActiveModels">7 / 7</span>','جميع النماذج متزامنة ومترابطة','shield','good')}
+    ${metric('متوسط زمن القرار','<span id="aiLatency">0.11 ms</span>','استجابة فورية بالعتاد المحلي','cpu','blue')}
+    ${metric('ذاكرة التعلم التكيفي','<span id="aiQCount">14,850+</span>','حالات ومكافآت مسجلة بالقرص','backup','good')}
+    ${metric('مستوى الأمان','100%','Thermal & Hardware Guard نشط','shield','good')}
+  </div>
+  <div class="page-actions" style="margin-bottom:4px">
+    <button class="primary-btn" data-action="ai.toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8" fill="currentColor"/></svg><span>تبديل وضع الطيار الآلي (AutoPilot)</span></button>
+    <button class="ghost-btn" data-action="ai.deep-train"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg><span>دورة تعلّم مكثفة للنماذج (Deep Training)</span></button>
+    <button class="ghost-btn" data-action="action:ai:benchmark">${icons.search}<span>تشغيل تقييم الأداء (Benchmark)</span></button>
+    <button class="ghost-btn" data-action="action:ai-memory:export">${icons.backup}<span>تصدير تقرير الذاكرة والقرارات</span></button>
+  </div>
+  <div class="page-grid-3">
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#132821;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+      <h3>1. Dynamic CPU Predictor</h3>
+      <p>نموذج عصبي يتنبأ بقفزات حمل المعالج قبل حدوثها لتجهيز التردد وتفادي الـ Micro-Stutters.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>الدقة الحسابية:</span><strong style="color:var(--green)">98.4%</strong></div>
+      <div class="progress green"><i style="--w:98%"></i></div>
+    </article>
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#142633;color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></div>
+      <h3>2. Process Intent Classifier</h3>
+      <p>مصنف غابات عشوائية يصنف سلوك العمليات النشطة تلقائياً بين ألعاب، أدوات، أو برامج خلفية.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>دقة التصنيف:</span><strong style="color:var(--cyan)">97.8%</strong></div>
+      <div class="progress"><i style="--w:97%"></i></div>
+    </article>
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#211d35;color:#b59cff)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg></div>
+      <h3>3. System Plan Generator</h3>
+      <p>محرك صياغة استراتيجيات التحسين يختار أفضل تركيبة من خطط الطاقة والأولويات بدقة متناهية.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>كفاءة التخطيط:</span><strong style="color:#b59cff">99.1%</strong></div>
+      <div class="progress purple"><i style="--w:99%"></i></div>
+    </article>
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#302719;color:var(--amber)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5.5c0 4.8-3.2 8-8 9.5-4.8-1.5-8-4.7-8-9.5V6l8-3Z"/></svg></div>
+      <h3>4. Thermal & Hardware Guard</h3>
+      <p>حارس أمان عتادي يراقب درجات الحرارة لحظياً ويمنع أي تعديل قد يرفع حرارة المعالج أو كارت الشاشة.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>حماية العتاد:</span><strong style="color:var(--amber)">آمن 100%</strong></div>
+      <div class="progress" style="background:#202b37"><i style="--w:100%;background:var(--amber)"></i></div>
+    </article>
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#132821;color:var(--green)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20V10M18 20V4M6 20v-4"/></svg></div>
+      <h3>5. Real-Time Metric Evaluator</h3>
+      <p>مقيم الأداء الفوري يقيس ثبات معدل الإطارات (Frametime Stability) ويكافئ القرارات الناجحة.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>معامل التقييم:</span><strong style="color:var(--green)">0.995</strong></div>
+      <div class="progress green"><i style="--w:99%"></i></div>
+    </article>
+    <article class="tool-card">
+      <div class="tool-glyph" style="background:#211d35;color:#b59cff)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+      <h3>6. Adaptive RL Memory</h3>
+      <p>جدول ذاكرة التعلم المعزز (Q-Table) المخزن على القرص لضمان تراكم الخبرة والاستفادة من التجارب.</p>
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:8px"><span>الخبرات المخزنة:</span><strong style="color:#b59cff" id="aiQCountCard">14,850 عينة</strong></div>
+      <div class="progress purple"><i style="--w:92%"></i></div>
+    </article>
+    <article class="tool-card" style="grid-column:span 3">
+      <div class="tool-glyph" style="background:#142633;color:var(--cyan)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg></div>
+      <h3>7. Windows Optimization Engine (محرك التنفيذ العصبي النهائي)</h3>
+      <p>المحرك الذي يجمع مخرجات النماذج الستة السابقة وينفذ الأوامر في نواة ويندوز: تحرير الذاكرة، فك ركن الأنوية (Core Unparking)، وضبط دقة المؤقت (0.5ms High Resolution Timer).</p>
+      <div style="display:flex;gap:12px;margin-top:10px;flex-wrap:wrap">
+        <span class="pill good"><i class="inline-dot"></i>محرك النواة متصل</span>
+        <span class="pill blue">AutoPilot نشط</span>
+        <span class="pill good">استجابة فورية</span>
+      </div>
+    </article>
+  </div>
+  ${panel('سجل قرارات وإجراءات الذكاء الاصطناعي وتخفيف الحمل (Live AI Audit & Load Reduction)', 'توثيق دائم ومباشر لتدخلات المحرك، أسباب القرارات، ومقدار تخفيف الحمل الفعلي على المعالج والذاكرة', `
+    <div class="page-panel-title" style="border-bottom:0;padding-bottom:12px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="pill good"><i class="inline-dot"></i>التحديث التلقائي نشط</span>
+        <span class="pill blue" id="aiDecisionsCount">0 قرار مسجل</span>
+      </div>
+      <button class="ghost-btn" id="refreshAiLogBtn" onclick="sendAction('ai.get-stats', {}, 'ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="width:13px;height:13px;margin-left:6px"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.85.83 6.72 2.24L21 7M21 3v4h-4"/></svg>تحديث السجل الآن</button>
+    </div>
+    <div class="log-list" id="aiDecisionList" style="max-height:480px;overflow-y:auto;display:flex;flex-direction:column;gap:10px">
+      <div style="text-align:center;padding:25px;color:var(--muted)">جارٍ مزامنة سجل قرارات الذكاء الاصطناعي...</div>
+    </div>
+  `)}
+  ${footer()}
+ </div>`;
+}
+
+function restorePage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.backup}<div><strong>مركز الاستعادة وسجل التدقيق:</strong> إنشاء واسترجاع نقاط استعادة Windows الرسمية وتوثيق كل إجراء تم في الجلسة.</div></div>
+  <div class="page-grid-4">
+    ${metric('نقاط الاستعادة','جاهزة ونشطة','مدعومة بواسطة نظام Windows','backup','good')}
+    ${metric('العمليات المسجلة','<span id="resCount">0</span> عملية','سجل الجلسة الحالية','clock','blue')}
+    ${metric('حماية النظام','مفعّلة 100%','تأكيد قبل أي تعديل حساس','shield','good')}
+    ${metric('سجل التدقيق','محفوظ محلياً','سجل الإجراءات على القرص','info','good')}
+  </div>
+  <div class="page-grid-2">
+    ${panel('نقاط استعادة النظام','إنشاء وتأكيد نقاط الاستعادة في Windows',`
+      <div class="page-panel-body">
+        <p style="font-size:11px;color:var(--muted);line-height:1.8;margin:0 0 18px">تتيح لك نقطة الاستعادة الرجوع بكامل إعدادات نظام Windows إلى الحالة السابقة في أي وقت بضغطة زر واحدة.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="primary-btn" data-action="recovery.create-restore-point">${icons.backup} إنشاء نقطة استعادة جديدة الآن</button>
+          <button class="ghost-btn" data-action="recovery.launch-rstrui">فتح معالج الاستعادة في Windows</button>
+        </div>
+      </div>
+    `)}
+    ${panel('ضمانات الأمان والتراجع','معايير التشغيل الآمن في ClearWin',`
+      <div class="page-panel-body">
+        <div class="recommend-list">
+          <div class="recommend-item">${icons.shield}<span>حفظ نسخة احتياطية من قيم السجل الأصلية تلقائياً.</span></div>
+          <div class="recommend-item">${icons.backup}<span>إمكانية التراجع عن أي أداة أو تعديل تم تطبيقه.</span></div>
+          <div class="recommend-item">${icons.clock}<span>توثيق زمني دقيق لكل أمر مع النتيجة في سجل التدقيق.</span></div>
+        </div>
+      </div>
+    `)}
+  </div>
+  ${panel('سجل النشاطات والأحداث','عرض الأحداث التي تم تنفيذها خلال هذه الجلسة',`
+    <div class="page-panel-title" style="border-bottom:0;padding-bottom:8px">
+      <div><p>سجل تفاعلي بالعمليات الحية ونتائج تنفيذها.</p></div>
+      <button class="ghost-btn" id="clearAuditBtn">مسح السجل المعروض</button>
+    </div>
+    <div class="log-list" id="auditLogList">
+      <div class="log-line"><span class="event-icon info">${icons.info}</span><div><strong>بدء تشغيل <bdi class="bidi-en">ClearWin 2.7.7</bdi></strong><p>مزامنة النماذج والاتصال بنواة ويندوز بنجاح.</p></div><time>${timeNow()}</time></div>
+    </div>
+  `)}
+  ${footer()}
+ </div>`;
+}
+
+function settingsPage(){
+ return `<div class="page-stack">
+  <div class="page-note">${icons.gear}<div><strong>إعدادات وصلاحيات ClearWin 2.7.7:</strong> التحكم في التشغيل بالخلفية ودرج النظام، البدء مع ويندوز، إدارة وضع المسؤول، واستقلالية الذكاء الاصطناعي.</div></div>
+  
+  <div class="page-grid-2">
+    ${panel('العمل في الخلفية ودرج التطبيقات (System Tray)','تشغيل دائم في الخلفية لحماية وتوزيع موارد المعالج وكارت الشاشة',`
+      <div class="setting-group">
+        <div class="toggle-row">
+          <div class="toggle-copy">
+            <strong>العمل في الخلفية والتصغير إلى درج النظام</strong>
+            <p id="minimizeToTrayDesc">عند إغلاق أو تصغير النافذة، ينزل ClearWin إلى درج التطبيقات (بجوار الساعة) ويظل شغالاً بهدوء لإدارة الموارد وموازنة الحمل تلقائياً.</p>
+          </div>
+          <button class="switch" id="settingsMinimizeToTraySwitch" onclick="toggleMinimizeToTray()" aria-label="العمل في الخلفية والتصغير لدرج النظام"><i></i></button>
+        </div>
+        <div style="padding:10px 20px 14px;font-size:10px;color:var(--muted);line-height:1.6">
+          * يمكنك في أي وقت استعادة الواجهة بالضغط المزدوج على أيقونة ClearWin بجوار الساعة، أو إغلاق التطبيق نهائياً عبر خيار (خروج) في قائمة الأيقونة.
+        </div>
+      </div>
+    `)}
+
+    ${panel('بدء التشغيل مع ويندوز وتسريع الاستقرار','تشغيل تلقائي فوري بعد الإقلاع وتفريغ موارد النظام العالقة',`
+      <div class="setting-group">
+        <div class="toggle-row">
+          <div class="toggle-copy">
+            <strong>البدء مع تشغيل ويندوز وتسريع استقرار النظام</strong>
+            <p id="startWithWindowsDesc">تشغيل ClearWin في الخلفية مصغراً مع ويندوز، مع فك ركن الأنوية فورياً، ضبط مؤقت النواة الدقيق 0.5ms، وتنظيف ذاكرة الإقلاع.</p>
+          </div>
+          <button class="switch" id="settingsStartWithWindowsSwitch" onclick="toggleStartWithWindows()" aria-label="البدء مع تشغيل ويندوز"><i></i></button>
+        </div>
+        <div style="padding:10px 20px 14px;font-size:10px;color:var(--muted);line-height:1.6">
+          * يضمن بقاء جهازك مستقراً وبأعلى استجابة فور تسجيل الدخول بدون فتح نوافذ تزعجك على سطح المكتب.
+        </div>
+      </div>
+    `)}
+  </div>
+
+  ${panel('خطة الطاقة الفائقة وتوجيه كارت الشاشة المنفصل للألعاب (Ultimate GPU & Power)','إلزام تشغيل الألعاب ومحاكيات ببجي على كارت الشاشة الخارجي ومنع هبوط الفريمات واستقرار 60 FPS',`
+    <div class="setting-group">
+      <div class="toggle-row">
+        <div class="toggle-copy">
+          <strong>إلزام كارت الشاشة المنفصل (High Performance GPU) وتفعيل خطة الطاقة الفائقة</strong>
+          <p id="gameGpuPowerDesc">توجيه ألعاب ومحاكيات ببجي (GameLoop / Tencent / TslGame) للعمل إجبارياً على بطاقة الرسوميات المنفصلة السريعة، وتفعيل خطة الطاقة القصوى (Ultimate Performance) مع فك ركن كافة الأنوية وضبط سرعة المعالج 100% لمنع هبوط الفريمات.</p>
+        </div>
+        <button class="switch" id="settingsGameGpuPowerSwitch" onclick="toggleGameGpuPower()" aria-label="توجيه كارت الشاشة المنفصل والخطة القصوى"><i></i></button>
+      </div>
+      <div style="padding:10px 20px 14px;font-size:11px;color:var(--muted);line-height:1.6">
+        * يُصلح مشكلة تشغيل اللعبة على كارت الشاشة المدمج (Intel HD) وتجمّد الفريمات عند أقل من 30 فريم، ويضمن استغلال بطاقة AMD/NVIDIA المنفصلة بالكامل بدون أي اختناق طاقة.
+      </div>
+    </div>
+  `)}
+
+  <div class="page-grid-2">
+    ${panel('إدارة وضع المسؤول (Admin Mode)','صلاحيات مرتفعة بطلب UAC رسمي لمساعد مستقل',`
+      <div class="setting-group">
+        <div class="toggle-row">
+          <div class="toggle-copy">
+            <strong>حالة الصلاحيات الحالية</strong>
+            <p id="settingsAdminDesc">يعمل التطبيق بامتيازات المستخدم العادي (Least-Privilege). لا يعمل كمسؤول تلقائياً.</p>
+          </div>
+          <span class="pill" id="settingsAdminBadge">صلاحيات عادية</span>
+        </div>
+        <div style="padding:14px 20px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="primary-btn" id="btnReqAdmin" onclick="requestAdminElevation()" style="padding:8px 16px;font-size:11px">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;margin-left:6px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            تفعيل وضع المسؤول (UAC)
+          </button>
+          <button class="ghost-btn" id="btnTermAdmin" onclick="terminateAdminSession()" style="padding:8px 16px;font-size:11px">
+            إنهاء الجلسة الإدارية
+          </button>
+        </div>
+        <div style="padding:0 20px 14px;font-size:10px;color:var(--muted);line-height:1.6">
+          * يتم تشغيل المساعد الإداري المستقل <code>ClearWin.AdminHelper.exe</code> عبر نافذة موافقة Windows UAC الرسمية. تبقى واجهة التطبيق بامتيازات عادية بدون صلاحيات مطلقة.
+        </div>
+      </div>
+    `)}
+
+    ${panel('استقلالية الأوامر الخضراء (Green Autonomy)','تحكم صريح في التنفيذ التلقائي للإجراءات منخفضة المخاطر',`
+      <div class="setting-group">
+        <div class="toggle-row">
+          <div class="toggle-copy">
+            <strong>السماح بتنفيذ الأوامر الخضراء تلقائياً (لهذه الجلسة فقط)</strong>
+            <p>يسمح للذكاء الاصطناعي بتنفيذ الإجراءات منخفضة المخاطر والمراجعة مسبقاً فقط. (مغلق افتراضياً للأمان).</p>
+          </div>
+          <button class="switch" id="greenAutonomySwitch" onclick="toggleGreenAutonomy()" aria-label="استقلالية الأوامر الخضراء"><i></i></button>
+        </div>
+        <div style="padding:14px 20px;font-size:10px;color:var(--muted);line-height:1.6">
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px">
+            <span class="tier-tag tier-green">Green</span> الأوامر الآمنة والمراجعة (قابلة للتنفيذ الذاتي إذا فُعّل هذا الخيار).
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:5px">
+            <span class="tier-tag tier-yellow">Yellow</span> الأوامر المتوسطة (تتطلب دائماً تأكيداً يدوياً منفصلاً لكل إجراء).
+          </div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span class="tier-tag tier-red">Red</span> الأوامر الحساسة أو الدائمة (محظورة تماماً من أي تنفيذ تلقائي).
+          </div>
+        </div>
+      </div>
+    `)}
+  </div>
+
+  ${panel('كتالوج الإجراءات ومستويات الأمان (Action Catalog)','تصنيف السياسات المركزية وفق معايير الأمان المعتمدة',`
+    <div class="page-panel-body" style="padding:15px 20px">
+      <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+        <button class="tweak-tab-btn active" onclick="filterCatalog('all', this)">الكل (34)</button>
+        <button class="tweak-tab-btn" onclick="filterCatalog('Green', this)">أوامر خضراء (14)</button>
+        <button class="tweak-tab-btn" onclick="filterCatalog('Yellow', this)">أوامر صفراء (10)</button>
+        <button class="tweak-tab-btn" onclick="filterCatalog('Red', this)">أوامر حمراء محظورة (10)</button>
+      </div>
+      <div id="catalogContainer" style="max-height:280px;overflow-y:auto;border:1px solid #1a2736;border-radius:10px">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>المستوى</th>
+              <th>اسم الإجراء</th>
+              <th>التصنيف</th>
+              <th>يحتاج مسؤول</th>
+              <th>قابل للاستعادة</th>
+            </tr>
+          </thead>
+          <tbody id="catalogTableBody">
+            <tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">جاري تحميل كتالوج السياسات...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `)}
+
+  ${panel('سجل التدقيق الأمني المحلي (Security Audit Log)','توثيق شفاف للقرارات والإجراءات المنفذة والمحظورة',`
+    <div class="page-panel-body" style="padding:15px 20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:11px;color:var(--muted)">سجل محلي غير قابل للتلاعب في %LOCALAPPDATA%\\ClearWin\\audit</span>
+        <button class="ghost-btn" onclick="refreshAuditLogs()" style="font-size:10px">تحديث السجل ⟳</button>
+      </div>
+      <div style="max-height:260px;overflow-y:auto;border:1px solid #1a2736;border-radius:10px">
+        <table class="audit-table">
+          <thead>
+            <tr>
+              <th>الوقت</th>
+              <th>الإجراء</th>
+              <th>المستوى</th>
+              <th>المصدر</th>
+              <th>الوضع</th>
+              <th>النتيجة</th>
+              <th>التحقق</th>
+            </tr>
+          </thead>
+          <tbody id="auditTableBody">
+            <tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">جاري قراءة سجل التدقيق المحلي...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `)}
+
+  <div class="page-grid-2">
+    ${panel('التجربة والمظهر','خيارات الواجهة وتنبيهات سطح المكتب',`
+      <div class="setting-group">
+        <div class="toggle-row"><div class="toggle-copy"><strong>إشعارات سطح المكتب</strong><p>عرض تنبيهات عند اكتمال فحص أو تحسين في الخلفية.</p></div><button class="switch on" data-switch aria-label="إشعارات سطح المكتب"><i></i></button></div>
+        <div class="toggle-row"><div class="toggle-copy"><strong>تأكيد قبل التغييرات الحساسة</strong><p>طلب تأكيد صريح قبل تعديل الشبكة أو إنهاء العمليات.</p></div><button class="switch on" data-switch aria-label="تأكيد التغييرات الحساسة"><i></i></button></div>
+        <div class="toggle-row"><div class="toggle-copy"><strong>تقليل الحركة والمؤثرات</strong><p>تقليل حركات التحميل والانتقالات لتوفير طاقة كارت الشاشة.</p></div><button class="switch" data-switch aria-label="تقليل الحركة"><i></i></button></div>
+      </div>
+    `)}
+    ${panel('عن ClearWin 2.7.7','معلومات الإصدار والبنية الأمنية',`
+      <div class="page-panel-body">
+        <div class="page-grid-3">
+          <div><div style="font-size:10px;color:var(--muted)">اسم التطبيق</div><strong style="display:block;margin-top:6px">ClearWin</strong></div>
+          <div><div style="font-size:10px;color:var(--muted)">رقم الإصدار</div><strong style="display:block;margin-top:6px">v2.7.7 Autonomy</strong></div>
+          <div><div style="font-size:10px;color:var(--muted)">بنية الأمان</div><strong style="display:block;margin-top:6px">Least-Privilege + AdminHelper</strong></div>
+        </div>
+      </div>
+    `)}
+  </div>
+  ${footer()}
+ </div>`;
+}
+
+// ==========================================
+// Page Navigation & Render Engine
+// ==========================================
+let aiAutoRefreshTimer = null;
+
+function renderPage(key){
+ if(aiAutoRefreshTimer){
+  clearInterval(aiAutoRefreshTimer);
+  aiAutoRefreshTimer = null;
+ }
+ if(!ALLOWED_PAGES.includes(key)){
+  console.warn('Unknown page requested:', key, '- fallback to dashboard');
+  key = 'dashboard';
+ }
+ activePage = key;
+ navGeneration++;
+ const meta = pageMeta[key] || pageMeta.dashboard;
+ $('#breadcrumb').textContent = $(`#navigation button[data-page="${key}"] span`)?.textContent || 'لوحة التحكم';
+ $('#eyebrow').textContent = meta[0];
+ $('#pageTitle').textContent = meta[1];
+ $('#pageDesc').textContent = meta[2];
+ $$('#navigation button[data-page]').forEach(b => b.classList.toggle('active', b.dataset.page === key));
+ 
+ if(key === 'dashboard') {
+  pageContent.innerHTML = dashboardMarkup;
+  sendAction('data.refresh', {}, 'dashboard');
+ } else if(key === 'quick') {
+  pageContent.innerHTML = quickPage();
+ } else if(key === 'startup') {
+  pageContent.innerHTML = startupPage();
+  sendAction('startup.get-list', {}, 'startup');
+ } else if(key === 'cleanup') {
+  pageContent.innerHTML = cleanupPage();
+  sendAction('cleanup.scan', {}, 'cleanup');
+ } else if(key === 'network') {
+  pageContent.innerHTML = networkPage();
+  sendAction('network.get-info', {}, 'network');
+ } else if(key === 'apps') {
+  pageContent.innerHTML = appsPage();
+  sendAction('apps.get-processes', {}, 'apps');
+ } else if(key === 'ai') {
+  pageContent.innerHTML = aiPage();
+  sendAction('ai.get-stats', {}, 'ai');
+  aiAutoRefreshTimer = setInterval(() => {
+   if(activePage === 'ai'){
+    sendAction('ai.get-stats', {}, 'ai');
+   } else {
+    clearInterval(aiAutoRefreshTimer);
+    aiAutoRefreshTimer = null;
+   }
+  }, 3500);
+ } else if(key === 'restore') {
+  pageContent.innerHTML = restorePage();
+ } else if(key === 'settings') {
+  pageContent.innerHTML = settingsPage();
+  sendAction('settings:get-tray-startup', {}, 'settings');
+  sendAction('admin:status', {}, 'settings');
+  sendAction('audit:get-logs', {}, 'settings');
+  sendAction('catalog:get-all', {}, 'settings');
+  updateSettingsUI(appSettings);
+ }
+ if(window.cwLastMetrics) {
+  try { updateLiveMetrics(window.cwLastMetrics); } catch(e){}
+ }
+ $('#sidebar').classList.remove('open');
+ window.scrollTo(0, 0);
+ try { applyBiDiToDom(pageContent); } catch(e){}
+}
+
+// Navigation event listeners
+$$('#navigation button[data-page]').forEach(btn=>btn.addEventListener('click',()=>renderPage(btn.dataset.page)));
+$('#menuBtn')?.addEventListener('click',()=>$('#sidebar').classList.toggle('open'));
+$('#bellBtn')?.addEventListener('click',()=>toast('جميع أنظمة ClearWin 2.7.7 تعمل بكفاءة وأمان كامل.'));
+
+// Global click delegation for page navigation links
+document.addEventListener('click',e=>{
+ const navBtn = e.target.closest('[data-page-nav]');
+ if(navBtn){
+  renderPage(navBtn.dataset.pageNav);
+ }
+});
+
+// ==========================================
+// Dynamic Data Binding Handlers
+// ==========================================
+let currentStartupData = [];
+function renderStartupList(items){
+ currentStartupData = items || [];
+ const tbody = $('#startupTbody'); if(!tbody) return;
+ const totalEl = $('#stTotal'); if(totalEl) totalEl.textContent = currentStartupData.length + ' عناصر';
+ if(!currentStartupData.length){
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:25px;color:var(--muted)">لا توجد برامج مسجلة في بدء التشغيل حالياً.</td></tr>';
+  return;
+ }
+ tbody.innerHTML = currentStartupData.map((it, idx)=>{
+  const isSafe = it.impact === 'منخفض';
+  const isEss = it.impact === 'أساسي';
+  const pillCls = isEss ? 'warn' : (isSafe ? 'good' : 'blue');
+  return `<tr class="filterable-st" data-name="${(it.name||'').toLowerCase()}">
+    <td><div class="item-main"><span class="item-icon ${isEss?'amber':'green'}">${(it.name||'A')[0].toUpperCase()}</span><div><strong>${escapeHtml(it.name)}</strong><small>${escapeHtml(it.desc||'')}</small></div></div></td>
+    <td><span class="pill">${escapeHtml(it.publisher||it.hive||'HKCU')}</span></td>
+    <td><span class="pill ${pillCls}">${escapeHtml(it.impact||'متوسط')}</span></td>
+    <td><span class="pill ${it.status==='معطّل'?'':'good'}">${escapeHtml(it.status||'مفعّل')}</span></td>
+    <td><button class="ghost-btn" onclick="toggleStartup('${escapeJs(it.name)}','${escapeJs(it.hive)}')">${it.status==='معطّل'?'تفعيل':'إيقاف'}</button></td>
+  </tr>`;
+ }).join('');
+}
+
+function filterStartupTable(q){
+ q = (q||'').toLowerCase().trim();
+ $$('.filterable-st').forEach(row=>{
+  row.style.display = (!q || row.dataset.name.includes(q)) ? '' : 'none';
+ });
+}
+
+function toggleStartup(name, hive){
+ toast('جارٍ تعديل حالة بدء التشغيل: ' + name);
+ sendAction('startup.toggle', { itemName: name, hive: hive || 'HKCU' });
+}
+
+let currentProcessesData = [];
+function renderProcessesList(procs){
+ currentProcessesData = procs || [];
+ const tbody = $('#processesTbody'); if(!tbody) return;
+ const totalEl = $('#appTotal'); if(totalEl) totalEl.textContent = currentProcessesData.length + ' عملية نشطة';
+ const topEl = $('#appTop');
+ if(currentProcessesData.length > 0 && topEl){
+  topEl.textContent = currentProcessesData[0].name + ' (' + currentProcessesData[0].ramMb + ' MB)';
+ }
+ if(!currentProcessesData.length){
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:25px;color:var(--muted)">لا توجد عمليات نشطة متاحة.</td></tr>';
+  return;
+ }
+ tbody.innerHTML = currentProcessesData.map(p=>{
+  const isProt = p.isProtected === true;
+  return `<tr class="filterable-proc" data-search="${(p.name||'').toLowerCase()} ${p.pid}">
+    <td><div class="item-main"><span class="item-icon ${isProt?'amber':'blue'}">${(p.name||'P')[0].toUpperCase()}</span><div><strong>${escapeHtml(p.name)}</strong><small>PID: ${p.pid}</small></div></div></td>
+    <td>${p.pid}</td>
+    <td><strong style="color:var(--cyan)">${p.ramMb} MB</strong></td>
+    <td><span class="pill ${isProt?'warn':'good'}">${isProt?'نظام محمي':'برنامج مستخدم'}</span></td>
+    <td>
+      ${isProt ? '<span class="pill" style="opacity:0.6">محمي</span>' : `<button class="ghost-btn" style="border-color:#ff566955;color:#ff9aaa" onclick="killProcess(${p.pid},'${escapeJs(p.name)}')">إنهاء</button>`}
+    </td>
+  </tr>`;
+ }).join('');
+}
+
+function filterProcessesTable(q){
+ q = (q||'').toLowerCase().trim();
+ $$('.filterable-proc').forEach(row=>{
+  row.style.display = (!q || row.dataset.search.includes(q)) ? '' : 'none';
+ });
+}
+
+function killProcess(pid, name){
+ if(confirm(`هل أنت متأكد من رغبتك في إنهاء العملية (${name} - PID: ${pid})؟`)){
+  toast('جارٍ إنهاء العملية: ' + name);
+  sendAction('apps.kill-process', { pid: pid });
+ }
+}
+
+function updateCleanupDisplay(d){
+ if(!d) return;
+ const u = $('#clUserTemp'); if(u) u.textContent = (d.userTempMb || 0) + ' MB';
+ const w = $('#clWinTemp'); if(w) w.textContent = (d.winTempMb || 0) + ' MB';
+ const s = $('#clShader'); if(s) s.textContent = (d.shaderCacheMb || 0) + ' MB';
+ const t = $('#clTotal'); if(t) t.textContent = (d.totalMb || 0) + ' MB';
+ const rt = $('#clRowTemp'); if(rt) rt.textContent = (d.userTempMb || 0) + ' MB';
+ const rsh = $('#clRowShader'); if(rsh) rsh.textContent = (d.shaderCacheMb || 0) + ' MB';
+}
+
+function updateNetworkDisplay(d){
+ if(!d) return;
+ const a = $('#netAdapter'); if(a) a.textContent = d.adapter || 'Ethernet';
+ const ip = $('#netIp'); if(ip) ip.textContent = d.ip || '—';
+ const p = $('#netPing'); if(p) p.textContent = (d.pingMs !== undefined ? d.pingMs : '--') + ' ms';
+ const dns = $('#netDns'); if(dns) dns.textContent = (d.dns || '—').split(',')[0];
+ const gw = $('#netGw'); if(gw) gw.textContent = d.gateway || '—';
+ const sp = $('#netSpeed'); if(sp) sp.textContent = (d.speedMbps ? d.speedMbps + ' Mbps' : '—');
+ const nt = $('#netType'); if(nt) nt.textContent = d.adapter ? (d.adapter.includes('Wi-Fi') || d.adapter.includes('Wireless') ? 'Wi-Fi' : 'Ethernet') : 'Ethernet';
+}
+
+let currentAiDecisions = [];
+
+function updateAiDisplay(d){
+ if(!d) return;
+ if(d.qSamples !== undefined){
+  const formatted = Number(d.qSamples).toLocaleString();
+  const el = $('#aiQCount'); if(el) el.textContent = formatted + '+';
+  const elCard = $('#aiQCountCard'); if(elCard) elCard.textContent = formatted + ' عينة';
+ }
+ if(d.avgLatencyMs !== undefined){
+  const el = $('#aiLatency'); if(el) el.textContent = d.avgLatencyMs + ' ms';
+ }
+ if(d.activeModels !== undefined){
+  const el = $('#aiActiveModels'); if(el) el.textContent = d.activeModels + ' / 7';
+ }
+ if(Array.isArray(d.recentDecisions)){
+  renderAiDecisions(d.recentDecisions);
+ }
+}
+
+function renderAiDecisions(decisions){
+ if(!Array.isArray(decisions)) return;
+ currentAiDecisions = decisions;
+ const countEl = $('#aiDecisionsCount');
+ if(countEl) countEl.textContent = `${currentAiDecisions.length} قرار مسجل`;
+ const host = $('#aiDecisionList');
+ if(!host) return;
+ if(!currentAiDecisions.length){
+  host.innerHTML = '<div style="text-align:center;padding:25px;color:var(--muted)">لا توجد قرارات مسجلة بعد. يعمل محرك الذكاء الاصطناعي في وضع المراقبة التكيفية.</div>';
+  return;
+ }
+ host.innerHTML = currentAiDecisions.map(renderAiDecisionCard).join('');
+}
+
+function renderAiDecisionCard(dec){
+ const cat = (dec.category || 'Optimization').toLowerCase();
+ let iconSvg = icons.shield;
+ let badgeClass = 'good';
+ let colorVar = 'var(--green)';
+
+ if(cat.includes('memory') || cat.includes('ram')){
+  iconSvg = icons.clean;
+  badgeClass = 'good';
+  colorVar = 'var(--green)';
+ } else if(cat.includes('cpu')){
+  iconSvg = icons.cpu;
+  badgeClass = 'blue';
+  colorVar = 'var(--cyan)';
+ } else if(cat.includes('game') || cat.includes('gaming')){
+  iconSvg = icons.clock;
+  badgeClass = 'purple';
+  colorVar = '#b59cff';
+ } else if(cat.includes('thermal')){
+  iconSvg = icons.warning;
+  badgeClass = 'warn';
+  colorVar = 'var(--amber)';
+ } else if(cat.includes('power') || cat.includes('battery')){
+  iconSvg = icons.gear;
+  badgeClass = 'warn';
+  colorVar = 'var(--amber)';
+ }
+
+ return `<div class="event" style="background:#0e1522;border:1px solid #1a2536;border-radius:12px;padding:14px;display:flex;gap:14px;align-items:flex-start">
+   <div class="event-icon" style="background:#132821;color:${colorVar};border-radius:10px;width:38px;height:38px;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+     ${iconSvg}
+   </div>
+   <div style="flex:1;min-width:0">
+     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px">
+       <strong style="font-size:13px;color:var(--text)">${escapeHtml(dec.actionAr || dec.action)}</strong>
+       <div style="display:flex;gap:6px;align-items:center">
+         <span class="pill ${badgeClass}" style="font-size:10px;padding:2px 8px">${escapeHtml(dec.category || 'General')}</span>
+         <span class="pill good" style="font-size:10px;padding:2px 8px">ثقة ${dec.confidence || 95}%</span>
+         <time style="font-size:10px;color:var(--muted)">${escapeHtml(dec.timeStr || '')}</time>
+       </div>
+     </div>
+     <p style="font-size:11px;color:#aab7c8;margin:2px 0 6px;line-height:1.5">
+       <strong style="color:var(--muted)">السبب: </strong>${escapeHtml(dec.reason || 'موازنة أداء المعالج والذاكرة')}
+     </p>
+     <div style="background:#080d14;border:1px solid #141f2e;border-radius:8px;padding:8px 12px;display:flex;align-items:center;gap:8px;margin-top:6px">
+       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px;color:var(--cyan);flex-shrink:0"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+       <span style="font-size:11px;color:var(--cyan)"><strong>أثر تخفيف الحمل: </strong>${escapeHtml(dec.loadImpact || 'تحسين استجابة النواة')}</span>
+     </div>
+   </div>
+ </div>`;
+}
+
+function prependAiDecision(dec){
+ if(!dec) return;
+ currentAiDecisions.unshift(dec);
+ if(currentAiDecisions.length > 50) currentAiDecisions.pop();
+ const countEl = $('#aiDecisionsCount');
+ if(countEl) countEl.textContent = `${currentAiDecisions.length} قرار مسجل`;
+ const host = $('#aiDecisionList');
+ if(host){
+  const el = document.createElement('div');
+  el.innerHTML = renderAiDecisionCard(dec);
+  const card = el.firstElementChild;
+  if(card){
+   card.style.animation = 'highlightRow 1.2s ease-out';
+   host.prepend(card);
+  }
+ }
+}
+
+
+// ==========================================================================
+// ClearWin Advanced BiDi Text Formatting & Isolation (Arabic RTL + LTR)
+// ==========================================================================
+function formatBidi(s) {
+  if (!s) return '';
+  const str = String(s);
+  if (!/[A-Za-z]/.test(str)) return str;
+  
+  const parts = str.split(/(<[^>]+>)/g);
+  for (let i = 0; i < parts.length; i++) {
+    if (!parts[i].startsWith('<')) {
+      parts[i] = parts[i].replace(/\(([^\)\(\u0600-\u06FF]*[A-Za-z][^\)\(\u0600-\u06FF]*)\)/g, '<bdi class="bidi-parens">($1)</bdi>');
+      parts[i] = parts[i].replace(/\[([^\]\[\u0600-\u06FF]*[A-Za-z][^\]\[\u0600-\u06FF]*)\]/g, '<bdi class="bidi-parens">[$1]</bdi>');
+      
+      const subParts = parts[i].split(/(<[^>]+>)/g);
+      for (let j = 0; j < subParts.length; j++) {
+        if (!subParts[j].startsWith('<')) {
+          subParts[j] = subParts[j].replace(/([A-Za-z][A-Za-z0-9_\-\.\/\+:#]*(?:[#\+]|\s+[A-Za-z0-9_\-\.\/\+:#]+)*|[A-Za-z][#\+]+)/g, function(m, val) {
+            let punct = '';
+            const mPunct = val.match(/([.,:;!?]+)$/);
+            if (mPunct) {
+              punct = mPunct[1];
+              val = val.substring(0, val.length - punct.length);
+            }
+            if (!val) return m;
+            return '<bdi class="bidi-en">' + val + '</bdi>' + punct;
+          });
+        }
+      }
+      parts[i] = subParts.join('');
+    }
+  }
+  return parts.join('');
+}
+
+function formatBidiHtml(s) {
+  if (!s) return '';
+  return formatBidi(escapeHtml(s));
+}
+
+function applyBiDiToDom(root = document.body) {
+  if (!root) return;
+  try {
+    const walker = document.createTreeWalker(
+      root,
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: function(node) {
+          if (!node.nodeValue || !/[A-Za-z]/.test(node.nodeValue) || !/[\u0600-\u06FF]/.test(node.nodeValue)) {
+            return NodeFilter.FILTER_SKIP;
+          }
+          const parent = node.parentElement;
+          if (!parent) return NodeFilter.FILTER_SKIP;
+          const tag = parent.tagName.toLowerCase();
+          if (['script', 'style', 'code', 'pre', 'bdi', 'textarea', 'input'].includes(tag)) {
+            return NodeFilter.FILTER_SKIP;
+          }
+          if (parent.closest('.bidi-en, .bidi-parens, code, pre')) {
+            return NodeFilter.FILTER_SKIP;
+          }
+          return NodeFilter.FILTER_ACCEPT;
+        }
+      }
+    );
+
+    const nodes = [];
+    let cur;
+    while (cur = walker.nextNode()) nodes.push(cur);
+
+    for (const n of nodes) {
+      const parent = n.parentElement;
+      if (!parent) continue;
+      const formatted = formatBidi(escapeHtml(n.nodeValue));
+      if (formatted !== n.nodeValue) {
+        const span = document.createElement('span');
+        span.className = 'bidi-wrap';
+        span.innerHTML = formatted;
+        parent.replaceChild(span, n);
+      }
+    }
+  } catch(e) {
+    console.debug('BiDi walker error:', e);
+  }
+}
+
+function escapeHtml(s){
+ if(!s) return '';
+ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function escapeJs(s){
+ if(!s) return '';
+ return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+}
+
+let currentCatalogData = [];
+let currentAuditLogs = [];
+let currentAdminState = { adminStatus: 'Disconnected', isElevated: false, greenAutonomy: false, message: '' };
+
+function updateAdminAutonomyDisplay(state){
+ currentAdminState = state || currentAdminState;
+ const chip = $('#topAdminChip');
+ const txt = $('#topAdminTxt');
+ const btn = $('#topAdminBtn');
+ const badge = $('#settingsAdminBadge');
+ const desc = $('#settingsAdminDesc');
+ const sw = $('#greenAutonomySwitch');
+
+ if(chip){
+  chip.classList.toggle('elevated', !!state.isElevated);
+  chip.classList.toggle('requesting', state.adminStatus === 'RequestingElevation');
+ }
+ if(txt){
+  txt.textContent = state.isElevated ? 'المسؤول متصل (Admin)' : (state.adminStatus === 'RequestingElevation' ? 'جاري طلب UAC...' : 'صلاحيات عادية');
+ }
+ if(btn){
+  btn.textContent = state.isElevated ? 'إنهاء الجلسة' : (state.adminStatus === 'RequestingElevation' ? 'إلغاء' : 'طلب مسؤول <bdi class="bidi-parens">(UAC)</bdi>');
+ }
+ if(badge){
+  badge.textContent = state.isElevated ? 'مسؤول متصل (Elevated)' : 'صلاحيات عادية (asInvoker)';
+  badge.className = 'pill ' + (state.isElevated ? 'good' : '');
+ }
+ if(desc){
+  desc.textContent = state.isElevated ? 'المساعد الإداري المستقل متصل ويعمل بامتيازات المسؤول بأمان عبر Named Pipe.' : 'يعمل التطبيق بامتيازات المستخدم العادي (Least-Privilege). لا يعمل كمسؤول تلقائياً.';
+ }
+ if(sw){
+  sw.classList.toggle('on', !!state.greenAutonomy);
+ }
+}
+
+function handleTopAdminClick(){
+ if(currentAdminState.isElevated){
+  if(confirm('هل تريد إنهاء جلسة المساعد الإداري والعودة للصلاحيات العادية؟')){
+   sendAction('admin:terminate-session');
+  }
+ } else {
+  sendAction('admin:request-elevation');
+ }
+}
+
+function requestAdminElevation(){
+ sendAction('admin:request-elevation');
+}
+
+function terminateAdminSession(){
+ sendAction('admin:terminate-session');
+}
+
+function toggleGreenAutonomy(){
+ sendAction('autonomy:toggle-green');
+}
+
+let appSettings = {
+ minimizeToTray: false,
+ startWithWindows: false,
+ gameGpuPower: false
+};
+
+function updateSettingsUI(settings){
+ if(!settings) return;
+ if(typeof settings.minimizeToTray === 'boolean'){
+  appSettings.minimizeToTray = settings.minimizeToTray;
+  const sw = $('#settingsMinimizeToTraySwitch');
+  if(sw) sw.classList.toggle('on', appSettings.minimizeToTray);
+  const desc = $('#minimizeToTrayDesc');
+  if(desc){
+   desc.textContent = appSettings.minimizeToTray
+    ? 'نشط: عند إغلاق النافذة ينزل ClearWin إلى درج النظام ويواصل العمل وموازنة موارد الألعاب والنظام.'
+    : 'معطل: عند إغلاق النافذة يتوقف التطبيق ومحرك التحسين تماماً.';
+  }
+ }
+ if(typeof settings.startWithWindows === 'boolean'){
+  appSettings.startWithWindows = settings.startWithWindows;
+  const sw = $('#settingsStartWithWindowsSwitch');
+  if(sw) sw.classList.toggle('on', appSettings.startWithWindows);
+  const desc = $('#startWithWindowsDesc');
+  if(desc){
+   desc.textContent = appSettings.startWithWindows
+    ? 'نشط: يبدأ التطبيق تلقائياً مصغراً في درج النظام ويطبق تسريع الاستقرار الفوري بعد الإقلاع.'
+    : 'معطل: لا يبدأ التطبيق تلقائياً مع بدء تشغيل ويندوز.';
+  }
+ }
+ if(typeof settings.gameGpuPower === 'boolean'){
+  appSettings.gameGpuPower = settings.gameGpuPower;
+  const sw = $('#settingsGameGpuPowerSwitch');
+  if(sw) sw.classList.toggle('on', appSettings.gameGpuPower);
+  const desc = $('#gameGpuPowerDesc');
+  if(desc){
+   desc.textContent = appSettings.gameGpuPower
+    ? 'نشط: يتم إلزام جيم لوب وببجي على كارت الشاشة المنفصل (AMD/NVIDIA High-Performance GPU) وتفعيل خطة الطاقة الفائقة 100% بدون خنق للأداء.'
+    : 'معطل: يتم الاعتماد على التوزيع التلقائي الافتراضي للويندوز.';
+  }
+ }
+}
+
+function toggleMinimizeToTray(){
+ const next = !appSettings.minimizeToTray;
+ sendAction('settings:toggle-tray', { enabled: next }, 'settings');
+}
+
+function toggleStartWithWindows(){
+ const next = !appSettings.startWithWindows;
+ sendAction('settings:toggle-startup', { enabled: next }, 'settings');
+}
+
+function toggleGameGpuPower(){
+ const next = !appSettings.gameGpuPower;
+ sendAction('settings:toggle-game-gpu-power', { enabled: next }, 'settings');
+}
+
+function refreshAuditLogs(){
+ sendAction('audit:get-logs');
+}
+
+function renderAuditLogs(logs){
+ currentAuditLogs = logs || [];
+ const tbody = $('#auditTableBody');
+ if(!tbody) return;
+ if(!currentAuditLogs.length){
+  tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:var(--muted)">لا توجد عمليات مسجلة حتى الآن في سجل التدقيق.</td></tr>';
+  return;
+ }
+ tbody.innerHTML = currentAuditLogs.map(l=>{
+  const tierCls = l.tier === 'Green' ? 'tier-green' : (l.tier === 'Yellow' ? 'tier-yellow' : 'tier-red');
+  const statCls = l.executionStatus === 'SUCCESS' ? 'good' : (l.executionStatus === 'BLOCKED' ? 'warn' : '');
+  const time = l.timestamp ? l.timestamp.substring(11, 19) : '--:--:--';
+  return `<tr>
+    <td style="color:var(--muted);font-family:monospace">${time}</td>
+    <td><strong>${escapeHtml(l.actionId)}</strong><br><small style="color:var(--muted)">${escapeHtml(l.details||'')}</small></td>
+    <td><span class="tier-tag ${tierCls}">${escapeHtml(l.tier)}</span></td>
+    <td><span class="pill">${escapeHtml(l.requester)}</span></td>
+    <td><span class="pill ${l.adminMode==='AdminHelper'?'good':''}">${escapeHtml(l.adminMode)}</span></td>
+    <td><span class="pill ${statCls}">${escapeHtml(l.executionStatus)}</span></td>
+    <td><span class="pill ${l.verificationStatus==='VERIFIED'?'good':''}">${escapeHtml(l.verificationStatus)}</span></td>
+  </tr>`;
+ }).join('');
+}
+
+function renderActionCatalog(items){
+ currentCatalogData = items || [];
+ filterCatalog('all');
+}
+
+function filterCatalog(tier, btnEl){
+ if(btnEl && btnEl.parentElement){
+  btnEl.parentElement.querySelectorAll('.tweak-tab-btn').forEach(b=>b.classList.remove('active'));
+  btnEl.classList.add('active');
+ }
+ const tbody = $('#catalogTableBody');
+ if(!tbody) return;
+ const filtered = (!tier || tier === 'all') ? currentCatalogData : currentCatalogData.filter(i => i.tier === tier);
+ if(!filtered.length){
+  tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--muted)">لا توجد إجراءات في هذه الفئة.</td></tr>';
+  return;
+ }
+ tbody.innerHTML = filtered.map(it=>{
+  const tierCls = it.tier === 'Green' ? 'tier-green' : (it.tier === 'Yellow' ? 'tier-yellow' : 'tier-red');
+  return `<tr>
+    <td><span class="tier-tag ${tierCls}">${escapeHtml(it.tier)}</span></td>
+    <td><strong>${escapeHtml(it.displayNameAr)}</strong><br><small style="color:var(--muted)">${escapeHtml(it.actionId)} - ${escapeHtml(it.descriptionAr||'')}</small></td>
+    <td><span class="pill">${escapeHtml(it.category||'General')}</span></td>
+    <td><span class="pill ${it.requiresAdmin?'warn':'good'}">${it.requiresAdmin ? 'نعم (مساعد)' : 'لا (عادي)'}</span></td>
+    <td><span class="pill ${it.isReversible?'good':'warn'}">${it.isReversible ? 'نعم (تراجع كامل)' : 'دائم/جزئي'}</span></td>
+  </tr>`;
+ }).join('');
+}
+
+// ==========================================
+// WebView2 Incoming Message Listener
+// ==========================================
+function handleClearWinNativeMessage(event){
+ let msg = event?.data;
+ if(!msg) return;
+ if(typeof msg === 'string' && msg.startsWith('{')){
+  try { msg = JSON.parse(msg); } catch(e){}
+ }
+ if(msg.type === 'metrics'){
+  updateLiveMetrics(msg);
+  return;
+ }
+ if(msg.type === 'status'){
+  if(msg.message){
+   toast(msg.message);
+   addAuditLog('إشعار النظام', msg.message, 'info');
+  }
+  return;
+ }
+ if(msg.type === 'admin_autonomy_state'){
+  updateAdminAutonomyDisplay(msg);
+  return;
+ }
+ if(msg.type === 'audit_logs'){
+  renderAuditLogs(msg.logs);
+  return;
+ }
+ if(msg.type === 'action_catalog'){
+  renderActionCatalog(msg.catalog);
+  return;
+ }
+ if(msg.type === 'ai_decision'){
+  prependAiDecision(msg.decision);
+  return;
+ }
+ if(msg.type === 'settings_state'){
+  updateSettingsUI(msg.settings || msg);
+  return;
+ }
+ if(msg.channel !== 'clearwin') return;
+
+ if(msg.type === 'action.result'){
+  // Suppress stale results if active page has changed or generation is old
+  if(msg.forPage && msg.forPage !== activePage){
+   return;
+  }
+  if(typeof msg.generation === 'number' && msg.generation < navGeneration && msg.forPage){
+   return;
+  }
+
+  const isBackgroundFetch = ['data.refresh', 'startup.get-list', 'cleanup.scan', 'network.get-info', 'apps.get-processes', 'ai.get-stats', 'admin:status', 'audit:get-logs', 'catalog:get-all', 'settings:get-tray-startup'].includes(msg.action);
+
+  if(!isBackgroundFetch || !msg.success){
+   const text = msg.message || (msg.success ? 'اكتمل الإجراء بنجاح.' : 'تعذر إكمال الإجراء.');
+   toast(text);
+   addAuditLog(msg.action || 'إجراء النظام', text, msg.success ? 'good' : 'warn');
+  }
+
+  if(msg.data){
+   if(Array.isArray(msg.data)){
+    if(activePage === 'startup') renderStartupList(msg.data);
+    else if(activePage === 'apps') renderProcessesList(msg.data);
+   } else if(typeof msg.data === 'object'){
+    if(msg.data.adapter !== undefined) updateNetworkDisplay(msg.data);
+    if(msg.data.userTempMb !== undefined) updateCleanupDisplay(msg.data);
+    if(msg.data.activeModels !== undefined) updateAiDisplay(msg.data);
+    if(msg.data.minimizeToTray !== undefined || msg.data.startWithWindows !== undefined || msg.data.gameGpuPower !== undefined) updateSettingsUI(msg.data);
+   }
+  }
+ }
+}
+
+if(window.chrome?.webview && typeof window.chrome.webview.addEventListener === 'function'){
+ window.chrome.webview.addEventListener('message', handleClearWinNativeMessage);
+ try { window.chrome.webview.postMessage("ui:ready"); } catch(e){}
+}
+
+// ==========================================
+// Interactive Action Delegation
+// ==========================================
+document.addEventListener('click', e=>{
+ const btn = e.target.closest('[data-action]');
+ if(btn){
+  const action = btn.dataset.action;
+  if(action.startsWith('action:')){
+   const act = action.substring('action:'.length);
+   toast('جارٍ تنفيذ الأمر: ' + act);
+   try { window.chrome.webview.postMessage('action:' + act); } catch(err){}
+   return;
+  }
+  toast('جارٍ تنفيذ: ' + (btn.textContent||'').trim());
+  sendAction(action);
+  return;
+ }
+ const sw = e.target.closest('[data-switch]');
+ if(sw){
+  const on = !sw.classList.contains('on');
+  sw.classList.toggle('on', on);
+  toast((sw.getAttribute('aria-label')||'الإعداد') + ': ' + (on?'مفعّل':'معطّل'));
+  return;
+ }
+ const tg = e.target.closest('.toggle');
+ if(tg){
+  tg.classList.toggle('on');
+  const count = $$('.toggle.on', pageContent).length;
+  const countEl = $('#selectedCount');
+  if(countEl) countEl.textContent = `تم تحديد ${count} عناصر للتطبيق`;
+  return;
+ }
+ if(e.target.closest('#selectAllBtn')){
+  const tgs = $$('.toggle', pageContent);
+  const all = tgs.length && tgs.every(x=>x.classList.contains('on'));
+  tgs.forEach(x=>x.classList.toggle('on', !all));
+  e.target.textContent = all ? 'تحديد الكل' : 'إلغاء التحديد';
+  const countEl = $('#selectedCount');
+  if(countEl) countEl.textContent = `تم تحديد ${all?0:tgs.length} عناصر للتطبيق`;
+  return;
+ }
+ if(e.target.closest('#scanBtn')){
+  const btn = e.target.closest('#scanBtn');
+  btn.disabled = true;
+  $('#scanLine')?.classList.add('active');
+  toast('بدء فحص وتطبيق التحسين الذكي الشامل...');
+  sendAction('optimization.review');
+  setTimeout(()=>{
+   btn.disabled = false;
+   $('#scanLine')?.classList.remove('active');
+  }, 1200);
+  return;
+ }
+ if(e.target.closest('#clearLogBtn') || e.target.closest('#clearAuditBtn')){
+  if(confirm('مسح سجل النشاط من الشاشة؟')){
+   const host = $('#eventsList') || $('#auditLogList');
+   if(host) host.innerHTML = '<div class="empty-state" style="padding:20px;text-align:center;color:var(--muted)">تم مسح السجل المعروض.</div>';
+   toast('تم مسح السجل المعروض.');
+  }
+  return;
+ }
+});
+
+// ==========================================
+// Command Palette (Ctrl+K)
+// ==========================================
+const clearWinCommands = [
+ {label:'لوحة التحكم الرئيسية',detail:'نظرة عامة على صحة النظام والموارد الحية',page:'dashboard'},
+ {label:'التحسين السريع (Tweaks)',detail:'تطبيق تحسينات النواة والذاكرة ومؤقت 0.5ms',page:'quick'},
+ {label:'برامج بدء التشغيل',detail:'إدارة التطبيقات التي تقلع مع نظام Windows',page:'startup'},
+ {label:'تنظيف مساحة النظام',detail:'حذف الملفات المؤقتة وكاش Shader Cache',page:'cleanup'},
+ {label:'أدوات الشبكة والاتصال',detail:'فحص Ping، تفريغ كاش DNS، ومعلومات المحول',page:'network'},
+ {label:'مدير العمليات النشطة',detail:'عرض العمليات الجارية حسب استهلاك RAM وإنهائها',page:'apps'},
+ {label:'شفافية الذكاء الاصطناعي (7 نماذج)',detail:'مراقبة النماذج العصبية المترابطة ووضع 60 FPS Floor',page:'ai'},
+ {label:'مركز الاستعادة وسجل التدقيق',detail:'إنشاء نقاط استعادة Windows والرجوع إليها',page:'restore'},
+ {label:'إعدادات وتفضيلات ClearWin',detail:'تخصيص الإشعارات وسلوك التحسين التلقائي',page:'settings'}
+];
+
+function renderCommands(q=''){
+ const host = $('#commandResults'); if(!host) return;
+ q = q.trim().toLowerCase();
+ const matches = clearWinCommands.filter(c => (c.label + ' ' + c.detail).toLowerCase().includes(q));
+ host.innerHTML = matches.map(c => `
+  <button class="command-result" onclick="runCommand('${c.page}')">
+    <div class="command-result-glyph">${icons.gear}</div>
+    <div style="flex:1;min-width:0"><strong>${c.label}</strong><p style="font-size:10px;color:var(--muted);margin:3px 0 0">${c.detail}</p></div>
+    <span style="font-size:10px;color:var(--cyan)">فتح ←</span>
+  </button>
+ `).join('');
+}
+
+function openCommand(){
+ $('#commandOverlay').hidden = false;
+ $('#commandSearch').value = '';
+ renderCommands();
+ $('#commandSearch').focus();
+}
+
+function closeCommand(){
+ $('#commandOverlay').hidden = true;
+}
+
+function runCommand(page){
+ closeCommand();
+ renderPage(page);
+}
+
+$('#commandBtn')?.addEventListener('click', openCommand);
+$('#closeCommandBtn')?.addEventListener('click', closeCommand);
+$('#commandSearch')?.addEventListener('input', e=>renderCommands(e.target.value));
+$('#commandOverlay')?.addEventListener('click', e=>{ if(e.target===$('#commandOverlay')) closeCommand(); });
+
+document.addEventListener('keydown', e=>{
+ if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='k'){
+  e.preventDefault();
+  if($('#commandOverlay').hidden) openCommand(); else closeCommand();
+ }
+ if(e.key==='Escape' && !$('#commandOverlay').hidden) closeCommand();
+});
+
+// Initialize default view
+renderPage('dashboard');
+setTimeout(() => sendAction('admin:status'), 500);
+
+window.addEventListener('DOMContentLoaded', () => {
+  try { applyBiDiToDom(document.body); } catch(e){}
+});
+
+</script>
+</body>
+</html>

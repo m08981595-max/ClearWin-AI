@@ -1,0 +1,7 @@
+{
+  "title": "Set Time To UTC",
+  "name": "set-time-utc",
+  "category": ["General"],
+  "description": "Sets the system time to UTC, Great for dual booting",
+  "deepDescription": "changes the system time to UTC"
+}

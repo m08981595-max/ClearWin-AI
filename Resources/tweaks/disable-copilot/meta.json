@@ -1,0 +1,7 @@
+{
+  "title": "Disable Copilot",
+  "name": "disable-copilot",
+  "category": ["Performance", "Privacy"],
+  "description": "Removes Microsoft's Copilot feature. (will fail if copilot is not installed)",
+  "deepDescription": "Finds and removes all installed Microsoft Copilot-related AppX packages for all users by filtering package names with 'Microsoft.Copilot'"
+}

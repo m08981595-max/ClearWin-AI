@@ -1,0 +1,30 @@
+Windows Registry Editor Version 5.00
+
+; ==============================================================================
+; تفعيل خزان الفريمات المسبق و Triple Buffering لكرت AMD Radeon HD 7700M
+; لمنع دروب فريم الاشتباكات والدخان في ببجي وجيم لوب
+; ==============================================================================
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000]
+"FlipQueueSize"=hex:31,00
+"TurboSync"=hex:31,00
+"EnableTripleBuffering"=hex:31,00,00,00
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Class\{4d36e968-e325-11ce-bfc1-08002be10318}\0000\UMD]
+"EnableTripleBuffering"=hex:31,00,00,00
+"FlipQueueSize"=hex:31,00
+"TextureOpt"=hex:31,00,00,00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Direct3D]
+"MaxPreRenderedFrames"=dword:00000001
+"TripleBuffering"=dword:00000001
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DirectDraw]
+"TripleBuffering"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\Direct3D]
+"MaxPreRenderedFrames"=dword:00000001
+"TripleBuffering"=dword:00000001
+
+[HKEY_CURRENT_USER\Software\Microsoft\DirectDraw]
+"TripleBuffering"=dword:00000001

@@ -1,0 +1,8 @@
+{
+  "title": "Optimize Nvidia Settings",
+  "name": "optimize-nvidia-settings",
+  "modal": "You can revert these changes from ClearWin's Undo option (or via the Nvidia control panel).",
+  "reversible": true,
+  "category": ["Performance", "GPU", "Gaming"],
+  "description": "Changes Nvidia Control Panel settings to improve performance"
+}

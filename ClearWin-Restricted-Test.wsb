@@ -1,0 +1,13 @@
+﻿<Configuration>
+  <VGpu>Disable</VGpu>
+  <Networking>Disable</Networking>
+  <ClipboardRedirection>Disable</ClipboardRedirection>
+  <MemoryInMB>2048</MemoryInMB>
+  <MappedFolders>
+    <MappedFolder>
+      <HostFolder>D:\ClearWin_Sandbox_Test</HostFolder>
+      <SandboxFolder>C:\Users\WDAGUtilityAccount\Desktop\ClearWinTest</SandboxFolder>
+      <ReadOnly>true</ReadOnly>
+    </MappedFolder>
+  </MappedFolders>
+</Configuration>

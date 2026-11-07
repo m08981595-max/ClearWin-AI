@@ -1,0 +1,14 @@
+{
+  "title": "Disable Defender RTP",
+  "name": "disable-defender-rtp",
+  "category": [
+    "Performance",
+    "General"
+  ],
+  "securityWarning": true,
+  "description": "Optional, manual-only Defender Real-time Protection change; disabled by default.",
+  "deepDescription": "ClearWin will not expose this tweak to automatic optimization. It can only run after an explicit confirmation because it reduces malware protection. Re-enable it immediately after any controlled test.",
+  "securityCritical": true,
+  "defaultEnabled": false,
+  "recommended": false
+}

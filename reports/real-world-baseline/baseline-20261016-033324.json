@@ -1,0 +1,187 @@
+﻿{
+    "Timestamp":  "2026-10-16T03:33:22.7531878+03:00",
+    "Computer":  "DESKTOP-9RINJIG",
+    "Windows":  {
+                    "Caption":  "Microsoft Windows 11 Pro",
+                    "Version":  "10.0.26200",
+                    "BuildNumber":  "26200",
+                    "LastBootUpTime":  "\/Date(1792020850159)\/",
+                    "TotalVisibleMemorySize":  8318520,
+                    "FreePhysicalMemory":  2219376
+                },
+    "CPU":  {
+                "Name":  "Intel(R) Core(TM) i7-3720QM CPU @ 2.60GHz",
+                "NumberOfCores":  4,
+                "NumberOfLogicalProcessors":  8,
+                "MaxClockSpeed":  2601
+            },
+    "Disks":  [
+                  {
+                      "DeviceID":  "C:",
+                      "Size":  106520637440,
+                      "FreeSpace":  21745455104
+                  },
+                  {
+                      "DeviceID":  "D:",
+                      "Size":  391927296000,
+                      "FreeSpace":  134633193472
+                  },
+                  {
+                      "DeviceID":  "F:",
+                      "Size":  1131409408,
+                      "FreeSpace":  117796864
+                  }
+              ],
+    "Processes":  [
+                      {
+                          "ProcessName":  "brave",
+                          "Id":  14324,
+                          "CPU":  138.859375,
+                          "WorkingSet64":  519888896
+                      },
+                      {
+                          "ProcessName":  "brave",
+                          "Id":  10820,
+                          "CPU":  80.828125,
+                          "WorkingSet64":  459378688
+                      },
+                      {
+                          "ProcessName":  "brave",
+                          "Id":  9200,
+                          "CPU":  355.40625,
+                          "WorkingSet64":  445845504
+                      },
+                      {
+                          "ProcessName":  "language_server",
+                          "Id":  14780,
+                          "CPU":  145.1875,
+                          "WorkingSet64":  418091008
+                      },
+                      {
+                          "ProcessName":  "Antigravity",
+                          "Id":  3272,
+                          "CPU":  3252.8125,
+                          "WorkingSet64":  411140096
+                      },
+                      {
+                          "ProcessName":  "explorer",
+                          "Id":  13852,
+                          "CPU":  649.359375,
+                          "WorkingSet64":  350212096
+                      },
+                      {
+                          "ProcessName":  "MsMpEng",
+                          "Id":  4156,
+                          "CPU":  7783.875,
+                          "WorkingSet64":  321921024
+                      },
+                      {
+                          "ProcessName":  "Memory Compression",
+                          "Id":  3424,
+                          "CPU":  122.15625,
+                          "WorkingSet64":  192081920
+                      },
+                      {
+                          "ProcessName":  "brave",
+                          "Id":  12548,
+                          "CPU":  163.34375,
+                          "WorkingSet64":  177922048
+                      },
+                      {
+                          "ProcessName":  "ClearWin",
+                          "Id":  15084,
+                          "CPU":  3.921875,
+                          "WorkingSet64":  156266496
+                      },
+                      {
+                          "ProcessName":  "Antigravity",
+                          "Id":  8296,
+                          "CPU":  998.734375,
+                          "WorkingSet64":  149377024
+                      },
+                      {
+                          "ProcessName":  "Antigravity",
+                          "Id":  15328,
+                          "CPU":  43,
+                          "WorkingSet64":  146206720
+                      },
+                      {
+                          "ProcessName":  "SearchIndexer",
+                          "Id":  13576,
+                          "CPU":  2866.28125,
+                          "WorkingSet64":  141471744
+                      },
+                      {
+                          "ProcessName":  "TextInputHost",
+                          "Id":  11784,
+                          "CPU":  18.3125,
+                          "WorkingSet64":  137039872
+                      },
+                      {
+                          "ProcessName":  "SearchHost",
+                          "Id":  3360,
+                          "CPU":  22.21875,
+                          "WorkingSet64":  133865472
+                      },
+                      {
+                          "ProcessName":  "svchost",
+                          "Id":  1720,
+                          "CPU":  942.796875,
+                          "WorkingSet64":  133279744
+                      },
+                      {
+                          "ProcessName":  "StartMenuExperienceHost",
+                          "Id":  12528,
+                          "CPU":  14.671875,
+                          "WorkingSet64":  122679296
+                      },
+                      {
+                          "ProcessName":  "Antigravity",
+                          "Id":  1308,
+                          "CPU":  1.125,
+                          "WorkingSet64":  108863488
+                      },
+                      {
+                          "ProcessName":  "svchost",
+                          "Id":  1728,
+                          "CPU":  394.203125,
+                          "WorkingSet64":  105152512
+                      },
+                      {
+                          "ProcessName":  "dwm",
+                          "Id":  1604,
+                          "CPU":  8688.078125,
+                          "WorkingSet64":  102879232
+                      },
+                      {
+                          "ProcessName":  "powershell",
+                          "Id":  14224,
+                          "CPU":  2.21875,
+                          "WorkingSet64":  102158336
+                      },
+                      {
+                          "ProcessName":  "msedgewebview2",
+                          "Id":  14976,
+                          "CPU":  0.828125,
+                          "WorkingSet64":  96456704
+                      },
+                      {
+                          "ProcessName":  "Antigravity",
+                          "Id":  13948,
+                          "CPU":  282.921875,
+                          "WorkingSet64":  85438464
+                      },
+                      {
+                          "ProcessName":  "brave",
+                          "Id":  2872,
+                          "CPU":  1.8125,
+                          "WorkingSet64":  82677760
+                      },
+                      {
+                          "ProcessName":  "explorer",
+                          "Id":  10828,
+                          "CPU":  1.25,
+                          "WorkingSet64":  74596352
+                      }
+                  ]
+}

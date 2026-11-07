@@ -1,0 +1,61 @@
+CLEARWIN END USER LICENSE AGREEMENT
+
+Version 1.0 - Effective August 2026
+
+Copyright (c) 2026 Abdullah Mohamed. All rights reserved.
+
+1. GRANT OF LICENSE
+   ClearWin ("the Software") is licensed, not sold. Subject to the terms of
+   this Agreement, the Licensor grants you a non-exclusive, non-transferable,
+   personal license to install and use the Software on one (1) computer at a
+   time.
+
+2. FREE USE
+   The Software is provided free of charge. You may use it for personal and
+   commercial purposes, and you may redistribute it in unmodified form
+   provided that this Agreement and the original copyright notice are
+   retained.
+
+3. RESTRICTIONS
+   You may not:
+   a) reverse engineer, decompile, or disassemble the Software;
+   b) modify, adapt, or create derivative works of the Software without prior
+      written permission;
+   c) sell, rent, lease, or sublicense the Software, or charge a fee for
+      distribution of the Software itself;
+   d) remove or alter any proprietary notices or labels on the Software;
+   e) use the Software in any manner that violates applicable law.
+
+4. NATURE OF THE SOFTWARE
+   The Software performs automated adjustments to Windows system settings,
+   including process priorities, network parameters, and power plans. You
+   acknowledge that such adjustments modify your operating system and that
+   you use the Software entirely at your own risk. The Software includes
+   safety mechanisms (backups, restore points, and an emergency kill switch),
+   but the Licensor does not warrant that any modification is reversible in
+   all circumstances.
+
+5. DISCLAIMER OF WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. THE ENTIRE RISK
+   ARISING OUT OF THE USE OF THE SOFTWARE REMAINS WITH YOU.
+
+6. LIMITATION OF LIABILITY
+   TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL THE
+   LICENSOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+   CONSEQUENTIAL, OR EXEMPLARY DAMAGES (INCLUDING LOSS OF DATA, SYSTEM
+   FAILURES, OR LOST PROFITS) ARISING OUT OF OR IN CONNECTION WITH THE USE OF
+   THE SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+7. TERMINATION
+   This license is effective until terminated. It terminates automatically if
+   you fail to comply with any of its terms. Upon termination, you must
+   destroy all copies of the Software.
+
+8. GOVERNING LAW
+   This Agreement shall be governed by the laws of the jurisdiction in which
+   the Licensor resides.
+
+By installing, copying, or using the Software, you acknowledge that you have
+read and agreed to this Agreement.

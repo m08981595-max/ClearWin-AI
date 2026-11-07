@@ -1,0 +1,59 @@
+<Window x:Class="ClearWin.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ClearWin v2.7.2 - AI Optimization Center"
+        Height="900" Width="1360"
+        MinHeight="760" MinWidth="1120"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="CanResize">
+    
+    <!-- Window Chrome for custom title bar -->
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40"
+                      ResizeBorderThickness="8"
+                      CornerRadius="12"
+                      GlassFrameThickness="0"/>
+    </WindowChrome.WindowChrome>
+
+    <!-- Main Container with Glassmorphism Background -->
+    <Border CornerRadius="12"
+            Background="#DD0A0A0A"
+            BorderBrush="#40FFFFFF"
+            BorderThickness="1">
+        
+        <!-- Blur Effect (Simulating Acrylic/Mica) -->
+        <Border.Effect>
+            <BlurEffect Radius="50" KernelType="Gaussian"/>
+        </Border.Effect>
+
+        <!-- Main Layout Grid: Sidebar + Content -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Left Sidebar -->
+                <ColumnDefinition Width="250"/>
+                <!-- Main Content Area -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Sidebar Column (Grid.Column="0") -->
+            <!-- To be filled in Step 2 -->
+            <Border Grid.Column="0"
+                    Background="#15FFFFFF"
+                    BorderBrush="#20FFFFFF"
+                    BorderThickness="0,0,1,0">
+                <!-- Sidebar content goes here -->
+            </Border>
+
+            <!-- Main Content Column (Grid.Column="1") -->
+            <!-- To be filled in Steps 3-5 -->
+            <Border Grid.Column="1"
+                    Background="Transparent"
+                    Padding="20">
+                <!-- Main content goes here -->
+            </Border>
+
+        </Grid>
+    </Border>
+</Window>

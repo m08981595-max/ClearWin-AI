@@ -1,0 +1,32 @@
+# Build outputs
+bin/
+obj/
+release/
+
+# IDE & Editor
+.vs/
+*.suo
+*.user
+*.sln.docstates
+.vscode/
+
+# OS Artifacts
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Temporary & Logs
+*.tmp
+*.log
+*.bak
+agent/
+
+# Local diagnostic dumps & test logs
+tools/*.log
+tools/*.json
+tools/*.txt
+tools/*.nupkg
+tools/*.zip
+
+# Backups & Scratch
+backups/

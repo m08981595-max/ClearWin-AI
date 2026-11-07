@@ -1,0 +1,12 @@
+{
+  "title": "Disable platform-clock override",
+  "name": "disable-hpet",
+  "category": [
+    "Performance",
+    "Gaming"
+  ],
+  "restart": false,
+  "warning": "Advanced setting. Removes the useplatformclock boot override; this does not disable the physical HPET timer.",
+  "description": "Removes the forced platform-clock override and returns Windows to normal timer-source selection.",
+  "deepDescription": "Runs bcdedit /deletevalue useplatformclock so Windows is not forced to use the platform clock. Results depend on the hardware, firmware, Windows build, and timer configuration; no universal FPS or input-lag improvement is guaranteed."
+}

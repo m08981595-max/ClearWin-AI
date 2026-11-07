@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<assembly manifestVersion="1.0" xmlns="urn:schemas-microsoft-com:asm.v1">
+  <assemblyIdentity version="2.7.7.0" name="ClearWin.AdminHelper" type="win32"/>
+  <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+    <security>
+      <requestedPrivileges>
+        <requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+</assembly>
