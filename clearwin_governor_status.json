@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-22T08:01:12.218627",
+  "timestamp": "2026-11-22T08:11:16.728961",
   "governor_active": true,
   "ai_integrated": true,
   "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
@@ -14,13 +14,18 @@
   "throttled_count": 5,
   "recent_throttled": [
     {
-      "pid": 6492,
-      "name": "brave.exe",
+      "pid": 1952,
+      "name": "msedgewebview2.exe",
       "priority": "BELOW_NORMAL"
     },
     {
-      "pid": 8424,
-      "name": "msedgewebview2.exe",
+      "pid": 5984,
+      "name": "vssvc.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 6492,
+      "name": "brave.exe",
       "priority": "BELOW_NORMAL"
     },
     {
@@ -29,12 +34,7 @@
       "priority": "BELOW_NORMAL"
     },
     {
-      "pid": 10988,
-      "name": "wmiapsrv.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 12484,
+      "pid": 12588,
       "name": "msedgewebview2.exe",
       "priority": "BELOW_NORMAL"
     }
@@ -42,7 +42,7 @@
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
   "total_boost_events": 0,
-  "total_throttle_events": 31,
+  "total_throttle_events": 62,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
