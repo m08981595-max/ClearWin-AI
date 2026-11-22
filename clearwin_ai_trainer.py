@@ -96,14 +96,18 @@ ACTIONS = {
 # [8] pcie_aspm_hazard (1.0 if PCIe ASPM or Disk spin-down active)
 NUM_FEATURES = 9
 NUM_ACTIONS = len(ACTIONS)
+NUM_HIDDEN = 16
+RESIDUAL_SCALE = 0.20
 
 # Default base policy weights for PC architecture
 DEFAULT_WEIGHTS = {
-    "version": "21.3-pc-hardware-guard",
+    "version": "22.0-deep-residual-policy",
+    "architecture": "Deep Residual Policy MLP (9 -> 16 -> 6) with LeakyReLU & Non-Destructive Warm Start",
     "updated_at": "",
     "total_training_iterations": 0,
     "cumulative_reward": 0.0,
     "learning_rate": 0.02,
+    "residual_scale": 0.20,
     "weights": [
         #  RAM    Commit   CPU    Idle   Bloat  CritRAM Disk   Cooldown ASPM_Hazard
         [ -0.5,   -0.3,  -0.4,   0.2,  -0.4,  -2.5,   0.0,    0.8,     -2.0 ],  # 0: MAINTAIN_STEADY_STATE
@@ -123,6 +127,60 @@ _last_disk_sample_bytes = 0
 _last_disk_sample_ops = 0
 _last_disk_sample_time_ms = 0
 
+def init_deep_mlp(linear_weights):
+    """Initializes the Deep Residual MLP (9 -> 16 -> 6) with non-destructive warm-start."""
+    mlp_hidden_weights = []
+    mlp_hidden_biases = [0.0] * NUM_HIDDEN
+    for h in range(NUM_HIDDEN):
+        if h < 6:
+            # Action latent directions
+            mlp_hidden_weights.append([linear_weights[h][f] * 0.5 for f in range(NUM_FEATURES)])
+        elif h == 6:
+            # CPU x Disk Saturation detector
+            row = [0.0] * NUM_FEATURES
+            row[2] = 1.5; row[6] = 2.0
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -1.0
+        elif h == 7:
+            # RAM Bloat x Cooldown detector
+            row = [0.0] * NUM_FEATURES
+            row[0] = 2.0; row[7] = -2.5
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -0.5
+        elif h == 8:
+            # Idle x Health Maintenance detector
+            row = [0.0] * NUM_FEATURES
+            row[3] = 2.5; row[0] = -1.5; row[2] = -1.5
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -0.5
+        elif h == 9:
+            # Emergency Cascade detector
+            row = [0.0] * NUM_FEATURES
+            row[0] = 2.0; row[1] = 1.5; row[5] = 3.0
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -2.0
+        elif h == 10:
+            # PCIe ASPM / Bus Hazard detector
+            row = [0.0] * NUM_FEATURES
+            row[8] = 3.5
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -1.5
+        elif h == 11:
+            # Gaming Latency / Micro-stutter detector
+            row = [0.0] * NUM_FEATURES
+            row[2] = 2.0; row[6] = 2.5
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = -1.5
+        else:
+            seed = (h * 13) % 17
+            row = [math.sin(seed + f) * 0.1 for f in range(NUM_FEATURES)]
+            mlp_hidden_weights.append(row)
+            mlp_hidden_biases[h] = 0.0
+
+    mlp_output_weights = [[0.01 * math.cos(a + h) for h in range(NUM_HIDDEN)] for a in range(NUM_ACTIONS)]
+    mlp_output_biases = [0.0] * NUM_ACTIONS
+    return mlp_hidden_weights, mlp_hidden_biases, mlp_output_weights, mlp_output_biases
+
 def load_weights():
     if os.path.exists(WEIGHTS_FILE):
         try:
@@ -133,24 +191,40 @@ def load_weights():
                 
                 # Auto-migrate from 21.2 (5 actions, 8 features) to 21.3 (6 actions, 9 features)
                 if len(weights) == 5:
-                    # Expand existing rows to 9 features
                     for row in weights:
                         if len(row) == 8:
                             row.append(-1.0)
-                    # Add Action 5 (ENFORCE_BUS_AND_POWER_STABILITY)
                     action_5_weights = [-0.2, -0.2, -0.2, 0.0, -0.2, 0.0, -0.2, 0.0, 7.5]
                     weights.append(action_5_weights)
                     biases.append(-2.50)
                     data["weights"] = weights
                     data["biases"] = biases
-                    data["version"] = "21.3-pc-hardware-guard"
-                    save_weights(data)
-                    return data
-                elif len(weights) == NUM_ACTIONS:
+                
+                # Warm-start upgrade to Phase 2: Deep Residual MLP (9 -> 16 -> 6)
+                if len(weights) == NUM_ACTIONS:
+                    needs_save = False
+                    if "mlp_hidden_weights" not in data or len(data.get("mlp_hidden_weights", [])) != NUM_HIDDEN:
+                        hw, hb, ow, ob = init_deep_mlp(weights)
+                        data["mlp_hidden_weights"] = hw
+                        data["mlp_hidden_biases"] = hb
+                        data["mlp_output_weights"] = ow
+                        data["mlp_output_biases"] = ob
+                        data["architecture"] = "Deep Residual Policy MLP (9 -> 16 -> 6) with LeakyReLU & Non-Destructive Warm Start"
+                        data["residual_scale"] = RESIDUAL_SCALE
+                        data["version"] = "22.0-deep-residual-policy"
+                        needs_save = True
+                    if needs_save:
+                        save_weights(data)
                     return data
         except Exception:
             pass
-    return json.loads(json.dumps(DEFAULT_WEIGHTS))
+    data = json.loads(json.dumps(DEFAULT_WEIGHTS))
+    hw, hb, ow, ob = init_deep_mlp(data["weights"])
+    data["mlp_hidden_weights"] = hw
+    data["mlp_hidden_biases"] = hb
+    data["mlp_output_weights"] = ow
+    data["mlp_output_biases"] = ob
+    return data
 
 def save_weights(weights_data):
     weights_data["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -321,13 +395,39 @@ def collect_pc_telemetry():
 
     return features, details
 
-def compute_action_distribution(features, weights, biases):
-    logits = []
+def compute_action_distribution(features, weights, biases,
+                                mlp_hidden_weights=None, mlp_hidden_biases=None,
+                                mlp_output_weights=None, mlp_output_biases=None,
+                                residual_scale=RESIDUAL_SCALE):
+    # 1. Base linear path (warm-start anchor)
+    linear_logits = []
     for a in range(NUM_ACTIONS):
         val = biases[a]
         for f in range(NUM_FEATURES):
             val += weights[a][f] * features[f]
-        logits.append(val)
+        linear_logits.append(val)
+
+    # 2. Deep Residual MLP Non-Linear Synergy path (Phase 2 Architecture)
+    hidden_z = []
+    hidden_a = []
+    if mlp_hidden_weights and mlp_output_weights:
+        num_h = len(mlp_hidden_weights)
+        for h in range(num_h):
+            z = mlp_hidden_biases[h] if mlp_hidden_biases and h < len(mlp_hidden_biases) else 0.0
+            for f in range(NUM_FEATURES):
+                z += mlp_hidden_weights[h][f] * features[f]
+            hidden_z.append(z)
+            act = z if z > 0 else 0.1 * z  # LeakyReLU(0.1)
+            hidden_a.append(act)
+
+        logits = []
+        for a in range(NUM_ACTIONS):
+            zo = mlp_output_biases[a] if mlp_output_biases and a < len(mlp_output_biases) else 0.0
+            for h in range(num_h):
+                zo += mlp_output_weights[a][h] * hidden_a[h]
+            logits.append(linear_logits[a] + residual_scale * zo)
+    else:
+        logits = linear_logits
 
     # Physical Safety Gates & Strict Operational Envelope:
     # Action 0 (Maintain Steady State): Forbidden if CPU is actively spiking (>= 70%) or HDD thrashing (features[6] >= 0.8)
@@ -356,7 +456,7 @@ def compute_action_distribution(features, weights, biases):
     exp_l = [math.exp(l - max_l) for l in logits]
     sum_e = sum(exp_l)
     probs = [e / sum_e for e in exp_l]
-    return logits, probs
+    return logits, probs, hidden_z, hidden_a
 
 def evaluate_decision_physics(chosen_action, features, details):
     """
@@ -437,9 +537,12 @@ def evaluate_decision_physics(chosen_action, features, details):
 
     return reward, optimal_action, " | ".join(reasoning)
 
-def update_weights(weights, biases, features, chosen_action, optimal_action, reward, lr=0.02):
+def update_weights(weights, biases, features, chosen_action, optimal_action, reward,
+                   mlp_hidden_weights=None, mlp_hidden_biases=None,
+                   mlp_output_weights=None, mlp_output_biases=None,
+                   hidden_z=None, hidden_a=None, lr=0.02):
+    # 1. Update Linear Base Weights
     for f in range(NUM_FEATURES):
-        # Reinforce good, punish bad
         weights[chosen_action][f] += lr * reward * features[f]
         if chosen_action != optimal_action:
             weights[optimal_action][f] += lr * 1.0 * features[f]
@@ -473,6 +576,36 @@ def update_weights(weights, biases, features, chosen_action, optimal_action, rew
     # Action 3 (Throttle Background Tasks): Must strongly respond to both CPU spikes and Disk bottlenecks
     weights[3][2] = max(weights[3][2], 4.5)  # CPU spike
     weights[3][6] = max(weights[3][6], 4.5)  # Disk bottleneck / thrashing
+
+    # 2. Backpropagation through Deep Residual MLP
+    if mlp_hidden_weights and mlp_output_weights and hidden_z and hidden_a:
+        num_h = len(mlp_hidden_weights)
+        delta_out = [0.0] * NUM_ACTIONS
+        delta_out[chosen_action] += lr * reward
+        if chosen_action != optimal_action:
+            delta_out[optimal_action] += lr * 1.0
+            delta_out[chosen_action] -= lr * 0.6
+
+        # Hidden layer delta: delta_h = (W_o^T * delta_out) * LeakyReLU'(z)
+        delta_h = [0.0] * num_h
+        for h in range(num_h):
+            grad_sum = sum(mlp_output_weights[a][h] * delta_out[a] for a in range(NUM_ACTIONS))
+            deriv = 1.0 if hidden_z[h] > 0 else 0.1
+            delta_h[h] = grad_sum * deriv
+
+        # Update Output Layer (W_o, b_o)
+        for a in range(NUM_ACTIONS):
+            for h in range(num_h):
+                mlp_output_weights[a][h] += delta_out[a] * hidden_a[h] * 0.5
+            if mlp_output_biases and a < len(mlp_output_biases):
+                mlp_output_biases[a] += delta_out[a] * 0.05
+
+        # Update Hidden Layer (W_h, b_h)
+        for h in range(num_h):
+            for f in range(NUM_FEATURES):
+                mlp_hidden_weights[h][f] += delta_h[h] * features[f] * 0.5
+            if mlp_hidden_biases and h < len(mlp_hidden_biases):
+                mlp_hidden_biases[h] += delta_h[h] * 0.05
 
 _last_trim_timestamp = 0.0
 _last_defrag_timestamp = 0.0
@@ -652,7 +785,18 @@ def run_step(weights_data, iter_num, apply_physical=True):
     biases = weights_data["biases"]
     lr = weights_data.get("learning_rate", 0.02)
 
-    logits, probs = compute_action_distribution(features, weights, biases)
+    hw = weights_data.get("mlp_hidden_weights")
+    hb = weights_data.get("mlp_hidden_biases")
+    ow = weights_data.get("mlp_output_weights")
+    ob = weights_data.get("mlp_output_biases")
+    res_scale = weights_data.get("residual_scale", RESIDUAL_SCALE)
+
+    logits, probs, hidden_z, hidden_a = compute_action_distribution(
+        features, weights, biases,
+        mlp_hidden_weights=hw, mlp_hidden_biases=hb,
+        mlp_output_weights=ow, mlp_output_biases=ob,
+        residual_scale=res_scale
+    )
 
     # 95% exploit, 5% explore (strictly over safe, physically-allowed actions)
     global _last_defrag_timestamp
@@ -678,7 +822,10 @@ def run_step(weights_data, iter_num, apply_physical=True):
 
     reward, optimal_action, reasoning = evaluate_decision_physics(chosen_action, features, details)
 
-    update_weights(weights, biases, features, chosen_action, optimal_action, reward, lr=lr)
+    update_weights(weights, biases, features, chosen_action, optimal_action, reward,
+                   mlp_hidden_weights=hw, mlp_hidden_biases=hb,
+                   mlp_output_weights=ow, mlp_output_biases=ob,
+                   hidden_z=hidden_z, hidden_a=hidden_a, lr=lr)
 
     weights_data["total_training_iterations"] += 1
     weights_data["cumulative_reward"] = round(weights_data["cumulative_reward"] + reward, 3)
