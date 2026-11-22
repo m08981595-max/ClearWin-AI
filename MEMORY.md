@@ -2,9 +2,19 @@
 # CLEARWIN 2.7.2 GLASSUI V21 — PROJECT MEMORY
 # Supreme Director: Eng. Abdullah Mohamed (maher)
 # Workspace: D:\open code\optomize\ClearWin-2.7.2-GlassUI-V21-AI-EXECUTION-CENTER\clearwin_v19_scrollbar_control
-# Last Updated: 2026-11-22 05:31
-# System Maintenance: German 100-Hour Video: 100% COMPLETED (13.38 GB MKV). WebUI Full Quad-Sync: 197KB index.html synchronized across all 4 locations. PE Exe Icon Embedded: ClearWin.exe binary patched with new icon resources. Desktop Shortcuts: Cleaned to 1 single shortcut. Old Icons: Permanently deleted. AI Training Engine: Audit #56 completed (+1796.8 pts, 1,775+ steps, 12 consecutive +1.50 Emergency RAM recoveries), 7h 40m continuous uptime.
+# Last Updated: 2026-11-22 06:12
+# System Maintenance: GitHub Release Created & Tagged (v2.7.2-v21-baseline alongside v2.7.7). Non-Destructive Versioning Protocol Enforced in AGENTS.md. German 100-Hour Video: 100% COMPLETED (13.38 GB MKV). WebUI Full Quad-Sync: 197KB index.html synchronized across all 4 locations. PE Exe Icon Embedded: ClearWin.exe binary patched with new icon resources. Desktop Shortcuts: Cleaned to 1 single shortcut. Old Icons: Permanently deleted. AI Training Engine: Audit #59 completed (+1873.1 pts, 1,836+ steps, 94.7% flawless window, CPU throttle 100% precision), 8h 10m continuous uptime.
 # ==============================================================================
+
+## 📌 0.0 GITHUB EVOLUTION & NON-DESTRUCTIVE VERSIONING PROTOCOL (2026-11-22)
+- **Directive:** "اي حاجه هتعملها بعد كده او تعدي في المشروع ترفع النسخه الجديده على الجيتاب وما تمسحش القديمه بحيث ان احنا نشوف هل في تطور ولا لا" (Eng. Abdullah Mohamed - `maher`).
+- **Enforced Protocol:**
+  1. **Strict Incremental History:** Every code edit, AI training milestone, or UI upgrade must be committed and pushed incrementally to GitHub without rebase/force-push.
+  2. **Zero Overwrite of Prior Releases:** All previous versions and releases (`v2.7.7`, `v2.7.2-v21-baseline`, and future milestones) are preserved permanently on GitHub Releases.
+  3. **Release Assets Tracking:** Every release attaches full binary artifacts (`ClearWin.exe`, `clearwin_ai_weights.json`, `clearwin_ai_training_log.md`, `.ico`) allowing instant side-by-side diffing and verification of hardware evolution.
+  4. **Active Releases on GitHub (`m08981595-max/ClearWin-AI`):**
+     - `v2.7.2-v21-baseline` (Latest): ClearWin 2.7.2 GlassUI V21 Fluent 2.0 + RL Policy Engine (+1,873.1 score).
+     - `v2.7.7` (Historical Baseline): ClearWin AI v2.7.7 (2026-11-07).
 
 ## 🏆 0.5 CLEARWIN 2.7.2 GLASSUI V21 — FLUENT 2.0 FRONTEND ARCHITECTURE DEPLOYED (2026-11-22 03:05)
 - **Directive:** "الواجه التطبيق كلها عايزه اعاده ترتيب و تنظيم و شكل افضل... اعطها لاكثر من وكيل خبراء" (Eng. Abdullah Mohamed - `maher`).
