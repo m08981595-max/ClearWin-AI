@@ -1,23 +1,63 @@
 {
-  "timestamp": "2026-11-22T12:00:25.959631",
+  "timestamp": "2026-11-22T12:11:01.350602",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "MAINTAIN_STEADY_STATE",
-  "governor_mode": "EQUILIBRIUM",
+  "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
+  "governor_mode": "ACTIVE_GOVERNANCE",
   "foreground_process": {
     "pid": 11876,
     "name": "OpenWith.exe",
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 0,
-  "throttled_count": 0,
-  "restored_count": 8,
-  "recent_throttled": [],
+  "governed_count": 11,
+  "throttled_count": 11,
+  "recent_throttled": [
+    {
+      "pid": 1796,
+      "name": "vssvc.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 2828,
+      "name": "msedgewebview2.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 2912,
+      "name": "brave.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 6456,
+      "name": "brave.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 6460,
+      "name": "brave.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 9948,
+      "name": "brave.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 10464,
+      "name": "msedgewebview2.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 12168,
+      "name": "mousocoreworker.exe",
+      "priority": "BELOW_NORMAL"
+    }
+  ],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 11,
-  "total_throttle_events": 678,
+  "total_boost_events": 13,
+  "total_throttle_events": 770,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
