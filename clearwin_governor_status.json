@@ -1,18 +1,28 @@
 {
-  "timestamp": "2026-11-22T10:00:30.181991",
+  "timestamp": "2026-11-22T10:10:34.375672",
   "governor_active": true,
   "ai_integrated": true,
   "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
   "governor_mode": "ACTIVE_GOVERNANCE",
   "foreground_process": {
-    "pid": 11468,
-    "name": "ClearWin.exe",
+    "pid": 8664,
+    "name": "Antigravity.exe",
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 4,
-  "throttled_count": 4,
+  "governed_count": 6,
+  "throttled_count": 6,
   "recent_throttled": [
+    {
+      "pid": 2572,
+      "name": "wmiapsrv.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 2612,
+      "name": "msedgewebview2.exe",
+      "priority": "BELOW_NORMAL"
+    },
     {
       "pid": 6492,
       "name": "brave.exe",
@@ -24,20 +34,20 @@
       "priority": "BELOW_NORMAL"
     },
     {
-      "pid": 10912,
+      "pid": 11076,
       "name": "msedgewebview2.exe",
       "priority": "BELOW_NORMAL"
     },
     {
-      "pid": 13020,
-      "name": "msedgewebview2.exe",
+      "pid": 12636,
+      "name": "vssvc.exe",
       "priority": "BELOW_NORMAL"
     }
   ],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
   "total_boost_events": 5,
-  "total_throttle_events": 293,
+  "total_throttle_events": 318,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
