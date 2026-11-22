@@ -1,43 +1,23 @@
 {
-  "timestamp": "2026-11-22T08:21:21.110759",
+  "timestamp": "2026-11-22T08:30:54.876931",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "THROTTLE_BACKGROUND_APPS",
-  "governor_mode": "HIGH_CPU_SHIELD",
+  "active_ai_action": "MAINTAIN_STEADY_STATE",
+  "governor_mode": "EQUILIBRIUM",
   "foreground_process": {
     "pid": 8664,
     "name": "Antigravity.exe",
-    "priority": "HIGH",
+    "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 4,
-  "throttled_count": 4,
-  "recent_throttled": [
-    {
-      "pid": 1952,
-      "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6492,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 9948,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 12588,
-      "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    }
-  ],
+  "governed_count": 0,
+  "throttled_count": 0,
+  "restored_count": 4,
+  "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 1,
-  "total_throttle_events": 86,
+  "total_boost_events": 2,
+  "total_throttle_events": 99,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
