@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-22T12:20:36.046606",
+  "timestamp": "2026-11-22T12:30:41.274139",
   "governor_active": true,
   "ai_integrated": true,
   "active_ai_action": "MAINTAIN_STEADY_STATE",
@@ -12,12 +12,12 @@
   },
   "governed_count": 0,
   "throttled_count": 0,
-  "restored_count": 10,
+  "restored_count": 9,
   "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
   "total_boost_events": 13,
-  "total_throttle_events": 819,
+  "total_throttle_events": 893,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
