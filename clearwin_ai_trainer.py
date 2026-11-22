@@ -334,7 +334,8 @@ def compute_action_distribution(features, weights, biases):
     if features[2] >= 0.70 or features[6] >= 0.8:
         logits[0] = -999.0
     # Action 1 (Trim RAM): Forbidden unless RAM is elevated (> 60%), cooldown clear (features[7] == 0), HDD not thrashing (features[6] < 0.8), CPU not spiking (features[2] < 0.70), and NOT critically exhausted (features[5] < 0.5)
-    if features[0] <= 0.60 or features[7] > 0.5 or features[6] > 0.8 or features[5] > 0.5 or features[2] >= 0.70:
+    # Also forbid if Disk throughput is elevated (features[6] >= 0.6) to protect mechanical disk heads
+    if features[0] <= 0.60 or features[7] > 0.5 or features[6] >= 0.6 or features[5] > 0.5 or features[2] >= 0.70:
         logits[1] = -999.0
     # Action 2 (Defrag HDD): Forbidden unless user idle >= 15m AND defrag cooldown is clear (>= 2h) AND HDD calm (features[6] < 0.20) AND RAM healthy (features[0] < 0.65)
     global _last_defrag_timestamp
@@ -500,10 +501,10 @@ def execute_physical_action(action, details=None):
             return  # Safety guard: emergency recovery only when RAM is actually critical
         _last_trim_timestamp = time.time()
 
-        # Engage Process Governor for intelligent background reclamation
+        # Engage Process Governor for intelligent background reclamation & transparent audit
         if gov:
             try:
-                gov.govern_background_processes(aggressive=(action == 4), trim_idle=True)
+                gov.execute_governor_cycle(high_cpu=False, critical_ram=(action == 4))
             except Exception:
                 pass
 
