@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-22T08:41:59.606910",
+  "timestamp": "2026-11-22T08:51:33.544287",
   "governor_active": true,
   "ai_integrated": true,
   "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
@@ -10,8 +10,8 @@
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 4,
-  "throttled_count": 4,
+  "governed_count": 5,
+  "throttled_count": 5,
   "recent_throttled": [
     {
       "pid": 5960,
@@ -32,12 +32,17 @@
       "pid": 9948,
       "name": "brave.exe",
       "priority": "BELOW_NORMAL"
+    },
+    {
+      "pid": 10720,
+      "name": "wmiapsrv.exe",
+      "priority": "BELOW_NORMAL"
     }
   ],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 2,
-  "total_throttle_events": 128,
+  "total_boost_events": 4,
+  "total_throttle_events": 148,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
