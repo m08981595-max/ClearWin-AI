@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-22T10:50:19.561426",
+  "timestamp": "2026-11-22T11:00:23.094611",
   "governor_active": true,
   "ai_integrated": true,
   "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
@@ -10,8 +10,8 @@
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 4,
-  "throttled_count": 4,
+  "governed_count": 5,
+  "throttled_count": 5,
   "recent_throttled": [
     {
       "pid": 3952,
@@ -29,6 +29,11 @@
       "priority": "BELOW_NORMAL"
     },
     {
+      "pid": 11136,
+      "name": "wmiapsrv.exe",
+      "priority": "BELOW_NORMAL"
+    },
+    {
       "pid": 12396,
       "name": "msedgewebview2.exe",
       "priority": "BELOW_NORMAL"
@@ -37,7 +42,7 @@
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
   "total_boost_events": 5,
-  "total_throttle_events": 384,
+  "total_throttle_events": 393,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
