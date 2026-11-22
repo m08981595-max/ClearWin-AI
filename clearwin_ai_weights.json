@@ -1,27 +1,27 @@
 {
   "version": "22.0-deep-residual-policy",
-  "updated_at": "2026-11-22 15:20:07",
-  "total_training_iterations": 2929,
-  "cumulative_reward": 3481.9,
+  "updated_at": "2026-11-22 15:30:12",
+  "total_training_iterations": 2949,
+  "cumulative_reward": 3510.0,
   "learning_rate": 0.02,
   "weights": [
     [
-      -0.2,
-      -0.1,
-      -0.2,
+      -0.5,
+      -0.3,
+      -0.4,
       0.0,
       0.0,
       -2.592,
       -1.0,
-      15.059999999999874,
+      15.209999999999871,
       -2.0
     ],
     [
-      12.67625999999998,
-      8.735889199999997,
-      4.695608000000001,
-      17.648598600000057,
-      1.6187870000000002,
+      12.80255999999998,
+      8.862155199999997,
+      4.734118000000001,
+      17.948598600000068,
+      1.6501780000000001,
       0.07999999999999947,
       -1.5,
       -0.8,
@@ -73,14 +73,14 @@
     ]
   ],
   "biases": [
-    1.0765999999999971,
-    -1.1480000000000037,
+    0.75,
+    -1.1270000000000044,
     -1.1910000000000003,
     -2.364999999999995,
     -3.0031999999999917,
     -2.8
   ],
-  "supervisor_notes": "Auto-Supervisor (2026-11-22 14:38:02): Boosted Action 1 RAM sensitivity (weight=12.02, bias=-1.25) due to 2 delayed trims.",
+  "supervisor_notes": "Auto-Supervisor (2026-11-22 15:30:16): Re-anchored Action 0 bias to +0.75 and clamped negative weights (prevented steady-state stubbornness under high load).",
   "mlp_hidden_weights": [
     [
       -0.09999392159905898,
