@@ -1,27 +1,27 @@
 {
   "version": "21.3-pc-hardware-guard",
-  "updated_at": "2026-11-22 11:10:27",
-  "total_training_iterations": 2433,
-  "cumulative_reward": 2747.4,
+  "updated_at": "2026-11-22 11:24:02",
+  "total_training_iterations": 2460,
+  "cumulative_reward": 2787.9,
   "learning_rate": 0.02,
   "weights": [
     [
-      -0.2,
-      -0.1,
-      -0.2,
+      -0.5,
+      -0.3,
+      -0.4,
       0.0,
       0.0,
       -2.572,
       -1.0,
-      9.859999999999985,
+      10.039999999999981,
       -2.0
     ],
     [
-      9.075259999999993,
-      5.261929199999997,
-      3.0758779999999986,
-      10.141932600000006,
-      0.7851670000000001,
+      9.186859999999992,
+      5.359219199999997,
+      3.124507999999998,
+      10.241835600000005,
+      0.8061309999999999,
       0.07999999999999947,
       -1.5,
       -0.8,
@@ -73,12 +73,12 @@
     ]
   ],
   "biases": [
-    1.0679999999999978,
-    -0.933800000000009,
+    0.75,
+    -0.9158000000000089,
     -1.197,
     -2.4039999999999964,
     -3.0271999999999926,
     -2.8
   ],
-  "supervisor_notes": "Auto-Supervisor (2026-11-22 10:08:04): Re-anchored Action 0 bias to +0.75 and clamped negative weights (prevented steady-state stubbornness under high load)."
+  "supervisor_notes": "Auto-Supervisor (2026-11-22 11:23:44): Re-anchored Action 0 bias to +0.75 and clamped negative weights (prevented steady-state stubbornness under high load)."
 }
