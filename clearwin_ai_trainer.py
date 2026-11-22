@@ -334,8 +334,8 @@ def compute_action_distribution(features, weights, biases):
     if features[2] >= 0.70 or features[6] >= 0.8:
         logits[0] = -999.0
     # Action 1 (Trim RAM): Forbidden unless RAM is elevated (> 60%), cooldown clear (features[7] == 0), HDD not thrashing (features[6] < 0.8), CPU not spiking (features[2] < 0.70), and NOT critically exhausted (features[5] < 0.5)
-    # Also forbid if Disk throughput is elevated (features[6] >= 0.6) to protect mechanical disk heads
-    if features[0] <= 0.60 or features[7] > 0.5 or features[6] >= 0.6 or features[5] > 0.5 or features[2] >= 0.70:
+    # Also forbid if Disk throughput is elevated (features[6] >= 0.33, ~20MB/s) to protect mechanical disk heads
+    if features[0] <= 0.60 or features[7] > 0.5 or features[6] >= 0.33 or features[5] > 0.5 or features[2] >= 0.70:
         logits[1] = -999.0
     # Action 2 (Defrag HDD): Forbidden unless user idle >= 15m AND defrag cooldown is clear (>= 2h) AND HDD calm (features[6] < 0.20) AND RAM healthy (features[0] < 0.65)
     global _last_defrag_timestamp
@@ -653,7 +653,7 @@ def run_step(weights_data, iter_num, apply_physical=True):
     import random
     safe_exploratory_actions = [0]
     is_crit = details.get("free_ram_mb", 4000) < 1800 or details.get("ram_used_pct", 0) > 75.0
-    if details.get("ram_used_pct", 0) > 60 and not details.get("trim_cooldown_active", False) and not details.get("is_hdd_thrashing", False) and not is_crit:
+    if details.get("ram_used_pct", 0) > 60 and not details.get("trim_cooldown_active", False) and not details.get("is_hdd_thrashing", False) and details.get("disk_io_mb_s", 0.0) < 20.0 and not is_crit:
         safe_exploratory_actions.append(1)
     if details.get("idle_minutes", 0) >= 15.0 and not defrag_cooldown and not details.get("is_hdd_thrashing", False) and details.get("ram_used_pct", 0) < 65.0:
         safe_exploratory_actions.append(2)

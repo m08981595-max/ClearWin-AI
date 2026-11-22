@@ -1,0 +1,22 @@
+{
+  "timestamp": "2026-11-22T07:02:05.962226",
+  "governor_active": true,
+  "foreground_process": {
+    "pid": 8664,
+    "name": "Antigravity.exe",
+    "priority": "ABOVE_NORMAL",
+    "boosted": true
+  },
+  "throttled_count": 1,
+  "recent_throttled": [
+    {
+      "pid": 2816,
+      "name": "wmiprvse.exe",
+      "priority": "BELOW_NORMAL"
+    }
+  ],
+  "cycle_ram_freed_mb": 0.0,
+  "total_ram_reclaimed_mb": 0.0,
+  "total_boost_events": 0,
+  "total_throttle_events": 1
+}
