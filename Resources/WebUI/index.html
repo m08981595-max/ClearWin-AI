@@ -1726,12 +1726,19 @@ bdi, .bidi-en, .bidi-parens {
         <span class="cw-pulse-dot"></span>
         <span class="cw-status-title">محرك الذكاء الاصطناعي المستقل (RL Policy Engine)</span>
         <span class="cw-version-tag">v21.3 Guard</span>
+        <span class="cw-version-tag" id="aiGovernorBadge" style="background:rgba(56,189,248,0.15); color:#38bdf8; border-color:rgba(56,189,248,0.3);">⚡ Process Governor: متصل</span>
       </div>
       <div class="cw-hero-info">
         <span class="cw-active-badge" id="aiActiveStateTxt">MAINTAIN_STEADY_STATE</span>
         <p class="cw-hero-summary" id="aiActiveStateSummary">
           النظام في استقرار فيزيائي مثالي (0.5ms Timer نشط · الذاكرة محررة · PCIe Safe)
         </p>
+        <div class="cw-governor-live-strip" id="aiGovernorLiveStrip" style="display:flex; flex-wrap:wrap; gap:12px; font-size:11px; color:rgba(255,255,255,0.75); margin-top:6px; align-items:center; background:rgba(255,255,255,0.03); padding:4px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06);">
+          <span>🛡️ درع التركيز: <strong id="govFgApp" style="color:#38bdf8; font-weight:600;">Active App</strong></span>
+          <span>⚡ العمليات المعزولة: <strong id="govThrottledCount" style="color:#a5f3fc; font-weight:600;">0</strong></span>
+          <span>💾 الرام المسترجع: <strong id="govRamReclaimed" style="color:#4ade80; font-weight:600;">+0 MB</strong></span>
+          <span>🔒 الأمان العتادي: <strong id="govSafetyStatus" style="color:#34d399; font-weight:600;">100% Safe</strong></span>
+        </div>
       </div>
     </div>
 
@@ -4278,9 +4285,42 @@ async function refreshAiTelemetry(showToast=false){
     }
   } catch(e){}
 
+  try {
+    const ts = Date.now();
+    const gResp = await fetch('clearwin_governor_status.json?t=' + ts);
+    if(gResp.ok){
+      const gJson = await gResp.json();
+      if(gJson){
+        window.clearwinGovernorStatus = gJson;
+        updateGovernorHud(gJson);
+      }
+    }
+  } catch(e){}
+
   updateAiCommandCenter();
   if(showToast){
     toast('تمت مزامنة سجل وأوزان الذكاء الاصطناعي بنجاح (الخطوة #' + (clearwinAiWeights.total_training_iterations || '') + ')');
+  }
+}
+
+function updateGovernorHud(gData){
+  if(!gData) return;
+  const fgAppEl = $('#govFgApp');
+  if(fgAppEl && gData.foreground_process){
+    const fg = gData.foreground_process;
+    fgAppEl.textContent = (fg.name || 'Desktop') + ' (' + (fg.priority || 'NORMAL') + ')';
+  }
+  const thEl = $('#govThrottledCount');
+  if(thEl){
+    thEl.textContent = gData.throttled_count || gData.governed_count || 0;
+  }
+  const ramEl = $('#govRamReclaimed');
+  if(ramEl && gData.total_ram_reclaimed_mb !== undefined){
+    ramEl.textContent = '+' + gData.total_ram_reclaimed_mb + ' MB';
+  }
+  const safeEl = $('#govSafetyStatus');
+  if(safeEl){
+    safeEl.textContent = gData.safety_status || '100% Safe';
   }
 }
 

@@ -1,16 +1,23 @@
 {
-  "timestamp": "2026-11-22T07:30:35.992064",
+  "timestamp": "2026-11-22T07:37:15.020729",
   "governor_active": true,
+  "ai_integrated": true,
+  "active_ai_action": "MAINTAIN_STEADY_STATE",
+  "governor_mode": "EQUILIBRIUM",
   "foreground_process": {
-    "pid": 8664,
-    "name": "Antigravity.exe",
+    "pid": 3076,
+    "name": "ClearWin.exe",
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
+  "governed_count": 0,
   "throttled_count": 0,
+  "restored_count": 3,
   "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 6,
-  "total_throttle_events": 5
+  "total_boost_events": 1,
+  "total_throttle_events": 3,
+  "safety_status": "✅ 100% Safe (0 Violations)",
+  "efficacy_rating": "⭐ 100% OPTIMAL"
 }

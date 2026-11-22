@@ -1,8 +1,8 @@
 {
   "version": "21.3-pc-hardware-guard",
-  "updated_at": "2026-11-22 07:31:06",
-  "total_training_iterations": 1996,
-  "cumulative_reward": 2097.6,
+  "updated_at": "2026-11-22 07:37:15",
+  "total_training_iterations": 2009,
+  "cumulative_reward": 2117.1,
   "learning_rate": 0.02,
   "weights": [
     [
@@ -13,15 +13,15 @@
       0.0,
       -2.572,
       -1.0,
-      6.950000000000016,
+      7.100000000000017,
       -2.0
     ],
     [
-      7.196559999999993,
-      3.6190602000000003,
-      2.2271479999999992,
-      5.88250260000001,
-      0.421834,
+      7.312659999999993,
+      3.7163472,
+      2.2768279999999987,
+      6.0280416000000105,
+      0.44184099999999993,
       0.07999999999999947,
       -1.5,
       -0.8,
@@ -74,11 +74,11 @@
   ],
   "biases": [
     0.953,
-    -1.2290000000000008,
+    -1.2110000000000014,
     -1.2,
     -2.4099999999999966,
     -3.0271999999999926,
     -2.8
   ],
-  "supervisor_notes": "Auto-Supervisor (2026-11-22 07:30:47): PENALTY: Lowered Action 2 bias to -1.20 after 1 invalid defrag attempts."
+  "supervisor_notes": "Auto-Supervisor (2026-11-22 07:36:44): PENALTY: Lowered Action 2 bias to -1.20 after 1 invalid defrag attempts."
 }

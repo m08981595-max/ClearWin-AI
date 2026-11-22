@@ -493,10 +493,17 @@ def execute_physical_action(action, details=None):
     global _last_trim_timestamp, _last_defrag_timestamp
     gov = get_process_governor()
 
-    if action == 2:
+    if action == 0:  # Maintain Steady State & Dynamic Process Equilibrium
+        if gov:
+            try:
+                gov.restore_steady_state()
+            except Exception:
+                pass
+
+    elif action == 2:
         _last_defrag_timestamp = time.time()
 
-    if action in (1, 4):  # Trim Working Sets or Emergency Recovery
+    elif action in (1, 4):  # Trim Working Sets or Emergency Recovery
         if action == 4 and details and details.get("free_ram_mb", 4000) >= 1800:
             return  # Safety guard: emergency recovery only when RAM is actually critical
         _last_trim_timestamp = time.time()
@@ -504,7 +511,7 @@ def execute_physical_action(action, details=None):
         # Engage Process Governor for intelligent background reclamation & transparent audit
         if gov:
             try:
-                gov.execute_governor_cycle(high_cpu=False, critical_ram=(action == 4))
+                gov.execute_governor_cycle(high_cpu=False, critical_ram=(action == 4), ai_action=ACTIONS[action])
             except Exception:
                 pass
 
@@ -543,7 +550,7 @@ def execute_physical_action(action, details=None):
         # 1. Engage Autonomous Process Governor (Foreground Shield + Background Demotion)
         if gov:
             try:
-                gov.execute_governor_cycle(high_cpu=True, critical_ram=False)
+                gov.execute_governor_cycle(high_cpu=True, critical_ram=False, ai_action=ACTIONS[action])
             except Exception:
                 pass
         CRITICAL_PROTECTED_KEYWORDS = [
