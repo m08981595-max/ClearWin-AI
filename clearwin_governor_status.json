@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-11-22T07:22:32.431672",
+  "timestamp": "2026-11-22T07:30:35.992064",
   "governor_active": true,
   "foreground_process": {
     "pid": 8664,
@@ -11,6 +11,6 @@
   "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 2,
-  "total_throttle_events": 0
+  "total_boost_events": 6,
+  "total_throttle_events": 5
 }
