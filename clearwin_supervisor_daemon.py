@@ -65,7 +65,7 @@ def deploy_new_icons_elevated():
         with open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "fix_icons_output.log"), "w", encoding="utf-8") as f:
             f.write(f"Exception: {e}\n")
 
-deploy_new_icons_elevated()
+# deploy_new_icons_elevated() # Disabled: Icon sync completed in earlier phase, prevents unintended desktop refreshes
 
 def sync_upgraded_webui_elevated():
     """Synchronizes the upgraded GlassUI index.html and AI telemetry files to Program Files."""
@@ -92,6 +92,11 @@ def sync_upgraded_webui_elevated():
             dest_log = os.path.join(dest_dir, "clearwin_ai_training_log.md")
             if os.path.exists(src_log):
                 shutil.copy2(src_log, dest_log)
+
+            src_gov = os.path.join(src_dir, "clearwin_governor_status.json")
+            dest_gov = os.path.join(dest_dir, "clearwin_governor_status.json")
+            if os.path.exists(src_gov):
+                shutil.copy2(src_gov, dest_gov)
                 
             # Touch a sync stamp file
             stamp_file = os.path.join(src_dir, "webui_sync_success.txt")

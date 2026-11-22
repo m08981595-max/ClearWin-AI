@@ -119,7 +119,4 @@ for oi in old_icons:
 
 # 6. Notify Windows Shell
 ctypes.windll.shell32.SHChangeNotify(0x08000000, 0x1000, None, None) # SHCNE_ASSOCCHANGED | SHCNF_FLUSH
-
-# 7. Relaunch ClearWin.exe from Program Files
-subprocess.Popen([os.path.join(PROG_DIR, "ClearWin.exe")], cwd=PROG_DIR)
-print("ClearWin.exe launched from official installation folder.")
+print("Desktop & icons sync completed (no auto-launch).")
