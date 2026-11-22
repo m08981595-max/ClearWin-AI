@@ -330,8 +330,11 @@ def compute_action_distribution(features, weights, biases):
         logits.append(val)
 
     # Physical Safety Gates & Strict Operational Envelope:
-    # Action 1 (Trim RAM): Forbidden unless RAM is elevated (> 60%), cooldown clear (features[7] == 0), HDD not thrashing (features[6] < 0.8), and NOT critically exhausted (features[5] < 0.5)
-    if features[0] <= 0.60 or features[7] > 0.5 or features[6] > 0.8 or features[5] > 0.5:
+    # Action 0 (Maintain Steady State): Forbidden if CPU is actively spiking (>= 70%) or HDD thrashing (features[6] >= 0.8)
+    if features[2] >= 0.70 or features[6] >= 0.8:
+        logits[0] = -999.0
+    # Action 1 (Trim RAM): Forbidden unless RAM is elevated (> 60%), cooldown clear (features[7] == 0), HDD not thrashing (features[6] < 0.8), CPU not spiking (features[2] < 0.70), and NOT critically exhausted (features[5] < 0.5)
+    if features[0] <= 0.60 or features[7] > 0.5 or features[6] > 0.8 or features[5] > 0.5 or features[2] >= 0.70:
         logits[1] = -999.0
     # Action 2 (Defrag HDD): Forbidden unless user idle >= 15m AND defrag cooldown is clear (>= 2h) AND HDD calm (features[6] < 0.20) AND RAM healthy (features[0] < 0.65)
     global _last_defrag_timestamp
@@ -470,15 +473,40 @@ def update_weights(weights, biases, features, chosen_action, optimal_action, rew
     weights[3][2] = max(weights[3][2], 4.5)  # CPU spike
     weights[3][6] = max(weights[3][6], 4.5)  # Disk bottleneck / thrashing
 
+_last_trim_timestamp = 0.0
+_last_defrag_timestamp = 0.0
+_governor = None
+
+def get_process_governor():
+    global _governor
+    if _governor is None:
+        try:
+            from clearwin_process_governor import ProcessGovernor
+            _governor = ProcessGovernor()
+        except Exception:
+            _governor = None
+    return _governor
+
 def execute_physical_action(action, details=None):
     """Executes the verified physical action natively in-process with strict system safety."""
     global _last_trim_timestamp, _last_defrag_timestamp
+    gov = get_process_governor()
+
     if action == 2:
         _last_defrag_timestamp = time.time()
+
     if action in (1, 4):  # Trim Working Sets or Emergency Recovery
         if action == 4 and details and details.get("free_ram_mb", 4000) >= 1800:
             return  # Safety guard: emergency recovery only when RAM is actually critical
         _last_trim_timestamp = time.time()
+
+        # Engage Process Governor for intelligent background reclamation
+        if gov:
+            try:
+                gov.govern_background_processes(aggressive=(action == 4), trim_idle=True)
+            except Exception:
+                pass
+
         # Protected Windows Kernel, GPU Drivers, Shell & Dev Subsystems (NEVER touch to prevent hard freeze)
         CRITICAL_PROTECTED_KEYWORDS = [
             "dwm", "csrss", "smss", "services", "lsass", "winlogon", "wininit",
@@ -510,7 +538,13 @@ def execute_physical_action(action, details=None):
                     pass
         except Exception:
             pass
-    elif action == 3:  # Throttle Background Tasks (CPU Scheduling & Mechanical HDD I/O Priority Shield)
+    elif action == 3:  # Throttle Background Tasks & Engage Process Governor
+        # 1. Engage Autonomous Process Governor (Foreground Shield + Background Demotion)
+        if gov:
+            try:
+                gov.execute_governor_cycle(high_cpu=True, critical_ram=False)
+            except Exception:
+                pass
         CRITICAL_PROTECTED_KEYWORDS = [
             "dwm", "csrss", "smss", "services", "lsass", "winlogon", "wininit",
             "fontdrvhost", "sihost", "audiodg", "system", "registry", "memory compression",
