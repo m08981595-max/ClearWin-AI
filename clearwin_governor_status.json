@@ -1,16 +1,16 @@
 {
-  "timestamp": "2026-11-22T07:11:09.743102",
+  "timestamp": "2026-11-22T07:22:32.431672",
   "governor_active": true,
   "foreground_process": {
-    "pid": 8432,
-    "name": "ClearWin.exe",
-    "priority": "HIGH",
+    "pid": 8664,
+    "name": "Antigravity.exe",
+    "priority": "ABOVE_NORMAL",
     "boosted": true
   },
   "throttled_count": 0,
   "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 4,
-  "total_throttle_events": 8
+  "total_boost_events": 2,
+  "total_throttle_events": 0
 }
