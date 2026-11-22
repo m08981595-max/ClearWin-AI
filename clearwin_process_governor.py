@@ -52,7 +52,11 @@ PROTECTED_PROCESSES = {
     # ClearWin Engine & Safety Daemons
     "clearwin.exe", "clearwin.adminhelper.exe", "python.exe", "pythonw.exe",
     # Dev & Editor Host (to prevent interrupting active agent session)
-    "antigravity.exe", "code.exe"
+    "antigravity.exe", "code.exe",
+    # Media & Background Audio Streamers (Never stutter user music/video)
+    "vlc.exe", "spotify.exe", "wmplayer.exe", "foobar2000.exe", "musicbee.exe",
+    # Active Downloaders (Never choke bandwidth or disk during downloads)
+    "yt-dlp.exe", "aria2c.exe", "idman.exe", "qbittorrent.exe", "steam.exe"
 }
 
 user32 = ctypes.windll.user32
@@ -112,15 +116,21 @@ class ProcessGovernor:
         """Identifies the active foreground interactive application via Win32."""
         try:
             hwnd = user32.GetForegroundWindow()
-            if not hwnd:
+            if not hwnd or not user32.IsWindowVisible(hwnd):
                 return 0, ""
-            
+
+            # Resolve root owner if focused on a child control or dialog
+            GA_ROOTOWNER = 3
+            root_hwnd = user32.GetAncestor(hwnd, GA_ROOTOWNER)
+            if root_hwnd:
+                hwnd = root_hwnd
+
             fg_pid = wintypes.DWORD()
             user32.GetWindowThreadProcessId(hwnd, ctypes.byref(fg_pid))
             pid = fg_pid.value
             if pid <= 4:
                 return 0, ""
-            
+
             try:
                 proc = psutil.Process(pid)
                 name = proc.name()
