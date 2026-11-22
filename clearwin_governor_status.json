@@ -1,26 +1,21 @@
 {
-  "timestamp": "2026-11-22T08:11:16.728961",
+  "timestamp": "2026-11-22T08:21:21.110759",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
-  "governor_mode": "ACTIVE_GOVERNANCE",
+  "active_ai_action": "THROTTLE_BACKGROUND_APPS",
+  "governor_mode": "HIGH_CPU_SHIELD",
   "foreground_process": {
     "pid": 8664,
     "name": "Antigravity.exe",
-    "priority": "ABOVE_NORMAL",
+    "priority": "HIGH",
     "boosted": true
   },
-  "governed_count": 5,
-  "throttled_count": 5,
+  "governed_count": 4,
+  "throttled_count": 4,
   "recent_throttled": [
     {
       "pid": 1952,
       "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 5984,
-      "name": "vssvc.exe",
       "priority": "BELOW_NORMAL"
     },
     {
@@ -41,8 +36,8 @@
   ],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 0,
-  "total_throttle_events": 62,
+  "total_boost_events": 1,
+  "total_throttle_events": 86,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
