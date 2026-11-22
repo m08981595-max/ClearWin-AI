@@ -4108,6 +4108,9 @@ function filterAiFeed(filterKey, btnEl){
   renderAiDecisionFeed(clearwinAiDecisions, filterKey);
 }
 
+let lastRenderedFeedSig = '';
+let lastRenderedWeightsSig = '';
+
 function renderAiDecisionFeed(rows, filterKey='all'){
   const tbody = $('#aiDecisionFeedTbody');
   if(!tbody) return;
@@ -4115,6 +4118,10 @@ function renderAiDecisionFeed(rows, filterKey='all'){
     tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">لا توجد قرارات مسجلة حالياً في السجل المباشر.</td></tr>';
     return;
   }
+
+  const sig = (rows[0] ? rows[0].step : '') + '_' + rows.length + '_' + filterKey;
+  if(sig === lastRenderedFeedSig) return; // Prevent unnecessary DOM reflows and glass re-renders
+  lastRenderedFeedSig = sig;
 
   let filtered = rows;
   if(filterKey === 'ram'){
@@ -4159,6 +4166,10 @@ function renderAiDecisionFeed(rows, filterKey='all'){
 function renderWeightsMatrix(wData){
   const tbody = $('#matrixTableBody');
   if(!tbody || !wData || !Array.isArray(wData.weights)) return;
+
+  const wSig = (wData.total_training_iterations || 0) + '_' + (wData.cumulative_reward || 0);
+  if(wSig === lastRenderedWeightsSig) return; // Prevent heavy table redraw
+  lastRenderedWeightsSig = wSig;
 
   const actionNames = [
     '0: MAINTAIN_STEADY_STATE',
@@ -4256,32 +4267,42 @@ async function refreshAiTelemetry(showToast=false){
     }
   } catch(e){}
 
+  // High-performance feed fetch: Use lightweight clearwin_ai_recent_feed.json (13KB) instead of heavy 800KB markdown
   try {
     const ts = Date.now();
-    const lResp = await fetch('clearwin_ai_training_log.md?t=' + ts);
-    if(lResp.ok){
-      const lText = await lResp.text();
-      const lines = lText.split('\n');
-      const parsed = [];
-      for(let i = lines.length - 1; i >= 0; i--){
-        const line = lines[i].trim();
-        if(line.startsWith('| #')){
-          const parts = line.split('|').map(p=>p.trim()).filter(Boolean);
-          if(parts.length >= 6){
-            parsed.push({
-              step: parts[0],
-              timestamp: parts[1],
-              chosen: parts[2].replace(/`/g, ''),
-              optimal: parts[3].replace(/`/g, ''),
-              reward: parts[4].replace(/`/g, ''),
-              metrics: parts.slice(5, parts.length - 1).join(' | '),
-              rationale: parts[parts.length - 1]
-            });
-          }
-          if(parsed.length >= 35) break;
-        }
+    const feedResp = await fetch('clearwin_ai_recent_feed.json?t=' + ts);
+    if(feedResp.ok){
+      const feedJson = await feedResp.json();
+      if(Array.isArray(feedJson) && feedJson.length){
+        clearwinAiDecisions = feedJson;
       }
-      if(parsed.length) clearwinAiDecisions = parsed;
+    } else {
+      // Fallback only if JSON feed is unavailable
+      const lResp = await fetch('clearwin_ai_training_log.md?t=' + ts);
+      if(lResp.ok){
+        const lText = await lResp.text();
+        const lines = lText.split('\n');
+        const parsed = [];
+        for(let i = lines.length - 1; i >= 0; i--){
+          const line = lines[i].trim();
+          if(line.startsWith('| #')){
+            const parts = line.split('|').map(p=>p.trim()).filter(Boolean);
+            if(parts.length >= 6){
+              parsed.push({
+                step: parts[0],
+                timestamp: parts[1],
+                chosen: parts[2].replace(/`/g, ''),
+                optimal: parts[3].replace(/`/g, ''),
+                reward: parts[4].replace(/`/g, ''),
+                metrics: parts.slice(5, parts.length - 1).join(' | '),
+                rationale: parts[parts.length - 1]
+              });
+            }
+            if(parsed.length >= 35) break;
+          }
+        }
+        if(parsed.length) clearwinAiDecisions = parsed;
+      }
     }
   } catch(e){}
 

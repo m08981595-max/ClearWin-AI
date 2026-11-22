@@ -97,6 +97,12 @@ def sync_upgraded_webui_elevated():
             dest_gov = os.path.join(dest_dir, "clearwin_governor_status.json")
             if os.path.exists(src_gov):
                 shutil.copy2(src_gov, dest_gov)
+
+            # High-performance lightweight feed (13KB) for lag-free WebUI
+            src_feed = os.path.join(src_dir, "clearwin_ai_recent_feed.json")
+            dest_feed = os.path.join(dest_dir, "clearwin_ai_recent_feed.json")
+            if os.path.exists(src_feed):
+                shutil.copy2(src_feed, dest_feed)
                 
             # Touch a sync stamp file
             stamp_file = os.path.join(src_dir, "webui_sync_success.txt")

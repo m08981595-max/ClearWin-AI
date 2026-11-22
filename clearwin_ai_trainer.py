@@ -72,6 +72,7 @@ acquire_highest_privileges()
 WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEIGHTS_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_weights.json")
 LOG_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_training_log.md")
+RECENT_FEED_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_recent_feed.json")
 TRIMMER_SCRIPT = r"C:\Users\maher\bin\ram-trimmer.ps1"
 
 # Pure Windows PC Action Space (Expanded with Hardware & Bus Stability Guard)
@@ -778,6 +779,28 @@ def record_log(iteration, chosen_action, optimal_action, reward, details, reason
 
     with open(LOG_FILE, "a", encoding="utf-8") as f:
         f.write(row)
+
+    # Maintain rolling lightweight JSON feed (35 items) for instant, lag-free WebUI rendering
+    try:
+        feed_item = {
+            "step": f"#{iteration:04d}",
+            "timestamp": timestamp,
+            "chosen": f"{icon} {action_name}",
+            "optimal": optimal_name,
+            "reward": f"{reward:+.2f}",
+            "metrics": f"RAM: {details.get('ram_used_pct')}% (Free: {details.get('free_ram_mb')}MB) | CPU: {details.get('cpu_load_pct')}% | HDD: {details.get('disk_io_mb_s', 0)}MB/s ({details.get('disk_latency_ms', 0)}ms) | Idle: {details.get('idle_minutes')}m",
+            "rationale": reasoning
+        }
+        feed = [feed_item]
+        if os.path.exists(RECENT_FEED_FILE):
+            with open(RECENT_FEED_FILE, "r", encoding="utf-8") as ff:
+                old_feed = json.load(ff)
+                if isinstance(old_feed, list):
+                    feed.extend(old_feed[:34])
+        with open(RECENT_FEED_FILE, "w", encoding="utf-8") as ff:
+            json.dump(feed, ff, indent=2, ensure_ascii=False)
+    except Exception:
+        pass
 
 def run_step(weights_data, iter_num, apply_physical=True):
     features, details = collect_pc_telemetry()
