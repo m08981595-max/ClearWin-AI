@@ -1,63 +1,23 @@
 {
-  "timestamp": "2026-11-22T16:24:12.602732",
+  "timestamp": "2026-11-22T16:30:48.179319",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
-  "governor_mode": "ACTIVE_GOVERNANCE",
+  "active_ai_action": "MAINTAIN_STEADY_STATE",
+  "governor_mode": "EQUILIBRIUM",
   "foreground_process": {
     "pid": 8664,
     "name": "Antigravity.exe",
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 16,
-  "throttled_count": 16,
-  "recent_throttled": [
-    {
-      "pid": 3972,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 5152,
-      "name": "claude.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6456,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6460,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6528,
-      "name": "runtimebroker.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 9384,
-      "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 9692,
-      "name": "claude.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 9948,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    }
-  ],
+  "governed_count": 0,
+  "throttled_count": 0,
+  "restored_count": 11,
+  "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 45,
-  "total_throttle_events": 2581,
+  "total_boost_events": 48,
+  "total_throttle_events": 2637,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }

@@ -1,13 +1,13 @@
 {
   "version": "23.0-network-governor",
-  "timestamp": "2026-11-22T16:23:45.745207",
+  "timestamp": "2026-11-22T16:30:15.916631",
   "governor_active": true,
   "governor_mode": "PRIORITY_QOS_BOOST",
   "action_taken": "BOOST_QOS_DSCP_46 (Antigravity.exe)",
-  "latency_rtt_ms": 73.1,
-  "baseline_rtt_ms": 40.7,
-  "jitter_ms": 23.46,
-  "bufferbloat_ratio": 1.8,
+  "latency_rtt_ms": 64.6,
+  "baseline_rtt_ms": 64.6,
+  "jitter_ms": 0.0,
+  "bufferbloat_ratio": 1.0,
   "throughput_upload_kbps": 0.0,
   "throughput_download_kbps": 0.0,
   "foreground_process": {
@@ -20,27 +20,22 @@
     {
       "pid": 5240,
       "name": "Antigravity.exe",
-      "connections": 25
+      "connections": 17
     },
     {
       "pid": 8500,
       "name": "language_server.exe",
-      "connections": 14
-    },
-    {
-      "pid": 5288,
-      "name": "brave.exe",
-      "connections": 2
-    },
-    {
-      "pid": 4232,
-      "name": "MsMpEng.exe",
-      "connections": 2
+      "connections": 10
     },
     {
       "pid": 12504,
       "name": "claude.exe",
-      "connections": 2
+      "connections": 4
+    },
+    {
+      "pid": 14768,
+      "name": "Antigravity.exe",
+      "connections": 1
     }
   ],
   "total_qos_boost_events": 1,
