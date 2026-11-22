@@ -1,28 +1,23 @@
 {
-  "timestamp": "2026-11-22T07:38:46.378331",
+  "timestamp": "2026-11-22T07:41:18.578070",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
-  "governor_mode": "ACTIVE_GOVERNANCE",
+  "active_ai_action": "MAINTAIN_STEADY_STATE",
+  "governor_mode": "EQUILIBRIUM",
   "foreground_process": {
     "pid": 8664,
     "name": "Antigravity.exe",
     "priority": "ABOVE_NORMAL",
     "boosted": true
   },
-  "governed_count": 1,
-  "throttled_count": 1,
-  "recent_throttled": [
-    {
-      "pid": 7692,
-      "name": "vssvc.exe",
-      "priority": "BELOW_NORMAL"
-    }
-  ],
+  "governed_count": 0,
+  "throttled_count": 0,
+  "restored_count": 6,
+  "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
   "total_boost_events": 1,
-  "total_throttle_events": 7,
+  "total_throttle_events": 17,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
