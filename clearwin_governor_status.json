@@ -1,63 +1,22 @@
 {
-  "timestamp": "2026-11-22T15:00:25.184928",
+  "timestamp": "2026-11-22T15:10:30.938784",
   "governor_active": true,
   "ai_integrated": true,
-  "active_ai_action": "TRIM_PROCESS_WORKING_SETS",
-  "governor_mode": "ACTIVE_GOVERNANCE",
+  "active_ai_action": "THROTTLE_BACKGROUND_APPS",
+  "governor_mode": "HIGH_CPU_SHIELD",
   "foreground_process": {
     "pid": 11876,
     "name": "OpenWith.exe",
-    "priority": "ABOVE_NORMAL",
+    "priority": "HIGH",
     "boosted": true
   },
   "governed_count": 10,
-  "throttled_count": 10,
-  "recent_throttled": [
-    {
-      "pid": 2612,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 3488,
-      "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6456,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6460,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 6464,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 8088,
-      "name": "msedgewebview2.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 9948,
-      "name": "brave.exe",
-      "priority": "BELOW_NORMAL"
-    },
-    {
-      "pid": 12316,
-      "name": "runtimebroker.exe",
-      "priority": "BELOW_NORMAL"
-    }
-  ],
+  "throttled_count": 0,
+  "recent_throttled": [],
   "cycle_ram_freed_mb": 0.0,
   "total_ram_reclaimed_mb": 0.0,
-  "total_boost_events": 23,
-  "total_throttle_events": 1975,
+  "total_boost_events": 28,
+  "total_throttle_events": 2038,
   "safety_status": "✅ 100% Safe (0 Violations)",
   "efficacy_rating": "⭐ 100% OPTIMAL"
 }
