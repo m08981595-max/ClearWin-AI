@@ -3,445 +3,1675 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="theme-color" content="#080b11" />
-<title>ClearWin 2.7.7 — لوحة القيادة ومركز شفافية الذكاء الاصطناعي</title>
+<meta name="theme-color" content="#0b0f17" />
+<title>ClearWin 2.7.2 GlassUI V21 — لوحة القيادة ومركز قيادة الذكاء الاصطناعي</title>
 <link rel="icon" type="image/x-icon" href="app.ico">
 <link rel="shortcut icon" href="app.ico">
 <style>
-:root{color-scheme:dark;--bg:#080b11;--panel:#0e131c;--panel2:#111925;--line:#202a38;--muted:#8996a8;--text:#eaf2ff;--cyan:#55d8ff;--cyan2:#159fce;--red:#ff5669;--green:#52e2b0;--amber:#ffcb70;--radius:18px;--shadow:0 16px 46px #0005}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 14% 0%,#102433 0,transparent 30%),radial-gradient(ellipse at 93% 90%,#171627 0,transparent 25%),var(--bg);color:var(--text);font-family:"Segoe UI Arabic","Segoe UI",-apple-system,BlinkMacSystemFont,Tahoma,Arial,sans-serif;min-height:100vh}
-/* ==========================================================================
-   ClearWin Advanced BiDi Layout & Mixed Direction Isolation (Arabic RTL + LTR)
-   ========================================================================== */
-html[dir="rtl"]{direction:rtl;text-align:right}
-bdi,.bdi,[dir="auto"],[dir="ltr"]{unicode-bidi:isolate}
-span,strong,b,em,i,small,code,kbd,var,mark,.pill,.badge,.tag,.tier-tag,.chip,.crumb span,.crumb b{unicode-bidi:isolate}
-.bidi-en{direction:ltr!important;unicode-bidi:isolate!important;display:inline!important;white-space:normal}
-.bidi-parens{direction:ltr!important;unicode-bidi:isolate!important;display:inline-block!important;white-space:nowrap!important;vertical-align:baseline}
-.bidi-num{direction:ltr!important;unicode-bidi:isolate!important;display:inline-block!important}
-code,pre,.mono,[data-code]{direction:ltr!important;unicode-bidi:isolate!important;text-align:left!important;font-family:Consolas,"Cascadia Code",monospace}
-p,h1,h2,h3,h4,h5,h6,li,td,th,label,.desc,.sub,.crumb,.tweak-card h3,.tweak-card p,.tool-card h3,.tool-card p,.clean-copy strong,.clean-copy p,.toggle-copy strong,.toggle-copy p,.opt-info strong,.opt-info p,.log-line strong,.log-line p,.recommend h3,.recommend p,.page-panel-title h2,.page-panel-title p,.side-system p,.page-note{unicode-bidi:isolate;text-align:start}
-button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
-.app{display:grid;grid-template-columns:1fr 250px;min-height:100vh;max-width:1800px;margin:auto}
-.sidebar{grid-column:2;grid-row:1;border-left:1px solid var(--line);padding:26px 17px;background:#090d14d9;backdrop-filter:blur(18px);position:sticky;top:0;height:100vh;display:flex;flex-direction:column;z-index:4}
-.main{grid-column:1;grid-row:1;min-width:0;padding:28px clamp(18px,3vw,42px) 42px}
-.brand{display:flex;align-items:center;gap:12px;padding:5px 9px 28px}
-.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;color:var(--cyan);border:1px solid #55d8ff55;background:linear-gradient(145deg,#163244,#101b28);box-shadow:0 0 25px #35c9ff17}
-.brand-mark img{width:38px;height:38px;border-radius:10px;object-fit:cover;box-shadow:0 0 14px rgba(0,180,255,0.45);border:1px solid rgba(80,180,255,0.35)}
-.brand-name{font-weight:800;font-size:20px;letter-spacing:.3px}.brand-name span{color:var(--cyan)}
-.version{font-size:10px;color:var(--muted);margin-top:4px;letter-spacing:1px}
-.nav-label{font-size:10px;letter-spacing:1.8px;color:#617083;padding:10px 12px 8px}
-.nav{display:grid;gap:6px}
-.nav button{border:1px solid transparent;display:flex;align-items:center;gap:12px;padding:12px 13px;border-radius:12px;color:#aab7c8;background:transparent;text-align:right;transition:.18s;width:100%;font-size:13px}
-.nav button:hover{background:#111b28;color:#edf8ff}
-.nav button.active{color:#e8faff;border-color:#39cafa35;background:linear-gradient(100deg,#102535,#10202b 78%,#12202b);box-shadow:inset -3px 0 var(--cyan)}
-.nav svg{width:18px;height:18px;stroke:currentColor;flex:none}
-.nav .tag{margin-right:auto;font-size:10px;color:var(--cyan);background:#14303b;padding:3px 6px;border-radius:5px}
-.sidebar-spacer{flex:1}
-.side-system{border:1px solid var(--line);background:linear-gradient(145deg,#101925,#0b1018);border-radius:14px;padding:14px;margin:15px 3px 0}
-.side-system .dot{width:7px;height:7px;display:inline-block;border-radius:50%;background:var(--green);margin-left:8px;box-shadow:0 0 11px #52e2b077}
-.side-system strong{font-size:12px}.side-system p{color:var(--muted);font-size:11px;margin:9px 0 0;line-height:1.7}
-.topbar{display:flex;align-items:center;gap:14px;justify-content:space-between;margin-bottom:29px}
-.crumb{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.crumb b{color:#eaf2ff;font-weight:600}
-.top-actions{display:flex;align-items:center;gap:10px}
-.search{position:relative}
-.search input{width:min(260px,25vw);background:#0d131c;border:1px solid var(--line);border-radius:11px;color:var(--text);padding:10px 38px 10px 12px;font-size:12px}
-.search svg{position:absolute;right:12px;top:10px;width:16px;color:#74869b}
-.icon-btn{width:39px;height:39px;display:grid;place-items:center;background:#0e141e;color:#a9b8ca;border:1px solid var(--line);border-radius:11px;position:relative}
-.icon-btn svg{width:17px}
-.notify-dot{position:absolute;top:8px;left:8px;background:var(--green);width:6px;height:6px;border-radius:50%;border:1px solid #0e141e}
-.avatar{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(145deg,#234355,#192332);border:1px solid #49d2fa44;color:var(--cyan);font-weight:800;font-size:12px}
-.eyebrow{color:var(--cyan);font-size:10px;letter-spacing:1.6px;margin-bottom:10px}
-.page-heading{display:flex;justify-content:space-between;gap:18px;align-items:flex-end;margin-bottom:22px}
-.page-heading h1{font-size:clamp(24px,3vw,34px);margin:0 0 9px;letter-spacing:-.7px}
-.page-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.8}
-.status-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #52e2b044;background:#0d201d;color:#8cebc9;padding:9px 12px;border-radius:10px;font-size:11px;white-space:nowrap}
-.status-chip i{display:inline-block;background:var(--green);width:6px;height:6px;border-radius:50%;box-shadow:0 0 10px #52e2b0}
-.grid{display:grid;gap:16px}
-.stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));margin-bottom:17px}
-.card{border:1px solid var(--line);background:linear-gradient(145deg,#111824f2,#0c1119f5);border-radius:var(--radius);box-shadow:var(--shadow);min-width:0}
-.stat{padding:18px 18px 17px;position:relative;overflow:hidden}
-.stat:after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;background:var(--glow,#55d8ff);filter:blur(60px);opacity:.09;left:-30px;bottom:-50px}
-.stat-top{display:flex;align-items:center;justify-content:space-between;color:#a7b5c8;font-size:11px}
-.stat-icon{width:34px;height:34px;border-radius:10px;background:#152b38;border:1px solid #55d8ff22;display:grid;place-items:center;color:var(--cyan)}
-.stat-icon svg{width:18px}
-.stat-num{font-size:28px;font-weight:750;margin:17px 0 8px;letter-spacing:-1px}
-.stat-num span{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:0}
-.stat-foot{font-size:10px;color:var(--muted);display:flex;gap:6px;align-items:center}
-.up{color:var(--green)}.down{color:var(--red)}
-.split{grid-template-columns:minmax(0,1.45fr) minmax(270px,.8fr);margin-bottom:17px}
-.card-head{padding:18px 20px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.card-head h2{font-size:14px;margin:0 0 7px}.card-head p{font-size:11px;color:var(--muted);margin:0}
-.ghost-btn{background:#111c28;border:1px solid #263749;color:#b5c8d9;border-radius:9px;padding:8px 11px;font-size:10px;display:inline-flex;align-items:center;gap:6px;transition:.18s}
-.ghost-btn:hover{border-color:#55d8ff66;color:#eafaff}
-.chart-wrap{padding:18px 20px 16px}
-.chart-summary{display:flex;gap:20px;align-items:center;margin-bottom:15px;flex-wrap:wrap}
-.chart-summary strong{font-size:21px}.chart-summary small{display:block;color:var(--muted);font-size:10px;margin-top:5px}
-.legend{display:flex;gap:13px;color:var(--muted);font-size:10px;margin-right:auto}
-.legend span{display:flex;align-items:center;gap:6px}
-.legend i{width:8px;height:8px;border-radius:2px;display:inline-block}
-.chart{width:100%;height:168px;display:block;overflow:visible}
-.chart text{fill:#6f7e91;font-size:10px}
-.grid-line{stroke:#23303d;stroke-width:1;stroke-dasharray:3 5}
-.chart-foot{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:5px}
-.health-body{padding:18px 20px 20px}
-.health-score{display:flex;align-items:center;gap:17px;margin-bottom:20px}
-.ring{width:112px;height:112px;border-radius:50%;display:grid;place-items:center;position:relative;background:conic-gradient(var(--cyan) 0 88%,#202b38 88% 100%);flex:none}
-.ring:before{content:"";position:absolute;inset:7px;border-radius:50%;background:#0e151f}
-.ring-inner{position:relative;text-align:center}
-.ring-inner strong{display:block;font-size:27px;letter-spacing:-1px}.ring-inner small{font-size:10px;color:var(--muted)}
-.health-label strong{font-size:14px}.health-label p{font-size:11px;color:var(--muted);line-height:1.8;margin:8px 0}
-.mini-status{display:flex;align-items:center;gap:8px;padding:11px 0;border-top:1px solid #202a37;font-size:11px;color:#c8d3e0}
-.mini-status .state{margin-right:auto;color:var(--green);font-size:10px}
-.mini-status .state.warn{color:var(--amber)}
-.mini-status svg{width:16px;color:#8c9db0}
-.actions{grid-template-columns:minmax(0,1.3fr) minmax(260px,.7fr);margin-bottom:17px}
-.opt-body{padding:16px 20px 19px}
-.opt-row{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid #202a37}
-.opt-row:last-of-type{border-bottom:0}
-.opt-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:11px;background:#142230;border:1px solid #314453;color:var(--cyan);flex:none}
-.opt-icon svg{width:18px}
-.opt-info{min-width:0;flex:1}
-.opt-info strong{display:block;font-size:12px;margin-bottom:5px}
-.opt-info p{font-size:10px;color:var(--muted);margin:0;line-height:1.6}
-.opt-meta{margin-right:auto;text-align:left;flex:none}
-.opt-meta small{display:block;color:var(--muted);font-size:9px;margin-bottom:7px}
-.toggle{width:37px;height:21px;padding:3px;border-radius:99px;border:1px solid #344152;background:#1a2431;display:flex;align-items:center;transition:.2s}
-.toggle:before{content:"";display:block;width:13px;height:13px;border-radius:50%;background:#7d8ca0;transition:.2s}
-.toggle.on{background:#10475a;border-color:#38c9f4}
-.toggle.on:before{transform:translateX(-15px);background:var(--cyan);box-shadow:0 0 9px #55d8ff66}
-.primary-btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;background:linear-gradient(100deg,#1588b1,#21bfe6);border:1px solid #5fdcff55;border-radius:10px;padding:11px 15px;color:#03131b;font-size:11px;font-weight:800;box-shadow:0 6px 22px #20bde21c;transition:.18s}
-.primary-btn:hover{filter:brightness(1.12);transform:translateY(-1px)}
-.primary-btn:disabled{opacity:.5;cursor:wait;transform:none}
-.primary-btn svg{width:15px}
-.opt-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:14px}
-.opt-footer span{font-size:10px;color:var(--muted)}
-.recommend{padding:18px 19px;display:flex;flex-direction:column;min-height:100%}
-.recommend .recommend-icon{width:41px;height:41px;display:grid;place-items:center;border-radius:13px;background:#251c35;color:#b59cff;border:1px solid #a68bff30;margin-bottom:14px}
-.recommend .recommend-icon svg{width:20px}
-.recommend h3{font-size:14px;margin:0 0 9px}.recommend p{font-size:11px;color:var(--muted);line-height:1.9;margin:0 0 16px}
-.recommend-list{display:grid;gap:10px;margin:0 0 18px}
-.recommend-item{display:flex;align-items:center;gap:8px;color:#c8d3df;font-size:10px}
-.recommend-item svg{width:15px;color:var(--green);flex:none}
-.recommend .ghost-btn{margin-top:auto;align-self:flex-start}
-.bottom-grid{grid-template-columns:minmax(0,1fr) minmax(280px,.85fr)}
-.table-card{overflow:hidden}
-.table-header{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
-.table-header h2{font-size:14px;margin:0}.table-header p{font-size:10px;color:var(--muted);margin:7px 0 0}
-.events{padding:0 20px}
-.event{display:grid;grid-template-columns:35px minmax(0,1fr) auto;align-items:center;gap:11px;padding:14px 0;border-bottom:1px solid #202a37}
-.event:last-child{border-bottom:0}
-.event-icon{width:33px;height:33px;border-radius:10px;display:grid;place-items:center;background:#13281f;color:var(--green)}
-.event-icon.warn{background:#302617;color:var(--amber)}.event-icon.info{background:#142633;color:var(--cyan)}
-.event-icon svg{width:16px}
-.event strong{font-size:11px;display:block;margin-bottom:5px}
-.event p{font-size:10px;color:var(--muted);margin:0}
-.event time{font-size:9px;color:#728195;white-space:nowrap}
-.task-panel{padding:18px 20px}
-.task-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}
-.task-top h2{font-size:14px;margin:0}.task-top span{font-size:10px;color:var(--muted)}
-.task{padding:12px 0;border-bottom:1px solid #202a37}.task:last-child{border-bottom:0}
-.task-head{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:11px;margin-bottom:10px}
-.task-head span:last-child{color:var(--muted);font-size:10px}
-.progress{height:5px;border-radius:20px;background:#202b37;overflow:hidden}
-.progress i{height:100%;display:block;border-radius:20px;background:linear-gradient(90deg,#258cb3,var(--cyan));width:var(--w,100%)}
-.progress.purple i{background:linear-gradient(90deg,#6558c4,#ac95ff)}
-.progress.green i{background:linear-gradient(90deg,#239779,#52e2b0)}
-.footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:28px;color:#66768a;font-size:9px;padding:0 2px}
-.footer span{display:flex;align-items:center;gap:7px}.footer .line-dot{width:5px;height:5px;border-radius:50%;background:var(--cyan)}
-.toast{position:fixed;bottom:22px;left:22px;z-index:100;max-width:380px;background:#13202a;border:1px solid #3a5b6a;border-radius:13px;padding:14px 17px;box-shadow:0 18px 50px #0009;color:#e9f8ff;font-size:12px;line-height:1.7;opacity:0;transform:translateY(10px);pointer-events:none;transition:.23s}
-.toast.show{opacity:1;transform:translateY(0)}
-.scan-line{height:3px;background:#1c2a38;overflow:hidden;border-radius:20px;margin-top:12px;display:none}
-.scan-line.active{display:block}
-.scan-line i{height:100%;width:30%;display:block;background:var(--cyan);box-shadow:0 0 12px var(--cyan);animation:scan 1s linear infinite}
-@keyframes scan{from{transform:translateX(350%)}to{transform:translateX(-120%)}}
-.page-content{min-width:0}
-.page-stack{display:grid;gap:17px}
-.page-grid-2{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(270px,.8fr);gap:16px}
-.page-grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.page-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-.page-panel{padding:0;overflow:hidden}
-.page-panel-body{padding:18px 20px}
-.page-panel-title{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:18px 20px;border-bottom:1px solid var(--line)}
-.page-panel-title h2{font-size:14px;margin:0 0 6px}
-.page-panel-title p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
-.page-panel-title .ghost-btn{flex:none}
-.metric-tile{padding:17px;border:1px solid var(--line);background:linear-gradient(145deg,#111a26,#0c1119);border-radius:15px;min-width:0}
-.metric-label{font-size:11px;color:#a7b5c8;display:flex;align-items:center;justify-content:space-between;gap:7px}
-.metric-value{font-size:25px;font-weight:750;letter-spacing:-.6px;margin:15px 0 7px}
-.metric-hint{font-size:10px;color:var(--muted);line-height:1.7}
-.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border:1px solid #263748;border-radius:8px;font-size:10px;color:#adc0d2;background:#111c27;white-space:nowrap}
-.pill.good{background:#10251f;border-color:#245442;color:#7de2bb}
-.pill.warn{background:#2a2114;border-color:#554127;color:#ffcf83}
-.pill.bad{background:#2d1820;border-color:#5b2b38;color:#ff9aaa}
-.pill.blue{background:#112632;border-color:#244656;color:#8be4ff}
-.inline-dot{width:6px;height:6px;border-radius:50%;background:currentColor}
-.page-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
-.page-note{display:flex;gap:10px;align-items:flex-start;padding:13px 15px;border-radius:13px;background:#101c25;border:1px solid #254050;color:#b4d1df;font-size:11px;line-height:1.8}
-.page-note svg{width:17px;height:17px;flex:none;margin-top:2px}
-.filterbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:13px 17px;border-bottom:1px solid var(--line)}
-.filterbar input,.filterbar select{background:#0b1119;border:1px solid #283443;color:var(--text);border-radius:9px;padding:10px 12px;font-size:11px;min-width:0}
-.filterbar input{flex:1;min-width:140px}
-.data-table-wrap{overflow:auto}
-.data-table{width:100%;border-collapse:collapse;min-width:600px}
-.data-table th{font-size:10px;color:#8190a4;font-weight:600;text-align:right;background:#0d131c;padding:13px 17px;border-bottom:1px solid var(--line);white-space:nowrap}
-.data-table td{font-size:11px;color:#cad5e3;padding:14px 17px;border-bottom:1px solid #1b2632;vertical-align:middle}
-.data-table tr:last-child td{border-bottom:0}
-.data-table tbody tr:hover{background:#111a25}
-.item-main{display:flex;align-items:center;gap:11px;min-width:160px}
-.item-icon{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:#142431;border:1px solid #294252;color:var(--cyan);font-weight:800;flex:none}
-.item-icon.purple{background:#211d34;border-color:#3c3562;color:#b3a5ff}
-.item-icon.green{background:#132821;border-color:#28513e;color:#7fe5b8}
-.item-icon.amber{background:#2c2317;border-color:#4d3b23;color:#ffd18b}
-.item-main strong{display:block;font-size:11px;margin-bottom:5px}
-.item-main small{display:block;color:var(--muted);font-size:9px}
-.switch{border:1px solid #344456;background:#17212d;border-radius:99px;width:36px;height:20px;padding:2px;display:inline-flex;align-items:center;transition:.18s;vertical-align:middle}
-.switch i{width:14px;height:14px;border-radius:50%;background:#7c8b9d;transition:.18s}
-.switch.on{justify-content:flex-start;background:#12313d;border-color:#27718b}
-.switch.on i{transform:translateX(-15px);background:var(--cyan);box-shadow:0 0 10px #55d8ff55}
-.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:15px 0;border-bottom:1px solid #202a37}
-.toggle-row:last-child{border-bottom:0}
-.toggle-copy strong{display:block;font-size:11px;margin-bottom:5px}
-.toggle-copy p{margin:0;color:var(--muted);font-size:10px;line-height:1.7}
-.setting-group{padding:0 20px}
-.storage-row{display:grid;grid-template-columns:115px minmax(0,1fr) 75px;align-items:center;gap:12px;margin:16px 0}
-.storage-row label{font-size:10px;color:#c1ccda}
-.storage-track{height:8px;border-radius:20px;background:#202b37;overflow:hidden}
-.storage-track i{display:block;height:100%;width:var(--w);border-radius:20px;background:linear-gradient(90deg,#168ab5,#55d8ff)}
-.storage-row:nth-child(3) .storage-track i{background:linear-gradient(90deg,#6558c4,#a797ff)}
-.storage-row:nth-child(4) .storage-track i{background:linear-gradient(90deg,#238264,#52e2b0)}
-.storage-row b{text-align:left;font-size:10px;font-weight:600;color:#aebccd}
-.clean-option{display:flex;align-items:flex-start;gap:11px;padding:15px 18px;border-bottom:1px solid #202a37}
-.clean-option:last-child{border-bottom:0}
-.fake-check{width:17px;height:17px;flex:none;border:1px solid #3a4d60;border-radius:5px;background:#0b121a;display:grid;place-items:center;color:#06141a;margin-top:1px;cursor:pointer}
-.fake-check.checked{background:var(--cyan);border-color:var(--cyan)}
-.fake-check.checked:after{content:'✓';font-weight:900;font-size:12px}
-.clean-copy{flex:1;min-width:0}
-.clean-copy strong{font-size:11px;display:block;margin-bottom:5px}
-.clean-copy p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
-.clean-size{font-size:11px;color:#bdd2e0;white-space:nowrap}
-.tool-card{border:1px solid var(--line);background:linear-gradient(145deg,#111a26,#0d121a);border-radius:15px;padding:17px;display:flex;flex-direction:column;min-height:165px}
-.tool-card .tool-glyph{height:36px;width:36px;border-radius:11px;display:grid;place-items:center;background:#132a38;color:var(--cyan);margin-bottom:14px}
-.tool-card .tool-glyph svg{width:19px}
-.tool-card h3{font-size:12px;margin:0 0 7px}
-.tool-card p{font-size:10px;line-height:1.8;color:var(--muted);margin:0 0 15px;flex:1}
-.tool-card .page-actions{margin-top:auto}
-.log-list{padding:0 20px}
-.log-line{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:11px;padding:14px 0;border-bottom:1px solid #202a37}
-.log-line:last-child{border-bottom:0}
-.log-line strong{font-size:11px;display:block;margin-bottom:5px}
-.log-line p{font-size:10px;color:var(--muted);margin:0;line-height:1.7}
-.log-line time{font-size:9px;color:#728195;white-space:nowrap}
-.command-overlay{position:fixed;inset:0;z-index:80;display:flex;align-items:flex-start;justify-content:center;padding:clamp(20px,10vh,110px) 14px 20px;background:#02050bd9;backdrop-filter:blur(12px)}
-.command-panel{width:min(650px,100%);max-height:80vh;display:flex;flex-direction:column;overflow:hidden;border:1px solid #355166;border-radius:20px;background:linear-gradient(145deg,#111b28,#090e16);box-shadow:0 28px 100px #000b}
-.command-panel-head{display:flex;align-items:center;gap:13px;padding:18px 19px;border-bottom:1px solid var(--line)}
-.command-search-icon{width:39px;height:39px;flex:none;display:grid;place-items:center;color:var(--cyan);background:#122c3a;border:1px solid #2b586b;border-radius:12px}
-.command-search-wrap{flex:1;min-width:0}
-.command-search-wrap label{display:block;font-size:10px;color:#8ea2b7;margin-bottom:5px}
-.command-search-wrap input{width:100%;border:0;outline:0!important;background:transparent;color:var(--text);font-size:15px;padding:2px 0}
-.command-close{background:#111925;border:1px solid #273446;border-radius:8px;color:#8fa0b3;padding:5px 8px;font-size:10px}
-.command-results{padding:0 9px 10px;overflow:auto}
-.command-result{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:1px solid transparent;border-radius:11px;background:transparent;color:#dce8f5;text-align:right;margin:2px 0}
-.command-result:hover{background:linear-gradient(100deg,#112a38,#111d2a);border-color:#2d596b}
-.command-result-glyph{width:35px;height:35px;display:grid;place-items:center;border:1px solid #2a4659;background:#132330;color:var(--cyan);border-radius:10px}
-.command-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 17px;border-top:1px solid var(--line);background:#080d14;color:#7f90a4;font-size:10px}
-.kbd{font-size:9px;padding:4px 6px;border:1px solid #2b3949;border-radius:5px;color:#9aabbc;background:#101721}
-[hidden]{display:none!important}
-@media(max-width:1180px){.app{grid-template-columns:1fr 220px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.split,.actions{grid-template-columns:minmax(0,1fr) minmax(240px,.8fr)}}
-.tweak-tabs-bar{display:flex;gap:7px;padding:12px 18px;border-bottom:1px solid #1c2b3a;overflow-x:auto;flex-wrap:wrap;background:#0a1017}
-.tweak-tab-btn{background:#0e1723;border:1px solid #233446;color:#8fa0b5;border-radius:9px;padding:7px 13px;font-size:11px;cursor:pointer;transition:.18s;white-space:nowrap}
-.tweak-tab-btn:hover{border-color:#38c9f455;color:#eafaff}
-.tweak-tab-btn.active{background:#123246;border-color:var(--cyan);color:var(--cyan);font-weight:700;box-shadow:0 0 14px #20bde222}
-.tweak-card{display:flex;flex-direction:column;min-height:195px;position:relative}
-.tweak-card.critical{border-color:#991b1b55}
-.tweak-card.deferred{opacity:.88}
-.admin-chip{display:flex;align-items:center;gap:7px;padding:5px 12px;background:#0d1622;border:1px solid #233446;border-radius:20px;font-size:11px;color:#9db0c6;cursor:pointer;transition:.2s;user-select:none}
-.admin-chip:hover{border-color:var(--cyan);background:#122030}
-.admin-chip.elevated{border-color:#22c55e66;background:#0d261b;color:#4ade80}
-.admin-chip.elevated .dot{background:#22c55e;box-shadow:0 0 10px #22c55e}
-.admin-chip.requesting{border-color:#f59e0b66;background:#2a1f0a;color:#fbbf24}
-.admin-toggle-btn{padding:2px 8px;font-size:10px;border-radius:12px;background:#182635;border:1px solid #2e445b;color:#dce8f5;cursor:pointer;transition:.15s}
-.admin-toggle-btn:hover{background:#24374c;border-color:var(--cyan)}
-.tier-tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700}
-.tier-green{background:#064e3b;color:#34d399;border:1px solid #05966955}
-.tier-yellow{background:#451a03;color:#fbbf24;border:1px solid #d9770655}
-.tier-red{background:#450a0a;color:#f87171;border:1px solid #dc262655}
-.audit-table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}
-.audit-table th,.audit-table td{padding:9px 12px;text-align:right;border-bottom:1px solid #1a2736}
-.audit-table th{background:#0a121c;color:#8fa2b8;font-weight:600}
-.audit-table tr:hover{background:#0e1a27}
-@media(max-width:850px){.app{display:block}.sidebar{position:fixed;right:0;top:0;width:270px;transform:translateX(102%);transition:transform .25s;box-shadow:-20px 0 60px #0008}.sidebar.open{transform:translateX(0)}.main{padding:18px 16px 32px}.topbar{margin-bottom:24px}.search input{width:clamp(130px,35vw,240px)}.split,.actions,.bottom-grid,.page-grid-2,.page-grid-3,.page-grid-4{grid-template-columns:1fr}}
+
+:root {
+  color-scheme: dark;
+
+  /* ========================================================================
+     Windows 11 Fluent 2.0 (Mica / Acrylic) Design Tokens
+     ======================================================================== */
+  --cw-bg-base: #0b0f17;
+  --cw-bg-mica: #0e1420;
+  --cw-bg-acrylic: rgba(16, 24, 38, 0.72);
+  --cw-bg-subtle: rgba(255, 255, 255, 0.03);
+  --cw-bg-hover: rgba(255, 255, 255, 0.06);
+  --cw-bg-active: rgba(255, 255, 255, 0.09);
+
+  /* Hairline Borders & Specular Bevel */
+  --cw-glass-stroke: rgba(255, 255, 255, 0.08);
+  --cw-glass-stroke-focus: rgba(56, 189, 248, 0.40);
+  --cw-glass-bevel: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+
+  /* Fluent Typography Colors */
+  --cw-text-primary: #f8fafc;
+  --cw-text-secondary: #94a3b8;
+  --cw-text-tertiary: #64748b;
+
+  /* Semantic Accents */
+  --cw-accent-cyan: #38bdf8;
+  --cw-accent-cyan-subtle: rgba(56, 189, 248, 0.14);
+  --cw-accent-green: #34d399;
+  --cw-accent-green-subtle: rgba(52, 211, 153, 0.14);
+  --cw-accent-amber: #fbbf24;
+  --cw-accent-amber-subtle: rgba(251, 191, 36, 0.14);
+  --cw-accent-purple: #c084fc;
+  --cw-accent-purple-subtle: rgba(192, 132, 252, 0.14);
+  --cw-accent-red: #f87171;
+  --cw-accent-red-subtle: rgba(248, 113, 113, 0.14);
+
+  /* Elevation Shadows */
+  --cw-shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.25);
+  --cw-shadow-card: 0 12px 32px -4px rgba(0, 0, 0, 0.45), var(--cw-glass-bevel);
+  --cw-shadow-glow: 0 0 24px rgba(56, 189, 248, 0.16);
+
+  /* Radii & Motion */
+  --cw-radius-sm: 10px;
+  --cw-radius-md: 14px;
+  --cw-radius-lg: 18px;
+  --cw-radius-xl: 22px;
+  --cw-radius-pill: 9999px;
+  --cw-ease-fluent: cubic-bezier(0.16, 1, 0.3, 1);
+  --cw-duration: 0.22s;
+
+  /* ========================================================================
+     Legacy Aliases (Ensures 100% Subpage Styling Compatibility)
+     ======================================================================== */
+  --bg: #0b0f17;
+  --panel: rgba(16, 24, 38, 0.72);
+  --panel2: #121927;
+  --line: rgba(255, 255, 255, 0.08);
+  --muted: #94a3b8;
+  --text: #f8fafc;
+  --cyan: #38bdf8;
+  --cyan2: #0284c7;
+  --red: #f87171;
+  --green: #34d399;
+  --amber: #fbbf24;
+  --radius: 18px;
+  --shadow: 0 16px 46px rgba(0, 0, 0, 0.45);
+}
 
 /* ==========================================================================
-   ClearWin 2.7.7 — Ultra Glassmorphism 2.0 & Gaming Turbo Styles
+   Base & Windows 11 Mica Canvas Reset
    ========================================================================== */
-.card {
-  background: linear-gradient(135deg, rgba(16, 23, 38, 0.75) 0%, rgba(12, 18, 30, 0.85) 100%) !important;
-  backdrop-filter: blur(25px) saturate(190%) !important;
-  -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
-.card:hover {
-  border-color: rgba(56, 189, 248, 0.35) !important;
-  box-shadow: 0 18px 45px -10px rgba(56, 189, 248, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
-  transform: translateY(-2px);
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--cw-bg-base);
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(56, 189, 248, 0.06), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 90% 15%, rgba(192, 132, 252, 0.04), transparent 60%),
+    radial-gradient(ellipse 50% 30% at 10% 85%, rgba(52, 211, 153, 0.03), transparent 60%);
+  background-attachment: fixed;
+  color: var(--cw-text-primary);
+  font-family: 'Segoe UI Variable Display', 'Segoe UI Variable Text', 'Segoe UI', -apple-system, BlinkMacSystemFont, Tahoma, system-ui, sans-serif;
+  direction: rtl;
+  text-align: right;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
-.turbo-hero {
-  position: relative;
-  overflow: hidden;
-  margin-bottom: 24px;
-  padding: 26px 30px;
-  background: linear-gradient(135deg, rgba(20, 27, 45, 0.90) 0%, rgba(13, 19, 33, 0.96) 100%) !important;
-  border: 1px solid rgba(56, 189, 248, 0.32) !important;
-  border-radius: 22px !important;
-  box-shadow: 0 18px 50px -10px rgba(0, 0, 0, 0.65), 0 0 35px rgba(56, 189, 248, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15) !important;
+
+/* Windows 11 Modern Glass Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+
+/* BiDi Isolation Helpers */
+bdi, .bidi-en, .bidi-parens {
+  direction: ltr !important;
+  unicode-bidi: isolate !important;
+  display: inline-block !important;
+}
+
+/* ==========================================================================
+   Application Master Grid (Sidebar + Main Viewport)
+   ========================================================================== */
+.app {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 280px;
+  min-height: 100vh;
+  position: relative;
+}
+
+@media (max-width: 980px) {
+  .app {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   Fluent Glass Sidebar Navigation
+   ========================================================================== */
+.sidebar {
+  grid-column: 2;
+  grid-row: 1;
+  border-left: 1px solid var(--cw-glass-stroke);
+  padding: 24px 16px;
+  background: rgba(11, 15, 23, 0.82);
+  backdrop-filter: blur(32px) saturate(180%);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+@media (max-width: 980px) {
+  .sidebar {
+    position: fixed;
+    right: -290px;
+    top: 0;
+    width: 280px;
+    transition: right 0.3s var(--cw-ease-fluent);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.6);
+  }
+  .sidebar.open {
+    right: 0;
+  }
+}
+
+.brand {
+  display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 12px;
+  padding: 6px 10px 22px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 18px;
 }
-.turbo-bg-glow {
-  position: absolute;
-  width: 380px;
-  height: 380px;
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(192, 132, 252, 0.15));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.2);
+}
+
+.brand-mark img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+.brand-name {
+  font-size: 19px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.5px;
+}
+.brand-name span {
+  color: var(--cw-accent-cyan);
+}
+
+.version {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--cw-text-tertiary);
+  letter-spacing: 0.5px;
+  margin-top: 1px;
+}
+
+.nav-label {
+  font-size: 10.5px;
+  font-weight: 750;
+  color: var(--cw-text-tertiary);
+  padding: 8px 12px 6px;
+  letter-spacing: 0.5px;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav button {
+  border: 1px solid transparent;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--cw-radius-md);
+  color: var(--cw-text-secondary);
+  background: transparent;
+  text-align: right;
+  transition: all var(--cw-duration) var(--cw-ease-fluent);
+  width: 100%;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  position: relative;
+}
+
+.nav button svg {
+  width: 18px;
+  height: 18px;
+  color: var(--cw-text-tertiary);
+  transition: color var(--cw-duration);
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.nav button:hover {
+  background: var(--cw-bg-hover);
+  color: var(--cw-text-primary);
+  transform: translateX(-2px);
+}
+.nav button:hover svg {
+  color: var(--cw-accent-cyan);
+}
+
+.nav button.active {
+  color: #fff;
+  border-color: rgba(56, 189, 248, 0.32);
+  background: linear-gradient(90deg, rgba(56, 189, 248, 0.16) 0%, rgba(56, 189, 248, 0.04) 100%);
+  box-shadow: inset -3px 0 var(--cw-accent-cyan), 0 0 16px rgba(56, 189, 248, 0.1);
+  font-weight: 700;
+}
+.nav button.active svg {
+  color: var(--cw-accent-cyan);
+}
+
+.tag {
+  margin-right: auto;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: var(--cw-radius-pill);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cw-text-secondary);
+}
+.nav button.active .tag {
+  background: var(--cw-accent-cyan-subtle);
+  color: var(--cw-accent-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.sidebar-spacer {
+  flex: 1;
+}
+
+.side-system {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(16, 24, 38, 0.6);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-md);
+  box-shadow: var(--cw-shadow-sm);
+}
+
+.side-system div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cw-text-primary);
+  margin-bottom: 4px;
+}
+
+.side-system .dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.18) 0%, rgba(99, 102, 241, 0.14) 40%, transparent 70%);
-  top: -120px;
-  right: -60px;
-  pointer-events: none;
-  filter: blur(45px);
+  background: var(--cw-accent-green);
+  box-shadow: 0 0 8px var(--cw-accent-green);
 }
-.turbo-badge {
+
+.side-system p {
+  margin: 0;
+  font-size: 10.5px;
+  color: var(--cw-text-tertiary);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Main Viewport Layout
+   ========================================================================== */
+.main {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
+  padding: 24px clamp(16px, 2.5vw, 36px) 40px;
+}
+
+/* ==========================================================================
+   Fluent Topbar
+   ========================================================================== */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 20px;
+  background: rgba(14, 20, 32, 0.65);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-lg);
+  box-shadow: var(--cw-shadow-card);
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--cw-text-tertiary);
+}
+.crumb b {
+  color: var(--cw-text-primary);
+  font-weight: 700;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Top AI Engine Badge */
+.cw-top-ai-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 12px;
+  background: var(--cw-accent-cyan-subtle);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: var(--cw-radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cw-accent-cyan);
+}
+
+/* Admin Elevation Chip */
+.admin-chip {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 13px;
-  background: rgba(56, 189, 248, 0.12);
-  border: 1px solid rgba(56, 189, 248, 0.35);
-  border-radius: 99px;
-  color: #38bdf8;
+  padding: 5px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-pill);
   font-size: 11px;
-  font-weight: 700;
-  margin-bottom: 10px;
+  font-weight: 600;
+  color: var(--cw-text-secondary);
+  cursor: pointer;
+  transition: all 0.18s;
 }
-.turbo-pulse {
+.admin-chip:hover {
+  background: var(--cw-bg-hover);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+.admin-chip .dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #38bdf8;
-  box-shadow: 0 0 10px #38bdf8;
-  animation: pulseGlow 1.8s infinite;
+  background: var(--cw-accent-green);
+  box-shadow: 0 0 6px var(--cw-accent-green);
 }
-@keyframes pulseGlow {
-  0% { transform: scale(0.9); opacity: 0.7; }
-  50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 15px #38bdf8; }
-  100% { transform: scale(0.9); opacity: 0.7; }
+.admin-toggle-btn {
+  background: transparent;
+  border: 0;
+  color: var(--cw-accent-cyan);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0 0 0 4px;
 }
-.turbo-title {
-  font-size: 21px;
-  font-weight: 800;
-  margin: 0 0 8px;
-  color: #f8fafc;
-  letter-spacing: -0.3px;
-}
-.turbo-desc {
-  margin: 0 0 18px;
-  color: #94a3b8;
-  font-size: 12.5px;
-  line-height: 1.7;
-  max-width: 760px;
-}
-.turbo-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-}
-.turbo-metric-card {
+
+.search {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 14px;
-  background: rgba(15, 23, 42, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  transition: 0.2s;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(10, 14, 22, 0.7);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-pill);
 }
-.turbo-metric-card:hover {
-  background: rgba(24, 34, 58, 0.85);
+.search svg {
+  width: 14px;
+  height: 14px;
+  color: var(--cw-text-tertiary);
+}
+.search input {
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--cw-text-primary);
+  font-size: 12px;
+  width: 140px;
+}
+.search input::placeholder {
+  color: var(--cw-text-tertiary);
+}
+
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--cw-glass-stroke);
+  color: var(--cw-text-secondary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.18s;
+}
+.icon-btn:hover {
+  background: var(--cw-bg-hover);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+.icon-btn svg {
+  width: 17px;
+  height: 17px;
+}
+.notify-dot {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cw-accent-cyan);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0284c7, #6366f1);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 12px rgba(2, 132, 199, 0.3);
+}
+
+.mobile-menu {
+  display: none;
+}
+@media (max-width: 980px) {
+  .mobile-menu { display: grid; }
+}
+
+/* ==========================================================================
+   Page Heading Block
+   ========================================================================== */
+.page-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--cw-accent-cyan);
+  margin-bottom: 4px;
+}
+
+#pageTitle {
+  font-size: 26px;
+  font-weight: 850;
+  letter-spacing: -0.6px;
+  margin: 0 0 6px;
+  color: #fff;
+}
+
+#pageDesc {
+  margin: 0;
+  font-size: 13px;
+  color: var(--cw-text-secondary);
+  line-height: 1.5;
+  max-width: 650px;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: rgba(14, 20, 32, 0.65);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-pill);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cw-text-secondary);
+}
+.status-chip i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cw-accent-green);
+  box-shadow: 0 0 8px var(--cw-accent-green);
+}
+
+/* ==========================================================================
+   Universal Glass Cards
+   ========================================================================== */
+.cw-card, .card {
+  background: var(--cw-bg-acrylic);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-lg);
+  box-shadow: var(--cw-shadow-card);
+  transition: border-color var(--cw-duration) var(--cw-ease-fluent),
+              box-shadow var(--cw-duration) var(--cw-ease-fluent),
+              transform var(--cw-duration) var(--cw-ease-fluent);
+  position: relative;
+  overflow: hidden;
+}
+
+.cw-card:hover, .card:hover {
+  border-color: var(--cw-glass-stroke-focus);
+  box-shadow: 0 16px 40px -8px rgba(0, 0, 0, 0.55), var(--cw-shadow-glow), var(--cw-glass-bevel);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   TIER 1: Serene AI Hero Bar
+   ========================================================================== */
+.cw-hero-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 16px 22px;
+  background: linear-gradient(135deg, rgba(16, 24, 38, 0.85) 0%, rgba(12, 17, 28, 0.92) 100%);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-xl);
+  backdrop-filter: blur(32px);
+  box-shadow: var(--cw-shadow-card);
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.cw-hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 280px;
+  flex: 1;
+}
+
+.cw-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--cw-text-secondary);
+}
+
+.cw-pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cw-accent-green);
+  box-shadow: 0 0 10px var(--cw-accent-green);
+  animation: cwPulse 2s infinite ease-in-out;
+}
+
+@keyframes cwPulse {
+  0%, 100% { transform: scale(0.9); opacity: 0.7; }
+  50% { transform: scale(1.25); opacity: 1; box-shadow: 0 0 14px var(--cw-accent-green); }
+}
+
+.cw-version-tag {
+  font-size: 9.5px;
+  color: var(--cw-accent-purple);
+  background: var(--cw-accent-purple-subtle);
+  border: 1px solid rgba(192, 132, 252, 0.25);
+  padding: 2px 8px;
+  border-radius: var(--cw-radius-pill);
+}
+
+.cw-hero-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cw-active-badge {
+  font-family: Consolas, monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--cw-accent-green);
+  background: var(--cw-accent-green-subtle);
+  border: 1px solid rgba(52, 211, 153, 0.3);
+  padding: 4px 10px;
+  border-radius: var(--cw-radius-sm);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.cw-hero-summary {
+  margin: 0;
+  font-size: 12px;
+  color: var(--cw-text-primary);
+  line-height: 1.5;
+}
+
+.cw-hero-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.cw-mode-segmented {
+  display: inline-flex;
+  padding: 3px;
+  background: rgba(10, 14, 22, 0.7);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-md);
+  gap: 4px;
+}
+
+.cw-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--cw-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--cw-duration) var(--cw-ease-fluent);
+  white-space: nowrap;
+}
+
+.cw-mode-btn svg {
+  width: 13px;
+  height: 13px;
+}
+
+.cw-mode-btn:hover {
+  color: var(--cw-text-primary);
+  background: var(--cw-bg-hover);
+}
+
+.cw-mode-btn.active {
+  background: var(--cw-accent-cyan-subtle);
+  border-color: rgba(56, 189, 248, 0.35);
+  color: var(--cw-accent-cyan);
+  font-weight: 750;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.15);
+}
+
+.cw-meta-pill {
+  font-size: 10.5px;
+  color: var(--cw-text-tertiary);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--cw-glass-stroke);
+  padding: 6px 10px;
+  border-radius: var(--cw-radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cw-meta-pill b {
+  color: var(--cw-text-secondary);
+  font-family: Consolas, monospace;
+}
+
+/* ==========================================================================
+   TIER 2: The 4-Card Vital Hardware HUD
+   ========================================================================== */
+.cw-hud-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1150px) {
+  .cw-hud-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .cw-hud-grid { grid-template-columns: 1fr; }
+}
+
+.cw-hud-card {
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(16, 24, 38, 0.72) 0%, rgba(12, 18, 30, 0.85) 100%);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-lg);
+  backdrop-filter: blur(24px);
+  box-shadow: var(--cw-shadow-card);
+  transition: all var(--cw-duration) var(--cw-ease-fluent);
+  position: relative;
+  overflow: hidden;
+}
+
+.cw-hud-card:hover {
+  border-color: var(--cw-card-accent, rgba(56, 189, 248, 0.4));
+  box-shadow: 0 14px 34px -6px rgba(0, 0, 0, 0.55), 0 0 20px rgba(56, 189, 248, 0.12);
+  transform: translateY(-2px);
+}
+
+.cw-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cw-card-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  color: var(--cw-text-secondary);
+  font-weight: 600;
+}
+
+.cw-card-icon {
+  width: 16px;
+  height: 16px;
+  color: var(--cw-card-accent, var(--cw-accent-cyan));
+  flex-shrink: 0;
+}
+
+.cw-micro-action {
+  font-size: 10px;
+  font-weight: 750;
+  padding: 3px 9px;
+  border-radius: 6px;
+  background: var(--cw-accent-purple-subtle);
+  border: 1px solid rgba(192, 132, 252, 0.35);
+  color: #e9d5ff;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+
+.cw-micro-action:hover {
+  background: rgba(192, 132, 252, 0.35);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(192, 132, 252, 0.4);
+}
+
+.cw-card-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.cw-card-value strong {
+  font-size: 28px;
+  font-weight: 850;
+  color: var(--cw-text-primary);
+  letter-spacing: -0.5px;
+}
+
+.cw-unit {
+  font-size: 11px;
+  color: var(--cw-text-secondary);
+  font-weight: 500;
+}
+
+.cw-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 10.5px;
+}
+
+.cw-tag {
+  font-size: 9.5px;
+  font-weight: 750;
+  padding: 2px 7px;
+  border-radius: 5px;
+}
+
+.cw-tag.green { background: var(--cw-accent-green-subtle); color: var(--cw-accent-green); border: 1px solid rgba(52, 211, 153, 0.28); }
+.cw-tag.cyan  { background: var(--cw-accent-cyan-subtle);  color: var(--cw-accent-cyan);  border: 1px solid rgba(56, 189, 248, 0.28); }
+.cw-tag.amber { background: var(--cw-accent-amber-subtle); color: var(--cw-accent-amber); border: 1px solid rgba(251, 191, 36, 0.28); }
+
+.cw-footnote {
+  color: var(--cw-text-tertiary);
+  font-size: 10px;
+}
+
+/* ==========================================================================
+   TIER 3: Quick Action Command Deck
+   ========================================================================== */
+.cw-action-deck {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+@media (max-width: 1150px) {
+  .cw-action-deck { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 650px) {
+  .cw-action-deck { grid-template-columns: 1fr; }
+}
+
+.cw-action-tile {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(16, 24, 38, 0.72) 0%, rgba(12, 18, 30, 0.85) 100%);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-md);
+  box-shadow: var(--cw-shadow-card);
+  cursor: pointer;
+  text-align: right;
+  transition: all var(--cw-duration) var(--cw-ease-fluent);
+  position: relative;
+  overflow: hidden;
+}
+
+.cw-action-tile:hover {
+  background: rgba(22, 33, 52, 0.85);
   border-color: rgba(56, 189, 248, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.5), 0 0 16px rgba(56, 189, 248, 0.15);
 }
-.turbo-metric-icon {
-  font-size: 20px;
+
+.cw-action-tile.turbo {
+  background: linear-gradient(135deg, rgba(30, 41, 68, 0.9) 0%, rgba(14, 23, 42, 0.95) 100%);
+  border-color: rgba(56, 189, 248, 0.35);
 }
-.turbo-metric-card small {
+
+.cw-action-tile.turbo:hover {
+  border-color: var(--cw-accent-cyan);
+  box-shadow: 0 14px 34px -6px rgba(6, 182, 212, 0.35), 0 0 25px rgba(56, 189, 248, 0.25);
+}
+
+.cw-action-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: var(--cw-accent-cyan);
+  flex-shrink: 0;
+}
+
+.cw-action-icon.cyan  { background: var(--cw-accent-cyan-subtle);   border-color: rgba(56, 189, 248, 0.3); color: var(--cw-accent-cyan); }
+.cw-action-icon.amber { background: var(--cw-accent-amber-subtle);  border-color: rgba(251, 191, 36, 0.3); color: var(--cw-accent-amber); }
+.cw-action-icon.green { background: var(--cw-accent-green-subtle);  border-color: rgba(52, 211, 153, 0.3); color: var(--cw-accent-green); }
+
+.cw-action-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+.cw-action-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.cw-action-text strong {
+  display: block;
+  font-size: 12px;
+  color: var(--cw-text-primary);
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cw-action-text span {
   display: block;
   font-size: 10px;
-  color: #94a3b8;
+  color: var(--cw-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.turbo-metric-card strong {
-  display: block;
-  font-size: 13px;
-  color: #e2e8f0;
-  margin-top: 2px;
+
+.cw-action-badge {
+  font-size: 9.5px;
+  font-weight: 750;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: var(--cw-accent-cyan);
+  color: #03131b;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+  white-space: nowrap;
 }
-.turbo-tag {
-  margin-right: auto;
-  font-size: 9px;
-  padding: 2px 6px;
-  border-radius: 5px;
+
+.cw-action-badge.secondary {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cw-text-secondary);
+  box-shadow: none;
+  border: 1px solid var(--cw-glass-stroke);
+}
+
+/* ==========================================================================
+   TIER 4: Split View (Hardware Chart + Decision Drawer)
+   ========================================================================== */
+.cw-split-view {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1050px) {
+  .cw-split-view { grid-template-columns: 1fr; }
+}
+
+.cw-panel-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--cw-glass-stroke);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cw-panel-header h3 {
+  font-size: 13.5px;
+  margin: 0 0 4px;
+  color: var(--cw-text-primary);
+  font-weight: 750;
+}
+
+.cw-panel-header p {
+  margin: 0;
+  font-size: 10.5px;
+  color: var(--cw-text-tertiary);
+}
+
+.cw-chart-indicators {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cw-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--cw-text-secondary);
+}
+
+.cw-chip i {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+
+.cw-chart-container {
+  padding: 16px 20px 8px;
+}
+
+.cw-panel-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--cw-glass-stroke);
+  background: rgba(10, 14, 22, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--cw-text-tertiary);
+}
+
+.cw-feed-filters {
+  display: inline-flex;
+  gap: 4px;
+  padding: 2px;
+  background: rgba(10, 14, 22, 0.6);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: 8px;
+}
+
+.cw-filter-pill {
+  padding: 4px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--cw-text-tertiary);
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.16s;
+}
+
+.cw-filter-pill:hover {
+  color: var(--cw-text-primary);
+}
+
+.cw-filter-pill.active {
+  background: var(--cw-accent-cyan-subtle);
+  color: var(--cw-accent-cyan);
+  font-weight: 750;
+}
+
+.cw-drawer-toggle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cw-glass-stroke);
+  color: var(--cw-text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.cw-drawer-toggle:hover {
+  background: var(--cw-bg-hover);
+  color: var(--cw-text-primary);
+}
+
+.cw-feed-table-scroll {
+  max-height: 240px;
+  overflow-y: auto;
+  overflow-x: auto;
+  transition: max-height 0.35s var(--cw-ease-fluent);
+}
+.cw-feed-table-scroll.expanded {
+  max-height: 480px;
+}
+
+.cw-ghost-link {
+  background: transparent;
+  border: 0;
+  color: var(--cw-accent-cyan);
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: 0.18s;
+}
+
+.cw-ghost-link:hover {
+  background: var(--cw-accent-cyan-subtle);
+}
+
+/* ==========================================================================
+   AI Transparent Decision Stream Table
+   ========================================================================== */
+.ai-glass-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+}
+
+.ai-glass-table th {
+  padding: 10px 14px;
+  background: rgba(10, 14, 22, 0.5);
+  color: var(--cw-text-tertiary);
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 1px solid var(--cw-glass-stroke);
+  white-space: nowrap;
+}
+
+.ai-glass-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+
+.ai-glass-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ai-step-pill {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--cw-accent-cyan);
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.ai-time-cell {
+  font-family: Consolas, monospace;
+  font-size: 10px;
+  color: var(--cw-text-secondary);
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.ai-action-badge {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 750;
+  font-family: Consolas, monospace;
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ai-action-badge.steady {
   background: rgba(52, 211, 153, 0.12);
   color: #34d399;
   border: 1px solid rgba(52, 211, 153, 0.25);
-  font-weight: 700;
 }
-.turbo-action-wrap {
+.ai-action-badge.trim {
+  background: rgba(192, 132, 252, 0.12);
+  color: #c084fc;
+  border: 1px solid rgba(192, 132, 252, 0.25);
+}
+.ai-action-badge.throttle {
+  background: rgba(251, 191, 36, 0.12);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+.ai-action-badge.bus {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.ai-reward-pill {
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-size: 10px;
+  font-weight: 800;
+  font-family: Consolas, monospace;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+.ai-reward-pill.positive {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+.ai-reward-pill.negative {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
+.ai-metrics-snippet {
+  font-family: Consolas, monospace;
+  font-size: 9.5px;
+  color: var(--cw-text-secondary);
+  white-space: nowrap;
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+.ai-rationale-text {
+  font-size: 11px;
+  color: var(--cw-text-primary);
+  line-height: 1.4;
+  min-width: 180px;
+}
+
+/* ==========================================================================
+   Hardware Performance Chart SVG Styles
+   ========================================================================== */
+.chart {
+  width: 100%;
+  height: 180px;
+  overflow: visible;
+}
+.grid-line {
+  stroke: rgba(255, 255, 255, 0.05);
+  stroke-dasharray: 4 4;
+}
+.chart text {
+  font-size: 10px;
+  fill: var(--cw-text-tertiary);
+  font-family: Consolas, monospace;
+}
+
+/* ==========================================================================
+   Subpages Global Support Styles (Quick, Startup, Cleanup, Network, Apps, AI, Restore, Settings)
+   ========================================================================== */
+.page-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+.page-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px; }
+.page-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+.page-stack { display: flex; flex-direction: column; gap: 16px; }
+
+@media (max-width: 1000px) {
+  .page-grid-2, .page-grid-3, .page-grid-4 { grid-template-columns: 1fr; }
+}
+
+.card-head, .table-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--cw-glass-stroke);
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
 }
-.turbo-button {
-  position: relative;
+.card-head h2, .table-header h2 {
+  font-size: 14px;
+  font-weight: 750;
+  color: #fff;
+  margin: 0 0 4px;
+}
+.card-head p, .table-header p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--cw-text-tertiary);
+}
+
+.page-panel-body {
+  padding: 16px 20px;
+}
+.page-note {
+  font-size: 11px;
+  color: var(--cw-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+/* Buttons */
+.primary-btn {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 12px;
-  padding: 16px 28px;
-  background: linear-gradient(135deg, #4f46e5 0%, #06b6d4 100%);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 14px;
-  color: #ffffff;
-  font-size: 13.5px;
-  font-weight: 800;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: var(--cw-radius-md);
+  background: linear-gradient(135deg, #0284c7, #0369a1);
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 10px 30px -5px rgba(6, 182, 212, 0.45), 0 0 20px rgba(79, 70, 229, 0.35);
-  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.18s;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3);
+}
+.primary-btn:hover {
+  background: linear-gradient(135deg, #0ea5e9, #0284c7);
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.45);
+  transform: translateY(-1px);
+}
+
+.ghost-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--cw-radius-sm);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--cw-glass-stroke);
+  color: var(--cw-text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s;
+}
+.ghost-btn:hover {
+  background: var(--cw-bg-hover);
+  color: var(--cw-text-primary);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+/* Tweak Cards & Tool Cards */
+.tweak-tabs-bar {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0 14px;
+  margin-bottom: 12px;
+}
+.tweak-tab-btn {
+  padding: 6px 14px;
+  border-radius: var(--cw-radius-pill);
+  border: 1px solid var(--cw-glass-stroke);
+  background: rgba(16, 24, 38, 0.6);
+  color: var(--cw-text-secondary);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s;
+}
+.tweak-tab-btn:hover {
+  color: #fff;
+  background: var(--cw-bg-hover);
+}
+.tweak-tab-btn.active {
+  background: var(--cw-accent-cyan-subtle);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: var(--cw-accent-cyan);
+  font-weight: 750;
+}
+
+.tool-card {
+  padding: 16px;
+  background: rgba(16, 24, 38, 0.6);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: var(--cw-radius-md);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tool-card:hover {
+  border-color: rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+.tool-glyph {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--cw-accent-cyan);
+}
+
+/* Switch & Toggles */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+}
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.switch .slider {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--cw-glass-stroke);
+  border-radius: 24px;
+  transition: .22s var(--cw-ease-fluent);
+}
+.switch .slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: .22s var(--cw-ease-fluent);
+}
+.switch input:checked + .slider {
+  background-color: var(--cw-accent-cyan);
+  border-color: var(--cw-accent-cyan);
+}
+.switch input:checked + .slider:before {
+  transform: translateX(20px);
+  background-color: #03131b;
+}
+
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.toggle-copy strong {
+  display: block;
+  font-size: 12.5px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+.toggle-copy p {
+  margin: 0;
+  font-size: 11px;
+  color: var(--cw-text-secondary);
+}
+
+/* Generic Data Tables */
+.data-table-wrap {
+  overflow-x: auto;
+}
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+}
+.data-table th {
+  padding: 10px 14px;
+  background: rgba(10, 14, 22, 0.5);
+  color: var(--cw-text-tertiary);
+  font-weight: 700;
+  text-align: right;
+  border-bottom: 1px solid var(--cw-glass-stroke);
+  white-space: nowrap;
+}
+.data-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  vertical-align: middle;
+}
+.data-table tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Progress bar */
+.progress {
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
+  position: relative;
 }
-.turbo-button:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 45px -5px rgba(6, 182, 212, 0.6), 0 0 32px rgba(79, 70, 229, 0.55);
-  filter: brightness(1.1);
+.progress i {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: var(--w, 0%);
+  background: var(--cw-accent-cyan);
+  border-radius: 4px;
+  transition: width 0.4s var(--cw-ease-fluent);
 }
-.turbo-button:active {
-  transform: translateY(0) scale(0.98);
+.progress.green i { background: var(--cw-accent-green); }
+.progress.amber i { background: var(--cw-accent-amber); }
+.progress.red i   { background: var(--cw-accent-red); }
+
+/* Storage Rows */
+.storage-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 0;
 }
-.turbo-button svg {
-  width: 22px;
-  height: 22px;
-  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+.storage-row div {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--cw-text-secondary);
 }
-.turbo-hint {
+
+/* ==========================================================================
+   Command Overlay (Ctrl+K)
+   ========================================================================== */
+.command-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 20px;
+}
+.command-overlay[hidden] {
+  display: none !important;
+}
+.command-panel {
+  width: min(620px, 94vw);
+  background: rgba(16, 24, 38, 0.95);
+  border: 1px solid var(--cw-glass-stroke-focus);
+  border-radius: var(--cw-radius-xl);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8), var(--cw-shadow-glow);
+  overflow: hidden;
+  animation: slideDown 0.2s var(--cw-ease-fluent);
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.command-panel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--cw-glass-stroke);
+}
+.command-search-wrap {
+  flex: 1;
+}
+.command-search-wrap label {
+  display: block;
   font-size: 10px;
-  color: #64748b;
-  text-align: center;
+  font-weight: 700;
+  color: var(--cw-accent-cyan);
+  margin-bottom: 2px;
 }
-@media (max-width: 900px) {
-  .turbo-hero {
-    grid-template-columns: 1fr;
-  }
+.command-search-wrap input {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+  color: #fff;
+}
+.command-close {
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--cw-glass-stroke);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--cw-text-secondary);
+  font-size: 11px;
+  cursor: pointer;
+}
+.command-results {
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 8px;
+}
+.command-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: var(--cw-radius-sm);
+  color: var(--cw-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.command-item:hover, .command-item.active {
+  background: var(--cw-accent-cyan-subtle);
+  color: #fff;
+}
+.command-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 18px;
+  border-top: 1px solid var(--cw-glass-stroke);
+  background: rgba(10, 14, 22, 0.6);
+  font-size: 10.5px;
+  color: var(--cw-text-tertiary);
+}
+.kbd {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-size: 10px;
+  font-family: Consolas, monospace;
+}
+
+/* ==========================================================================
+   Toast Notification
+   ========================================================================== */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(14, 22, 35, 0.95);
+  border: 1px solid var(--cw-accent-cyan);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.2);
+  border-radius: var(--cw-radius-md);
+  padding: 12px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  z-index: 2000;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: all 0.25s var(--cw-ease-fluent);
+  max-width: 420px;
+  direction: rtl;
+}
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 11px;
+  color: var(--cw-text-tertiary);
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+.line-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--cw-accent-cyan);
+  margin-left: 6px;
 }
 
 </style>
@@ -473,6 +1703,10 @@ button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:fo
     <header class="topbar">
       <div style="display:flex;align-items:center;gap:11px"><button class="icon-btn mobile-menu" id="menuBtn" aria-label="فتح القائمة"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button><div class="crumb"><span>ClearWin</span><span>／</span><b id="breadcrumb">لوحة التحكم</b></div></div>
       <div class="top-actions">
+        <div class="cw-top-ai-badge" id="topAiBadge">
+          <span class="cw-pulse-dot"></span>
+          <span>محرك الذكاء نشط</span>
+        </div>
         <div class="admin-chip" id="topAdminChip" onclick="handleTopAdminClick()" title="حالة الصلاحيات ونظام الأمان">
           <i class="dot" id="topAdminDot"></i>
           <span id="topAdminTxt">صلاحيات عادية</span>
@@ -481,88 +1715,333 @@ button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:fo
         <div class="search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.3 4.3"/></svg><input id="searchInput" placeholder="ابحث في ClearWin..." aria-label="بحث عام" autocomplete="off" /></div><button class="icon-btn command-open" id="commandBtn" aria-label="مركز الأوامر" title="مركز الأوامر · Ctrl+K"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v4m0 10v4M3 12h4m10 0h4"/><circle cx="12" cy="12" r="5"/><path d="m9.8 12 1.5 1.5 3-3"/></svg></button><button class="icon-btn" id="bellBtn" aria-label="الإشعارات"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg><i class="notify-dot"></i></button><div class="avatar">CW</div></div>
     </header>
     <div class="page-heading"><div><div class="eyebrow" id="eyebrow">CONTROL CENTER / 01</div><h1 id="pageTitle">كل شيء تحت السيطرة.</h1><p id="pageDesc">راقب حالة جهازك، راجع اقتراحات التحسين، ونفّذ التغييرات اللي تناسبك من مكان واحد.</p></div><div class="status-chip" id="statusChip"><i id="statusDot"></i><span id="statusChipTxt">متصل بمحرك <bdi class="bidi-en">ClearWin 2.7.7</bdi> · نشط</span></div></div>
-    
-    <div id="pageContent" class="page-content">
-      
-      <!-- ULTRA GAMING TURBO HERO SUITE -->
-      <section class="card turbo-hero">
-        <div class="turbo-bg-glow"></div>
-        <div class="turbo-content">
-          <div class="turbo-badge"><span>⚡ وضع الألعاب واستقرار النواة الفائق</span><span class="turbo-pulse"></span></div>
-          <h2 class="turbo-title">تسريع الألعاب وحماية الإطارات الشاملة (Gaming Turbo)</h2>
-          <p class="turbo-desc">ضغطة واحدة لتطبيق أعلى إعدادات النواة: تفعيل مؤقت 0.5ms فائق الدقة، إيقاظ 100% من أنوية المعالج، تفريغ الذاكرة الاحتياطية لمنع التقطيع (Micro-Stutters)، وتوجيه أقصى أولوية للعبة النشطة.</p>
-          <div class="turbo-metrics-grid">
-            <div class="turbo-metric-card" id="turboTimerCard">
-              <div class="turbo-metric-icon">⏱️</div>
-              <div>
-                <small>مؤقت النواة الدقيق</small>
-                <strong id="turboTimerVal">0.5 ms</strong>
-              </div>
-              <span class="turbo-tag">Zero Lag</span>
-            </div>
-            <div class="turbo-metric-card" id="turboCoresCard">
-              <div class="turbo-metric-icon">🚀</div>
-              <div>
-                <small>أنوية المعالج (CPU)</small>
-                <strong id="turboCoresVal">100% Unparked</strong>
-              </div>
-              <span class="turbo-tag">Full Clock</span>
-            </div>
-            <div class="turbo-metric-card" id="turboRamCard">
-              <div class="turbo-metric-icon">🧹</div>
-              <div>
-                <small>الذاكرة الاحتياطية</small>
-                <strong id="turboRamVal">Standby Purged</strong>
-              </div>
-              <span class="turbo-tag">No Stutter</span>
-            </div>
-            <div class="turbo-metric-card" id="turboFpsCard">
-              <div class="turbo-metric-icon">🎮</div>
-              <div>
-                <small>تثبيت الإطارات</small>
-                <strong id="turboFpsVal">60 FPS Floor</strong>
-              </div>
-              <span class="turbo-tag">Auto Shield</span>
-            </div>
-          </div>
-        </div>
-        <div class="turbo-action-wrap">
-          <button class="turbo-button" id="btnTurboBoost" onclick="executeFullTurboBoost()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg>
-            <span>تفعيل التوربو الشامل (TURBO BOOST)</span>
-          </button>
-          <span class="turbo-hint">تطبيق فوري مع ضمان استقرار وأمان النظام 100%</span>
-        </div>
-      </section>
+<div id="pageContent" class="page-content">
 
-      <div class="grid stats" id="statsGrid">
-        <article class="card stat" style="--glow:#55d8ff"><div class="stat-top"><span>صحة النظام</span><span class="stat-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5.5c0 4.8-3.2 8-8 9.5-4.8-1.5-8-4.7-8-9.5V6l8-3Z"/><path d="m8.5 12 2.3 2.3 4.8-4.8"/></svg></span></div><div class="stat-num" id="healthScoreNum">94<span> / 100</span></div><div class="stat-foot"><span class="up">حالة ممتازة</span><span>مراقبة مستمرة للموارد</span></div></article>
-        <article class="card stat" style="--glow:#8f7aff"><div class="stat-top"><span>استخدام المعالج <bdi class="bidi-parens">(CPU)</bdi></span><span class="stat-icon" style="color:#ae9cff;background:#211d35"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg></span></div><div class="stat-num" id="cpuNum">0<span>%</span></div><div class="stat-foot"><span class="up" id="cpuFoot">مستقر</span><span>قراءة لحظية <bdi class="bidi-en">500ms</bdi></span></div></article>
-        <article class="card stat" style="--glow:#52e2b0"><div class="stat-top"><span>الذاكرة <bdi class="bidi-parens">(RAM)</bdi></span><span class="stat-icon" style="color:var(--green);background:#142a29"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 10v4m4-4v4m4-4v4M7 4v3m5-3v3m5-3v3M7 17v3m5-3v3m5-3v3"/></svg></span></div><div class="stat-num" id="ramNum">0.0<span> / <bdi class="bidi-en">16 GB</bdi></span></div><div class="stat-foot" id="ramFoot"><span class="up" id="ramPct">0%</span><span id="ramSub">قراءة فيزيائية مباشرة</span></div></article>
-        <article class="card stat" style="--glow:#52e2b0"><div class="stat-top"><span>كارت الشاشة <bdi class="bidi-parens">(GPU)</bdi></span><span class="stat-icon" style="color:var(--green);background:#132821"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M7 20h10M12 16v4M8 8h2m4 0h2"/></svg></span></div><div class="stat-num" id="gpuNum">0<span>%</span></div><div class="stat-foot" id="gpuFoot"><span class="up" id="gpuTemp">-- °C</span><span id="gpuNameTxt">معالج الرسوميات</span></div></article>
-        <article class="card stat" style="--glow:#ffb84d"><div class="stat-top"><span>القرص الصلب (الهارد)</span><span class="stat-icon" style="color:var(--amber);background:#2e2212"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="7" cy="12" r="1.5"/><path d="M12 12h5"/></svg></span></div><div class="stat-num" id="diskNum">0<span>%</span></div><div class="stat-foot" id="diskFoot"><span class="up" id="diskPct">نشاط مستقر</span><span id="diskStorage">C: مساحة حية</span></div></article>
-        <article class="card stat" style="--glow:#ffcb70"><div class="stat-top"><span>توصيات الأداء</span><span class="stat-icon" style="color:var(--amber);background:#302719"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a7 7 0 0 0-4 12.7c.7.5 1 1.1 1 1.8h6c0-.7.3-1.3 1-1.8A7 7 0 0 0 12 3Z"/><path d="M9 21h6m-5-3v3m4-3v3"/></svg></span></div><div class="stat-num" id="recoNum">4<span> اقتراحات</span></div><div class="stat-foot"><span style="color:var(--green)">جاهزة للتطبيق</span><span>آمنة 100%</span></div></article>
+  <!-- =====================================================================
+       TIER 1: SERENE HERO AI COMMAND & STATUS BAR
+       ===================================================================== -->
+  <header class="cw-hero-bar" id="aiNeuralHeroBar">
+    <div class="cw-hero-left">
+      <div class="cw-status-indicator">
+        <span class="cw-pulse-dot"></span>
+        <span class="cw-status-title">محرك الذكاء الاصطناعي المستقل (RL Policy Engine)</span>
+        <span class="cw-version-tag">v21.3 Guard</span>
       </div>
-      <div class="grid split">
-        <section class="card"><div class="card-head"><div><h2>نظرة عامة على الأداء والموارد <bdi class="bidi-parens">(Hardware Monitor)</bdi></h2><p>رصد بياني حي للمعالج والرامات وكارت الشاشة <bdi class="bidi-parens">(GPU)</bdi> والقرص الصلب (الهارد)</p></div><button class="ghost-btn" id="periodBtn">تحديث حي <bdi class="bidi-en">500ms</bdi></button></div><div class="chart-wrap"><div class="chart-summary"><div><strong id="chartCpu" style="color:#55d8ff">0%</strong><small>المعالج <bdi class="bidi-parens">(CPU)</bdi></small></div><div><strong id="chartRam" style="color:#8a75ff">0%</strong><small>الذاكرة <bdi class="bidi-parens">(RAM)</bdi></small></div><div><strong id="chartGpu" style="color:#52e2b0">0%</strong><small>كارت الشاشة <bdi class="bidi-parens">(GPU)</bdi></small></div><div><strong id="chartDisk" style="color:#ffb84d">0%</strong><small>الهارد <bdi class="bidi-parens">(Disk)</bdi></small></div><div class="legend"><span><i style="background:#55d8ff"></i>المعالج</span><span><i style="background:#8a75ff"></i>الذاكرة</span><span><i style="background:#52e2b0"></i>كارت الشاشة</span><span><i style="background:#ffb84d"></i>الهارد</span></div></div><svg class="chart" viewBox="0 0 620 180" preserveAspectRatio="none"><defs><linearGradient id="areaCyan" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#55d8ff" stop-opacity=".25"/><stop offset="1" stop-color="#55d8ff" stop-opacity="0"/></linearGradient><linearGradient id="areaPurple" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#8a75ff" stop-opacity=".2"/><stop offset="1" stop-color="#8a75ff" stop-opacity="0"/></linearGradient><linearGradient id="areaGreen" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#52e2b0" stop-opacity=".2"/><stop offset="1" stop-color="#52e2b0" stop-opacity="0"/></linearGradient><linearGradient id="areaAmber" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#ffb84d" stop-opacity=".2"/><stop offset="1" stop-color="#ffb84d" stop-opacity="0"/></linearGradient></defs><g><path class="grid-line" d="M34 20H610M34 55H610M34 90H610M34 125H610M34 160H610"/><text x="26" y="23" text-anchor="end">100%</text><text x="26" y="58" text-anchor="end">75%</text><text x="26" y="93" text-anchor="end">50%</text><text x="26" y="128" text-anchor="end">25%</text><text x="26" y="163" text-anchor="end">0%</text><path id="chartAreaCyan" d="" fill="url(#areaCyan)"/><path id="chartAreaPurple" d="" fill="url(#areaPurple)"/><path id="chartAreaGreen" d="" fill="url(#areaGreen)"/><path id="chartAreaAmber" d="" fill="url(#areaAmber)"/><path id="chartPathCyan" d="" fill="none" stroke="#55d8ff" stroke-width="2.2"/><path id="chartPathPurple" d="" fill="none" stroke="#8a75ff" stroke-width="2"/><path id="chartPathGreen" d="" fill="none" stroke="#52e2b0" stroke-width="2"/><path id="chartPathAmber" d="" fill="none" stroke="#ffb84d" stroke-width="2"/><g><text x="34" y="176" text-anchor="middle">00:00</text><text x="178" y="176" text-anchor="middle">06:00</text><text x="322" y="176" text-anchor="middle">12:00</text><text x="466" y="176" text-anchor="middle">18:00</text><text x="610" y="176" text-anchor="middle">الآن</text></g></g></svg><div class="chart-foot"><span>مراقبة متزامنة لموارد المعالج والذاكرة والرسومات والهارد</span><span id="loadBalanceStatus">موازنة الحمل في الألعاب: نشطة ومتكيفة</span></div></div></section>
-        <section class="card"><div class="card-head"><div><h2>حالة الجهاز</h2><p>فحص تلقائي مستمر</p></div><button class="ghost-btn" id="detailsBtn">التفاصيل ↗</button></div><div class="health-body"><div class="health-score"><div class="ring" id="healthRing"><div class="ring-inner"><strong id="healthScoreVal">94</strong><small>صحة عامة</small></div></div><div class="health-label"><strong>الأداء ممتاز</strong><p>كافة خدمات النظام ونواة المعالج تعمل باستقرار وبدون اختناق حراري أو استنزاف موارد.</p></div></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v14H4zM8 9h8m-8 4h5"/></svg><span>ملفات النظام الأساسية</span><span class="state">سليمة 100%</span></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M5 6l1 14h12l1-14M9 6V3h6v3"/></svg><span>الملفات المؤقتة</span><span class="state" id="dashTempStatus">جاهزة للتنظيف</span></div><div class="mini-status"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg><span>حماية النظام والاستعادة</span><span class="state">مفعّلة ونشطة</span></div></div></section>
+      <div class="cw-hero-info">
+        <span class="cw-active-badge" id="aiActiveStateTxt">MAINTAIN_STEADY_STATE</span>
+        <p class="cw-hero-summary" id="aiActiveStateSummary">
+          النظام في استقرار فيزيائي مثالي (0.5ms Timer نشط · الذاكرة محررة · PCIe Safe)
+        </p>
       </div>
-      <div class="grid actions">
-        <section class="card"><div class="card-head"><div><h2>التحسين الذكي المباشر</h2><p>اختر العناصر لتطبيق التحسين الفوري على موارد النظام</p></div><button class="ghost-btn" id="selectAllBtn">تحديد الكل</button></div><div class="opt-body" id="optList">
-          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg></div><div class="opt-info"><strong>تحرير ذاكرة <bdi class="bidi-en">RAM</bdi> وسجلات النظام المؤقتة</strong><p>تفريغ الذاكرة الاحتياطية وإفراغ كاش التطبيقات في الخلفية.</p></div><div class="opt-meta"><small>الذاكرة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
-          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v9m0 0 4-4m-4 4L8 8"/><path d="M5 13v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5"/></svg></div><div class="opt-info"><strong>مراجعة وتخفيف برامج بدء التشغيل</strong><p>إيقاف إقلاع التطبيقات غير الأساسية لتسريع بدء تشغيل ويندوز.</p></div><div class="opt-meta"><small>بدء التشغيل</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
-          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 8.8a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0m-11 3a5 5 0 0 1 8 0M12 19h.01"/></svg></div><div class="opt-info"><strong>تفريغ كاش <bdi class="bidi-en">DNS</bdi> وضبط موجهات الشبكة</strong><p>مسح مخزن <bdi class="bidi-en">DNS</bdi> المؤقت وتحسين سرعة استجابة واستقرار الاتصال.</p></div><div class="opt-meta"><small>الشبكة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
-          <div class="opt-row"><div class="opt-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg></div><div class="opt-info"><strong>فك ركن أنوية المعالج ومؤقت <bdi class="bidi-en">0.5ms</bdi></strong><p>إلغاء تجميد الأنوية وضبط دقة المؤقت للحد الأدنى من الـ <bdi class="bidi-en">Input Lag</bdi>.</p></div><div class="opt-meta"><small>النواة</small><button class="toggle on" data-pick role="switch" aria-checked="true"></button></div></div>
-          <div class="scan-line" id="scanLine"><i></i></div><div class="opt-footer"><span id="selectedCount">تم تحديد 4 عناصر للتطبيق</span><button class="primary-btn" id="scanBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg><span>فحص وتطبيق التحسين الذكي</span></button></div>
-        </div></section>
-        <section class="card recommend"><div class="recommend-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3a7 7 0 0 0-4 12.7c.7.5 1 1.1 1 1.8h6c0-.7.3-1.3 1-1.8A7 7 0 0 0 12 3Z"/><path d="M9 21h6m-5-3v3m4-3v3"/></svg></div><h3>محرك الذكاء الاصطناعي الذاتي</h3><p>يعمل <bdi class="bidi-en">SmartAgent</bdi> تلقائياً في الخلفية لمراقبة معدل الإطارات <bdi class="bidi-parens">(60 FPS Floor Stabilizer)</bdi> وتحرير الذاكرة وتفادي التباطؤ قبل حدوثه.</p><div class="recommend-list"><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>مراقبة وتثبيت معدل الإطارات <bdi class="bidi-en">60 FPS</bdi></span></div><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>حارس حرارة المعالج وكارت الشاشة</span></div><div class="recommend-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg><span>حفظ نقاط استعادة تلقائية قبل التغييرات</span></div></div><button class="ghost-btn" data-page-nav="ai">مركز شفافية الذكاء ↗</button></section>
-      </div>
-      <div class="grid bottom-grid">
-        <section class="card table-card"><div class="table-header"><div><h2>سجل النشاط المباشر</h2><p>توثيق حي للقرارات وإجراءات النظام</p></div><button class="ghost-btn" id="clearLogBtn">مسح السجل</button></div><div class="events" id="eventsList"><div class="event"><div class="event-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg></div><div><strong>بدء تشغيل <bdi class="bidi-en">ClearWin 2.7.7</bdi></strong><p>مزامنة النماذج الـ 7 وربط نواة النظام بنجاح.</p></div><time>الآن</time></div><div class="event"><div class="event-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg></div><div><strong>تثبيت معدل الإطارات <bdi class="bidi-en">60 FPS Floor</bdi> نشط</strong><p>نظام الاستقرار التلقائي يحمي سلاسة الألعاب.</p></div><time>منذ 2 دقيقة</time></div><div class="event"><div class="event-icon info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="m19.4 15 .1.1a1.7 1.7 0 0 1-2.4 2.4l-.1-.1a1.7 1.7 0 0 0-2.9 1.2v.3a1.7 1.7 0 0 1-3.4 0v-.2a1.7 1.7 0 0 0-2.9-1.2l-.1.1a1.7 1.7 0 0 1-2.4-2.4l.1-.1a1.7 1.7 0 0 0-1.2-2.9H4a1.7 1.7 0 0 1 0-3.4h.2a1.7 1.7 0 0 0 1.2-2.9l-.1-.1a1.7 1.7 0 0 1 2.4-2.4l.1.1a1.7 1.7 0 0 0 2.9-1.2V2a1.7 1.7 0 0 1 3.4 0v.2a1.7 1.7 0 0 0 2.9 1.2l.1-.1a1.7 1.7 0 0 1 2.4 2.4l-.1.1a1.7 1.7 0 0 0 1.2 2.9h.3a1.7 1.7 0 0 1 0 3.4h-.2a1.7 1.7 0 0 0-1.2 2.9Z"/></svg></div><div><strong>نقطة استعادة <bdi class="bidi-en">Windows</bdi> مؤكدة</strong><p>حماية النظام مفعلة مع إمكانية التراجع الفوري.</p></div><time>منذ 5 دقائق</time></div></div></section>
-        <section class="card"><div class="table-header"><div><h2>مراكز المتابعة</h2><p>حالة وحدات التشغيل ونواة ويندوز</p></div><button class="ghost-btn" data-page-nav="settings">الإعدادات</button></div><div class="task-panel"><div class="task"><div class="task-head"><span>واجهة WebView2 الهجينة</span><span style="color:var(--green)">متصلة ونشطة</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>محرك النواة وأدوات C#</span><span style="color:var(--green)">متصل وجاهز</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>حساسات العتاد والمعالج</span><span style="color:var(--green)">قراءة حية</span></div><div class="progress green"><i style="--w:100%"></i></div></div><div class="task"><div class="task-head"><span>سجل التراجع ونقاط الاستعادة</span><span style="color:var(--green)">نشط ومؤمن</span></div><div class="progress green"><i style="--w:100%"></i></div></div></div></section>
-      </div>
-      <footer class="footer"><span><i class="line-dot"></i>ClearWin 2.7.7 · Smart Windows Optimization Suite</span><span>اتصال كامل مع نواة النظام والذكاء الاصطناعي</span><span>Arabic RTL · Cyber-Dark UI</span></footer>
     </div>
+
+    <div class="cw-hero-right">
+      <div class="cw-mode-segmented" id="aiModeSelector">
+        <button class="cw-mode-btn ai-mode-btn active" data-ai-mode="autonomous" onclick="setAiMode('autonomous')" title="تنفيذ ذاتي فوري لقرارات توازن الموارد وتفريغ الذاكرة">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg>
+          <span>استقلالية كاملة</span>
+        </button>
+        <button class="cw-mode-btn ai-mode-btn" data-ai-mode="safe" onclick="setAiMode('safe')" title="تنفيذ الإجراءات الآمنة فقط">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg>
+          <span>حماية تكيفية</span>
+        </button>
+        <button class="cw-mode-btn ai-mode-btn" data-ai-mode="monitor" onclick="setAiMode('monitor')" title="مراقبة شفافة دون تعديل مباشر">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7-10-7-10-7Z"/></svg>
+          <span>مراقبة</span>
+        </button>
+      </div>
+      <div class="cw-meta-pill" title="آخر خطوة موثقة ومسجلة على القرص">
+        <span>الخطوة:</span>
+        <b id="aiLastStepTime">02:18:16</b>
+      </div>
+    </div>
+  </header>
+
+  <!-- =====================================================================
+       TIER 2: BALANCED 4-CARD HARDWARE VITALS HUD
+       ===================================================================== -->
+  <section class="cw-hud-grid">
+    <!-- Tile 1: RAM Guard & Working Sets -->
+    <article class="cw-hud-card" id="hudCardRam" style="--cw-card-accent: var(--cw-accent-purple)">
+      <div class="cw-card-top">
+        <div class="cw-card-title-wrap">
+          <svg class="cw-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="7" width="18" height="10" rx="2"/><path d="M7 10v4m4-4v4m4-4v4M7 4v3m5-3v3m5-3v3M7 17v3m5-3v3m5-3v3"/></svg>
+          <span>الذاكرة الفيزيائية (RAM)</span>
+        </div>
+        <button class="cw-micro-action" onclick="triggerAiManualAction('TRIM_PROCESS_WORKING_SETS')" title="تفريغ فوري لقوائم العمل والذاكرة الاحتياطية">
+          تفريغ ⚡
+        </button>
+      </div>
+      <div class="cw-card-value">
+        <strong id="aiHeroRam">51.0%</strong>
+        <span class="cw-unit" id="aiHeroRamMb">3.9 GB حرة</span>
+      </div>
+      <div class="cw-card-footer">
+        <span class="cw-tag green">Working Sets Safe</span>
+        <span class="cw-footnote">منع التقطيع (No Stutter)</span>
+      </div>
+    </article>
+
+    <!-- Tile 2: CPU Load & High-Res Timer -->
+    <article class="cw-hud-card" id="hudCardCpu" style="--cw-card-accent: var(--cw-accent-cyan)">
+      <div class="cw-card-top">
+        <div class="cw-card-title-wrap">
+          <svg class="cw-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="5" width="14" height="14" rx="2"/><path d="M9 9h6v6H9zM9 1v4m6-4v4M9 19v4m6-4v4M1 9h4m-4 6h4m14-6h4m-4 6h4"/></svg>
+          <span>المعالج ومؤقت النواة</span>
+        </div>
+        <span class="cw-tag cyan">0.5ms Timer</span>
+      </div>
+      <div class="cw-card-value">
+        <strong id="aiHeroCpu">12.5%</strong>
+        <span class="cw-unit">Load</span>
+      </div>
+      <div class="cw-card-footer">
+        <span class="cw-tag green">100% Unparked</span>
+        <span class="cw-footnote">استجابة فائقة للأنوية</span>
+      </div>
+    </article>
+
+    <!-- Tile 3: Mechanical HDD Seek Shield -->
+    <article class="cw-hud-card" id="hudCardHdd" style="--cw-card-accent: var(--cw-accent-amber)">
+      <div class="cw-card-top">
+        <div class="cw-card-title-wrap">
+          <svg class="cw-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="7" cy="12" r="1.5"/><path d="M12 12h5"/></svg>
+          <span>حارس الهارد الميكانيكي</span>
+        </div>
+        <span class="cw-tag amber" id="aiHeroHddIo">2.0 MB/s</span>
+      </div>
+      <div class="cw-card-value">
+        <strong id="aiHeroHddLatency">0.01 ms</strong>
+        <span class="cw-unit">Seek Latency</span>
+      </div>
+      <div class="cw-card-footer">
+        <span class="cw-tag amber">I/O Priority 1</span>
+        <span class="cw-footnote">منع تجمد القرص أثناء البث</span>
+      </div>
+    </article>
+
+    <!-- Tile 4: PCIe ASPM & Bus Stability -->
+    <article class="cw-hud-card" id="hudCardBus" style="--cw-card-accent: var(--cw-accent-green)">
+      <div class="cw-card-top">
+        <div class="cw-card-title-wrap">
+          <svg class="cw-card-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>مسار الطاقة وناقل PCIe</span>
+        </div>
+        <span class="cw-tag green">Safe (0x00)</span>
+      </div>
+      <div class="cw-card-value">
+        <strong id="aiHeroBusStatus" style="color:var(--cw-accent-green)">100% مستقر</strong>
+        <span class="cw-unit">Locked</span>
+      </div>
+      <div class="cw-card-footer">
+        <span class="cw-tag green">ASPM Lockout</span>
+        <span class="cw-footnote">حماية من الشاشات الزرقاء</span>
+      </div>
+    </article>
+  </section>
+
+  <!-- =====================================================================
+       TIER 3: QUICK ACTION COMMAND DECK (Primary Optimization Routines)
+       ===================================================================== -->
+  <section class="cw-action-deck">
+    <!-- Turbo Boost Master Action -->
+    <button class="cw-action-tile turbo" id="btnTurboBoost" onclick="executeFullTurboBoost()">
+      <div class="cw-action-glow"></div>
+      <div class="cw-action-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m13 2-9 12h7l-1 8 10-13h-7l1-7Z"/></svg>
+      </div>
+      <div class="cw-action-text">
+        <strong>تسريع الألعاب الخارق (Gaming Turbo)</strong>
+        <span>تثبيت مؤقت 0.5ms + إيقاظ 100% من الأنوية</span>
+      </div>
+      <span class="cw-action-badge">تطبيق فوري ⚡</span>
+    </button>
+
+    <!-- RAM Trim Action -->
+    <button class="cw-action-tile" onclick="triggerAiManualAction('TRIM_PROCESS_WORKING_SETS')">
+      <div class="cw-action-icon cyan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M10 11v6m4-6v6M5 7l1 13h12l1-13M9 7V4h6v3"/></svg>
+      </div>
+      <div class="cw-action-text">
+        <strong>تفريغ Working Sets (RAM Trim)</strong>
+        <span>تطهير الذاكرة الاحتياطية وإفراغ كاش النواة</span>
+      </div>
+      <span class="cw-action-badge secondary">تفريغ</span>
+    </button>
+
+    <!-- Background App Throttle -->
+    <button class="cw-action-tile" onclick="triggerAiManualAction('THROTTLE_BACKGROUND_APPS')">
+      <div class="cw-action-icon amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+      </div>
+      <div class="cw-action-text">
+        <strong>كبح مهام الخلفية (CPU Throttle)</strong>
+        <span>خفض أولوية I/O للمهام الخاملة لتسريع اللعبة النشطة</span>
+      </div>
+      <span class="cw-action-badge secondary">كبح</span>
+    </button>
+
+    <!-- Bus & Power Guard -->
+    <button class="cw-action-tile" onclick="triggerAiManualAction('ENFORCE_BUS_AND_POWER_STABILITY')">
+      <div class="cw-action-icon green">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 20 6v5c0 5-3 8-8 10-5-2-8-5-8-10V6l8-3Z"/></svg>
+      </div>
+      <div class="cw-action-text">
+        <strong>تأمين مسار PCIe والقرص (Bus Guard)</strong>
+        <span>منع خمول وسقوط ناقل الطاقة والهارد نهائياً</span>
+      </div>
+      <span class="cw-action-badge secondary">تأمين</span>
+    </button>
+  </section>
+
+  <!-- =====================================================================
+       TIER 4: SPLIT HARMONY AREA (Telemetry Chart + AI Decision Drawer)
+       ===================================================================== -->
+  <section class="cw-split-view">
+    
+    <!-- Left Column: Hardware Monitor Chart -->
+    <div class="cw-card cw-chart-panel">
+      <div class="cw-panel-header">
+        <div>
+          <h3>مراقبة الأداء والموارد (Hardware Monitor)</h3>
+          <p>رصد بياني مباشر للمعالج والذاكرة وكارت الشاشة والقرص</p>
+        </div>
+        <div class="cw-chart-indicators">
+          <span class="cw-chip" style="color:var(--cw-accent-cyan)"><i style="background:var(--cw-accent-cyan)"></i> المعالج <b id="chartCpu">0%</b></span>
+          <span class="cw-chip" style="color:var(--cw-accent-purple)"><i style="background:var(--cw-accent-purple)"></i> الذاكرة <b id="chartRam">0%</b></span>
+          <span class="cw-chip" style="color:var(--cw-accent-green)"><i style="background:var(--cw-accent-green)"></i> الشاشة <b id="chartGpu">0%</b></span>
+          <span class="cw-chip" style="color:var(--cw-accent-amber)"><i style="background:var(--cw-accent-amber)"></i> القرص <b id="chartDisk">0%</b></span>
+        </div>
+      </div>
+      
+      <div class="cw-chart-container">
+        <svg class="chart" viewBox="0 0 620 180" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="areaCyan" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#38bdf8" stop-opacity=".25"/><stop offset="1" stop-color="#38bdf8" stop-opacity="0"/></linearGradient>
+            <linearGradient id="areaPurple" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#c084fc" stop-opacity=".2"/><stop offset="1" stop-color="#c084fc" stop-opacity="0"/></linearGradient>
+            <linearGradient id="areaGreen" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#34d399" stop-opacity=".2"/><stop offset="1" stop-color="#34d399" stop-opacity="0"/></linearGradient>
+            <linearGradient id="areaAmber" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fbbf24" stop-opacity=".2"/><stop offset="1" stop-color="#fbbf24" stop-opacity="0"/></linearGradient>
+          </defs>
+          <g>
+            <path class="grid-line" d="M34 20H610M34 55H610M34 90H610M34 125H610M34 160H610"/>
+            <text x="26" y="23" text-anchor="end">100%</text>
+            <text x="26" y="93" text-anchor="end">50%</text>
+            <text x="26" y="163" text-anchor="end">0%</text>
+            <path id="chartAreaCyan" d="" fill="url(#areaCyan)"/>
+            <path id="chartAreaPurple" d="" fill="url(#areaPurple)"/>
+            <path id="chartAreaGreen" d="" fill="url(#areaGreen)"/>
+            <path id="chartAreaAmber" d="" fill="url(#areaAmber)"/>
+            <path id="chartPathCyan" d="" fill="none" stroke="#38bdf8" stroke-width="2.2"/>
+            <path id="chartPathPurple" d="" fill="none" stroke="#c084fc" stroke-width="2"/>
+            <path id="chartPathGreen" d="" fill="none" stroke="#34d399" stroke-width="2"/>
+            <path id="chartPathAmber" d="" fill="none" stroke="#fbbf24" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+      <div class="cw-panel-footer">
+        <span id="loadBalanceStatus">موازنة الحمل في الألعاب: نشطة ومتكيفة</span>
+        <span class="cw-meta-pill" style="margin-right:auto">تحديث حي 500ms</span>
+      </div>
+    </div>
+
+    <!-- Right Column: Collapsible / Tabbed Transparent Decision Feed -->
+    <div class="cw-card cw-feed-panel">
+      <div class="cw-panel-header">
+        <div>
+          <h3>سجل شفافية القرارات المباشر</h3>
+          <p>توثيق حي للقرارات مع رصد المكافأة الآنية</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="cw-feed-filters" id="aiFeedFilterTabs">
+            <button class="cw-filter-pill ai-filter-tab active" data-filter="all" onclick="filterAiFeed('all', this)">الكل</button>
+            <button class="cw-filter-pill ai-filter-tab" data-filter="ram" onclick="filterAiFeed('ram', this)">RAM</button>
+            <button class="cw-filter-pill ai-filter-tab" data-filter="throttle" onclick="filterAiFeed('throttle', this)">كبح</button>
+            <button class="cw-filter-pill ai-filter-tab" data-filter="steady" onclick="filterAiFeed('steady', this)">استقرار</button>
+          </div>
+          <button class="cw-drawer-toggle" onclick="toggleDecisionDrawer(this)" id="btnToggleDecisionDrawer" title="توسيع أو طي نافذة السجل">عرض السجل الكامل ▼</button>
+        </div>
+      </div>
+
+      <div class="cw-feed-table-scroll">
+        <table class="ai-glass-table">
+          <thead>
+            <tr>
+              <th>الخطوة</th>
+              <th>التوقيت</th>
+              <th>القرار المتخذ</th>
+              <th>الهدف الأمثل</th>
+              <th>المكافأة</th>
+              <th>بيانات العتاد</th>
+              <th>العلة والفيزياء</th>
+            </tr>
+          </thead>
+          <tbody id="aiDecisionFeedTbody">
+            <!-- Dynamically populated by renderAiDecisionFeed() -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cw-panel-footer">
+        <span class="cw-footnote">مكافأة تراكمية: <strong id="aiHeroReward" style="color:var(--cw-accent-green)">+1395.2</strong> pts · <span id="aiHeroCycles">1,415</span> دورة</span>
+        <button class="cw-ghost-link" data-page-nav="ai">فتح صفحة شفافية الذكاء ↗</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       HIDDEN COMPATIBILITY CONTAINERS (Maintains 100% C# Bridge & DOM IDs)
+       ===================================================================== -->
+  <div style="display:none!important;" aria-hidden="true">
+    <span id="healthScoreNum">94</span>
+    <span id="healthScoreVal">94</span>
+    <div id="healthRing"></div>
+    <span id="cpuNum">0%</span>
+    <span id="cpuFoot">مستقر</span>
+    <span id="ramNum">0.0 / 16 GB</span>
+    <span id="ramPct">0%</span>
+    <span id="ramFoot"></span>
+    <span id="ramSub"></span>
+    <span id="gpuNum">0%</span>
+    <span id="gpuFoot"></span>
+    <span id="gpuTemp">-- °C</span>
+    <span id="gpuNameTxt">معالج الرسوميات</span>
+    <span id="diskNum">0%</span>
+    <span id="diskFoot"></span>
+    <span id="diskPct"></span>
+    <span id="diskStorage">C: مساحة حية</span>
+    <span id="recoNum">4</span>
+    <span id="turboTimerVal">0.5 ms</span>
+    <span id="turboCoresVal">100%</span>
+    <span id="turboRamVal">Clean</span>
+    <span id="turboFpsVal">60 FPS</span>
+    <span id="quickRespTimer">0.5 ms</span>
+    <span id="quickFpsFloor">60 FPS Floor</span>
+    <span id="aiSupervisorNotesTxt"></span>
+    <table><tbody id="matrixTableBody"></tbody></table>
+    <div id="eventsList"></div>
+    <div id="optList"></div>
+    <div id="scanLine"></div>
+    <span id="selectedCount"></span>
+    <button id="scanBtn"></button>
+    <button id="selectAllBtn"></button>
+    <button id="clearLogBtn"></button>
+    <button id="periodBtn"></button>
+    <button id="detailsBtn"></button>
+    <span id="dashTempStatus"></span>
+    <div id="turboTimerCard"></div>
+    <div id="turboCoresCard"></div>
+    <div id="turboRamCard"></div>
+    <div id="turboFpsCard"></div>
+    <div id="statsGrid"></div>
+    <section id="aiNeuralCommandCenter"></section>
+  </div>
+
+  <footer class="footer">
+    <span><i class="line-dot"></i>ClearWin 2.7.2 · Modern Windows 11 Fluent GlassUI Architecture</span>
+    <span>اتصال كامل مع نواة النظام والذكاء الاصطناعي</span>
+    <span>Arabic RTL · Cyber-Dark UI</span>
+  </footer>
+</div>
   </main>
 </div>
 
@@ -581,6 +2060,7 @@ button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,a:fo
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
+
 const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 let toastTimer, activePage='dashboard', auditLog=[];
 const pageContent=$('#pageContent');
@@ -1776,6 +3256,7 @@ function renderPage(key){
  if(key === 'dashboard') {
   pageContent.innerHTML = dashboardMarkup;
   sendAction('data.refresh', {}, 'dashboard');
+  try { updateAiCommandCenter(); } catch(e){}
  } else if(key === 'quick') {
   pageContent.innerHTML = quickPage();
  } else if(key === 'startup') {
@@ -1793,6 +3274,7 @@ function renderPage(key){
  } else if(key === 'ai') {
   pageContent.innerHTML = aiPage();
   sendAction('ai.get-stats', {}, 'ai');
+  try { updateAiCommandCenter(); } catch(e){}
   aiAutoRefreshTimer = setInterval(() => {
    if(activePage === 'ai'){
     sendAction('ai.get-stats', {}, 'ai');
@@ -2540,6 +4022,284 @@ function executeFullTurboBoost() {
     if($('#turboRamVal')) $('#turboRamVal').innerHTML = '<span style="color:#34d399">Clean & Optimized</span>';
     if($('#turboFpsVal')) $('#turboFpsVal').innerHTML = '<span style="color:#34d399">60 FPS Floor ON</span>';
   }, 700);
+}
+
+
+// ==========================================
+// ClearWin Autonomous AI Telemetry & Command Center
+// ==========================================
+let clearwinAiWeights = {"version": "21.3-pc-hardware-guard", "updated_at": "2026-11-22 02:18:16", "total_training_iterations": 1415, "cumulative_reward": 1395.2, "learning_rate": 0.02, "weights": [[-0.2, -0.1, -0.27433, 0.0, 0.0, -2.5, -1.0, 1.1400000000000003, -2.0], [3.1075, 0.2637949999999999, 0.11423000000000005, 0.4452299999999998, 0.38224400000000003, 0.7, -1.5, -0.8, -1.0], [-0.18699999999999997, -0.19075699999999998, -0.6234699999999999, 4.545501000000001, -0.23174300000000003, -0.3, -2.002714, 0.2, -1.0], [0.7987999999999998, 0.618877, 4.52309, 0.12797500000000006, 0.3761710000000001, 0.4, 4.50063, -0.12000000000000002, -1.0], [1.9964, 0.947912, 0.26657999999999993, -0.014243999999999998, 0.794005, 6.53, 0.187417, -1.2, -1.0], [-0.24020000000000002, -0.23021200000000003, -0.23951999999999998, -0.0009239999999999999, -0.20455600000000002, 0.0, -0.20465999999999998, 0.0, 7.5]], "biases": [0.81, -1.25, -1.2, -2.5, -3.2041999999999993, -2.8], "supervisor_notes": "Auto-Supervisor (2026-11-22 02:16:31): Calibrated Action 3 throttle bias to -2.50 (guarded against 4 false triggers on moderate CPU). | PENALTY: Lowered Action 2 bias to -1.20 after 1 invalid defrag attempts."};
+let clearwinAiDecisions = [{"step": "#1415", "timestamp": "2026-11-22 02:18:16", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3829.4MB) | CPU: 11.4% | HDD: 2.41MB/s (0.03ms) | Idle: 10.85m", "rationale": "System healthy (RAM 52.0%, Free 3829.4MB, CPU 11.4%, HDD 0.03ms, Bus Safe) -> Maintain steady state"}, {"step": "#1414", "timestamp": "2026-11-22 02:17:45", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3845.8MB) | CPU: 12.0% | HDD: 1.4MB/s (0.01ms) | Idle: 10.34m", "rationale": "System healthy (RAM 52.0%, Free 3845.8MB, CPU 12.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1413", "timestamp": "2026-11-22 02:17:15", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3887.1MB) | CPU: 11.8% | HDD: 0.7MB/s (0.01ms) | Idle: 9.84m", "rationale": "System healthy (RAM 52.0%, Free 3887.1MB, CPU 11.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1412", "timestamp": "2026-11-22 02:16:45", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3890.9MB) | CPU: 50.0% | HDD: 1.52MB/s (0.01ms) | Idle: 9.34m", "rationale": "System healthy (RAM 52.0%, Free 3890.9MB, CPU 50.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1411", "timestamp": "2026-11-22 02:16:15", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 54.0% (Free: 3704.5MB) | CPU: 32.9% | HDD: 3.18MB/s (0.01ms) | Idle: 8.83m", "rationale": "System healthy (RAM 54.0%, Free 3704.5MB, CPU 32.9%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1410", "timestamp": "2026-11-22 02:15:45", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3890.0MB) | CPU: 31.5% | HDD: 1.49MB/s (0.01ms) | Idle: 8.33m", "rationale": "System healthy (RAM 52.0%, Free 3890.0MB, CPU 31.5%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1409", "timestamp": "2026-11-22 02:15:15", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3929.7MB) | CPU: 19.0% | HDD: 2.74MB/s (0.01ms) | Idle: 7.83m", "rationale": "System healthy (RAM 51.0%, Free 3929.7MB, CPU 19.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1408", "timestamp": "2026-11-22 02:14:44", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3832.0MB) | CPU: 11.0% | HDD: 1.66MB/s (0.01ms) | Idle: 7.32m", "rationale": "System healthy (RAM 52.0%, Free 3832.0MB, CPU 11.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1407", "timestamp": "2026-11-22 02:14:14", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3926.0MB) | CPU: 10.8% | HDD: 2.05MB/s (0.01ms) | Idle: 6.82m", "rationale": "System healthy (RAM 51.0%, Free 3926.0MB, CPU 10.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1406", "timestamp": "2026-11-22 02:13:44", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3916.2MB) | CPU: 55.6% | HDD: 2.11MB/s (0.01ms) | Idle: 6.32m", "rationale": "System healthy (RAM 51.0%, Free 3916.2MB, CPU 55.6%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1405", "timestamp": "2026-11-22 02:13:14", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3887.8MB) | CPU: 23.0% | HDD: 3.17MB/s (0.01ms) | Idle: 5.82m", "rationale": "System healthy (RAM 52.0%, Free 3887.8MB, CPU 23.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1404", "timestamp": "2026-11-22 02:12:44", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 48.0% (Free: 4219.2MB) | CPU: 10.1% | HDD: 1.46MB/s (0.01ms) | Idle: 5.31m", "rationale": "System healthy (RAM 48.0%, Free 4219.2MB, CPU 10.1%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1403", "timestamp": "2026-11-22 02:12:14", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 48.0% (Free: 4147.3MB) | CPU: 30.9% | HDD: 1.45MB/s (0.01ms) | Idle: 4.81m", "rationale": "System healthy (RAM 48.0%, Free 4147.3MB, CPU 30.9%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1402", "timestamp": "2026-11-22 02:11:43", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3884.7MB) | CPU: 20.8% | HDD: 1.32MB/s (0.01ms) | Idle: 4.31m", "rationale": "System healthy (RAM 52.0%, Free 3884.7MB, CPU 20.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1401", "timestamp": "2026-11-22 02:11:13", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3881.6MB) | CPU: 14.8% | HDD: 8.23MB/s (0.01ms) | Idle: 3.8m", "rationale": "System healthy (RAM 52.0%, Free 3881.6MB, CPU 14.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1400", "timestamp": "2026-11-22 02:10:43", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3917.3MB) | CPU: 25.7% | HDD: 1.8MB/s (0.01ms) | Idle: 3.3m", "rationale": "System healthy (RAM 51.0%, Free 3917.3MB, CPU 25.7%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1399", "timestamp": "2026-11-22 02:10:13", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3895.6MB) | CPU: 14.3% | HDD: 1.67MB/s (0.01ms) | Idle: 2.8m", "rationale": "System healthy (RAM 52.0%, Free 3895.6MB, CPU 14.3%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1398", "timestamp": "2026-11-22 02:09:43", "chosen": "\u2705 THROTTLE_BACKGROUND_APPS", "optimal": "THROTTLE_BACKGROUND_APPS", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3963.7MB) | CPU: 70.7% | HDD: 1.26MB/s (0.01ms) | Idle: 2.3m", "rationale": "High CPU workload (70.7%) -> Throttle background tasks"}, {"step": "#1397", "timestamp": "2026-11-22 02:09:13", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 46.0% (Free: 4317.8MB) | CPU: 8.1% | HDD: 0.67MB/s (0.01ms) | Idle: 1.79m", "rationale": "System healthy (RAM 46.0%, Free 4317.8MB, CPU 8.1%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1396", "timestamp": "2026-11-22 02:08:42", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 50.0% (Free: 4005.3MB) | CPU: 12.3% | HDD: 0.97MB/s (0.01ms) | Idle: 1.29m", "rationale": "System healthy (RAM 50.0%, Free 4005.3MB, CPU 12.3%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1395", "timestamp": "2026-11-22 02:08:12", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 49.0% (Free: 4102.2MB) | CPU: 12.9% | HDD: 2.32MB/s (0.01ms) | Idle: 0.79m", "rationale": "System healthy (RAM 49.0%, Free 4102.2MB, CPU 12.9%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1394", "timestamp": "2026-11-22 02:07:42", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 49.0% (Free: 4071.7MB) | CPU: 6.5% | HDD: 2.57MB/s (0.01ms) | Idle: 0.29m", "rationale": "System healthy (RAM 49.0%, Free 4071.7MB, CPU 6.5%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1393", "timestamp": "2026-11-22 02:07:12", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 48.0% (Free: 4205.2MB) | CPU: 9.6% | HDD: 2.24MB/s (0.01ms) | Idle: 38.04m", "rationale": "System healthy (RAM 48.0%, Free 4205.2MB, CPU 9.6%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1392", "timestamp": "2026-11-22 02:06:42", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 47.0% (Free: 4239.3MB) | CPU: 9.3% | HDD: 2.94MB/s (0.01ms) | Idle: 37.54m", "rationale": "System healthy (RAM 47.0%, Free 4239.3MB, CPU 9.3%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1391", "timestamp": "2026-11-22 02:06:12", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 46.0% (Free: 4315.3MB) | CPU: 3.8% | HDD: 6.61MB/s (0.01ms) | Idle: 37.04m", "rationale": "System healthy (RAM 46.0%, Free 4315.3MB, CPU 3.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1390", "timestamp": "2026-11-22 02:05:41", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 50.0% (Free: 4041.1MB) | CPU: 7.0% | HDD: 19.19MB/s (0.01ms) | Idle: 36.54m", "rationale": "System healthy (RAM 50.0%, Free 4041.1MB, CPU 7.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1389", "timestamp": "2026-11-22 02:05:11", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 47.0% (Free: 4240.3MB) | CPU: 14.5% | HDD: 32.92MB/s (0.0ms) | Idle: 36.03m", "rationale": "System healthy (RAM 47.0%, Free 4240.3MB, CPU 14.5%, HDD 0.0ms, Bus Safe) -> Maintain steady state"}, {"step": "#1388", "timestamp": "2026-11-22 02:04:41", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 47.0% (Free: 4292.5MB) | CPU: 11.8% | HDD: 24.85MB/s (0.01ms) | Idle: 35.53m", "rationale": "System healthy (RAM 47.0%, Free 4292.5MB, CPU 11.8%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1387", "timestamp": "2026-11-22 02:04:11", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 50.0% (Free: 4046.1MB) | CPU: 0.0% | HDD: 11.94MB/s (0.01ms) | Idle: 35.03m", "rationale": "System healthy (RAM 50.0%, Free 4046.1MB, CPU 0.0%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1386", "timestamp": "2026-11-22 02:03:41", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 49.0% (Free: 4097.7MB) | CPU: 23.2% | HDD: 18.53MB/s (0.01ms) | Idle: 34.52m", "rationale": "System healthy (RAM 49.0%, Free 4097.7MB, CPU 23.2%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1385", "timestamp": "2026-11-22 02:03:11", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 47.0% (Free: 4235.5MB) | CPU: 21.6% | HDD: 33.61MB/s (0.01ms) | Idle: 34.02m", "rationale": "System healthy (RAM 47.0%, Free 4235.5MB, CPU 21.6%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1384", "timestamp": "2026-11-22 02:02:40", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3921.9MB) | CPU: 4.9% | HDD: 30.77MB/s (0.01ms) | Idle: 33.52m", "rationale": "System healthy (RAM 51.0%, Free 3921.9MB, CPU 4.9%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1383", "timestamp": "2026-11-22 02:02:10", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 51.0% (Free: 3925.4MB) | CPU: 11.1% | HDD: 27.8MB/s (0.01ms) | Idle: 33.02m", "rationale": "System healthy (RAM 51.0%, Free 3925.4MB, CPU 11.1%, HDD 0.01ms, Bus Safe) -> Maintain steady state"}, {"step": "#1382", "timestamp": "2026-11-22 02:01:40", "chosen": "\u2705 MAINTAIN_STEADY_STATE", "optimal": "MAINTAIN_STEADY_STATE", "reward": "+1.50", "metrics": "RAM: 50.0% (Free: 4011.4MB) | CPU: 15.1% | HDD: 13.56MB/s (0.0ms) | Idle: 32.51m", "rationale": "System healthy (RAM 50.0%, Free 4011.4MB, CPU 15.1%, HDD 0.0ms, Bus Safe) -> Maintain steady state"}, {"step": "#1381", "timestamp": "2026-11-22 02:01:10", "chosen": "\u2705 TRIGGER_IDLE_HDD_DEFRAG", "optimal": "TRIGGER_IDLE_HDD_DEFRAG", "reward": "+1.50", "metrics": "RAM: 52.0% (Free: 3846.2MB) | CPU: 19.5% | HDD: 0.0MB/s (0.0ms) | Idle: 32.01m", "rationale": "System idle for 32.0m (>= 15m) with cool CPU & calm disk -> Optimal window for HDD Defragmentation"}];
+let currentAiMode = 'autonomous';
+let activeAiFeedFilter = 'all';
+
+const ACTION_DISPLAY_NAMES = {
+  'MAINTAIN_STEADY_STATE': { name: 'استقرار الموارد (Steady State)', cls: 'steady', icon: '✅' },
+  'TRIM_PROCESS_WORKING_SETS': { name: 'تفريغ Working Sets (RAM Trim)', cls: 'trim', icon: '🧹' },
+  'TRIGGER_IDLE_HDD_DEFRAG': { name: 'إلغاء تجزئة القرص الخامل', cls: 'steady', icon: '💿' },
+  'THROTTLE_BACKGROUND_APPS': { name: 'كبح مهام الخلفية (Throttle)', cls: 'throttle', icon: '⚠️' },
+  'EMERGENCY_RAM_RECOVERY': { name: 'استرداد الذاكرة الطارئ', cls: 'trim', icon: '🚨' },
+  'ENFORCE_BUS_AND_POWER_STABILITY': { name: 'تأمين مسار PCIe والقرص', cls: 'bus', icon: '🛡️' }
+};
+
+function setAiMode(mode){
+  currentAiMode = mode;
+  $$('#aiModeSelector .ai-mode-btn, #aiModeSelector .cw-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.aiMode === mode);
+  });
+  const msgs = {
+    'autonomous': 'تم تفعيل وضع الاستقلالية الكاملة: المحرك يطبق القرارات فورياً لحماية الأداء.',
+    'safe': 'تم تفعيل وضع الحماية التكيفية: يتم تطبيق الإجراءات الآمنة فقط (RAM Trim & Cooldown).',
+    'monitor': 'تم تفعيل وضع المراقبة الشفافة: مراقبة وتقييم المكافآت بدون تعديل مباشر.'
+  };
+  toast(msgs[mode] || 'تم تغيير وضع الذكاء الاصطناعي.');
+  addAuditLog('وضع الذكاء الاصطناعي', 'تم التبديل إلى ' + mode, 'good');
+}
+
+function triggerAiManualAction(actionName){
+  toast('جارٍ إرسال أمر الذكاء الاصطناعي المباشر: ' + actionName);
+  const actionInfo = ACTION_DISPLAY_NAMES[actionName] || { name: actionName, cls: 'steady', icon: '⚡' };
+  
+  // Update state banner immediately for instant feedback
+  const stateTxt = $('#aiActiveStateTxt');
+  if(stateTxt) {
+    stateTxt.textContent = actionName;
+    stateTxt.className = 'ai-state-val ' + actionInfo.cls;
+  }
+  const stateSummary = $('#aiActiveStateSummary');
+  if(stateSummary) {
+    stateSummary.textContent = 'تدخل يدوي موثق: تم تنفيذ ' + actionInfo.name + ' لضمان أقصى كفاءة للموارد.';
+  }
+  
+  if(actionName === 'TRIM_PROCESS_WORKING_SETS') {
+    sendAction('opt.ram');
+  } else {
+    sendAction('ai.execute', { action: actionName });
+  }
+  
+  // Prepend simulated manual action record
+  const manualRecord = {
+    step: '#' + (clearwinAiWeights.total_training_iterations || 1412) + '-M',
+    timestamp: new Date().toLocaleTimeString('en-US', { hour12: false }),
+    chosen: actionInfo.icon + ' ' + actionName,
+    optimal: actionName,
+    reward: '+1.50',
+    metrics: 'Manual Override Triggered',
+    rationale: 'Supreme Director Manual Intervention -> ' + actionInfo.name
+  };
+  clearwinAiDecisions.unshift(manualRecord);
+  renderAiDecisionFeed(clearwinAiDecisions, activeAiFeedFilter);
+  addAuditLog('أمر الذكاء الاصطناعي', actionInfo.name, 'good');
+}
+
+function filterAiFeed(filterKey, btnEl){
+  activeAiFeedFilter = filterKey;
+  if(btnEl && btnEl.parentElement){
+    btnEl.parentElement.querySelectorAll('.ai-filter-tab, .cw-filter-pill').forEach(b => b.classList.remove('active'));
+    btnEl.classList.add('active');
+  }
+  renderAiDecisionFeed(clearwinAiDecisions, filterKey);
+}
+
+function renderAiDecisionFeed(rows, filterKey='all'){
+  const tbody = $('#aiDecisionFeedTbody');
+  if(!tbody) return;
+  if(!rows || !rows.length){
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">لا توجد قرارات مسجلة حالياً في السجل المباشر.</td></tr>';
+    return;
+  }
+
+  let filtered = rows;
+  if(filterKey === 'ram'){
+    filtered = rows.filter(r => (r.chosen + r.optimal + r.rationale).toLowerCase().includes('ram') || (r.chosen + r.optimal).includes('TRIM'));
+  } else if(filterKey === 'throttle'){
+    filtered = rows.filter(r => (r.chosen + r.optimal + r.rationale).toLowerCase().includes('throttle'));
+  } else if(filterKey === 'steady'){
+    filtered = rows.filter(r => (r.chosen + r.optimal).includes('MAINTAIN_STEADY_STATE'));
+  }
+
+  if(!filtered.length){
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--muted)">لا توجد قرارات تطابق الفلتر المحدد.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = filtered.map(r => {
+    let actionCls = 'steady';
+    const ch = r.chosen || '';
+    if(ch.includes('TRIM') || ch.includes('RAM')) actionCls = 'trim';
+    else if(ch.includes('THROTTLE')) actionCls = 'throttle';
+    else if(ch.includes('BUS') || ch.includes('POWER')) actionCls = 'bus';
+
+    const rw = String(r.reward || '').replace('`','');
+    const isPos = !rw.startsWith('-');
+    const rwCls = isPos ? 'positive' : 'negative';
+
+    const stepClean = String(r.step || '').replace('`','');
+    const timeClean = String(r.timestamp || '').replace('`','').substring(11, 19) || r.timestamp;
+
+    return `<tr>
+      <td><span class="ai-step-pill">${stepClean}</span></td>
+      <td class="ai-time-cell">${timeClean}</td>
+      <td><span class="ai-action-badge ${actionCls}">${r.chosen}</span></td>
+      <td><span style="font-family:Consolas,monospace;font-size:10px;color:var(--muted)">${r.optimal}</span></td>
+      <td><span class="ai-reward-pill ${rwCls}">${rw}</span></td>
+      <td><span class="ai-metrics-snippet">${r.metrics}</span></td>
+      <td><div class="ai-rationale-text">${r.rationale}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+function renderWeightsMatrix(wData){
+  const tbody = $('#matrixTableBody');
+  if(!tbody || !wData || !Array.isArray(wData.weights)) return;
+
+  const actionNames = [
+    '0: MAINTAIN_STEADY_STATE',
+    '1: TRIM_PROCESS_WORKING_SETS',
+    '2: TRIGGER_IDLE_HDD_DEFRAG',
+    '3: THROTTLE_BACKGROUND_APPS',
+    '4: EMERGENCY_RAM_RECOVERY',
+    '5: ENFORCE_BUS_AND_POWER_STABILITY'
+  ];
+
+  tbody.innerHTML = wData.weights.map((row, idx) => {
+    const b = (wData.biases && wData.biases[idx] !== undefined) ? Number(wData.biases[idx]).toFixed(2) : '0.00';
+    const bCls = b > 0 ? 'pos' : (b < 0 ? 'neg' : 'neutral');
+    
+    const cells = row.map(v => {
+      const num = Number(v);
+      const cls = num > 0.05 ? 'pos' : (num < -0.05 ? 'neg' : 'neutral');
+      return `<td><span class="w-val ${cls}">${num > 0 ? '+' : ''}${num.toFixed(2)}</span></td>`;
+    }).join('');
+
+    return `<tr>
+      <td style="text-align:right;font-weight:700;color:#f1f5f9;white-space:nowrap">${actionNames[idx] || idx}</td>
+      <td><span class="w-val ${bCls}">${b > 0 ? '+' : ''}${b}</span></td>
+      ${cells}
+    </tr>`;
+  }).join('');
+
+  const notesEl = $('#aiSupervisorNotesTxt');
+  if(notesEl && wData.supervisor_notes){
+    notesEl.textContent = wData.supervisor_notes;
+  }
+}
+
+function updateAiCommandCenter(){
+  // Update HUD elements
+  const rewEl = $('#aiHeroReward');
+  if(rewEl && clearwinAiWeights.cumulative_reward !== undefined){
+    rewEl.textContent = (clearwinAiWeights.cumulative_reward > 0 ? '+' : '') + Number(clearwinAiWeights.cumulative_reward).toFixed(1);
+  }
+  const cycEl = $('#aiHeroCycles');
+  if(cycEl && clearwinAiWeights.total_training_iterations !== undefined){
+    cycEl.textContent = Number(clearwinAiWeights.total_training_iterations).toLocaleString();
+  }
+
+  // Update latest step time & active state from recent row
+  if(clearwinAiDecisions && clearwinAiDecisions.length){
+    const latest = clearwinAiDecisions[0];
+    const timeEl = $('#aiLastStepTime');
+    if(timeEl) timeEl.textContent = (latest.timestamp ? latest.timestamp.substring(11, 19) : 'الآن');
+    
+    const stateEl = $('#aiActiveStateTxt');
+    if(stateEl && latest.chosen){
+      const cleanChosen = latest.chosen.replace(/[✅⚠️🚨🛡️]/g, '').trim();
+      stateEl.textContent = cleanChosen;
+    }
+    const summEl = $('#aiActiveStateSummary');
+    if(summEl && latest.rationale){
+      summEl.textContent = latest.rationale;
+    }
+  }
+
+  // Sync with live metrics if available
+  if(window.cwLastMetrics){
+    if(typeof window.cwLastMetrics.ram === 'number'){
+      const ramEl = $('#aiHeroRam');
+      if(ramEl) ramEl.textContent = Math.round(window.cwLastMetrics.ram) + '%';
+      const ramMbEl = $('#aiHeroRamMb');
+      if(ramMbEl && window.cwLastMetrics.ramTotalGb){
+        const free = window.cwLastMetrics.ramTotalGb * (1 - (window.cwLastMetrics.ram / 100));
+        ramMbEl.textContent = free.toFixed(1) + ' GB حرة';
+      }
+    }
+    if(typeof window.cwLastMetrics.cpu === 'number'){
+      const cpuEl = $('#aiHeroCpu');
+      if(cpuEl) cpuEl.textContent = Math.round(window.cwLastMetrics.cpu) + '%';
+    }
+  }
+
+  renderAiDecisionFeed(clearwinAiDecisions, activeAiFeedFilter);
+  if(activePage === 'ai'){
+    renderWeightsMatrix(clearwinAiWeights);
+  }
+}
+
+// Asynchronous real-time telemetry fetcher
+async function refreshAiTelemetry(showToast=false){
+  try {
+    const ts = Date.now();
+    const wResp = await fetch('clearwin_ai_weights.json?t=' + ts);
+    if(wResp.ok){
+      const wJson = await wResp.json();
+      if(wJson && wJson.total_training_iterations){
+        clearwinAiWeights = wJson;
+      }
+    }
+  } catch(e){}
+
+  try {
+    const ts = Date.now();
+    const lResp = await fetch('clearwin_ai_training_log.md?t=' + ts);
+    if(lResp.ok){
+      const lText = await lResp.text();
+      const lines = lText.split('\n');
+      const parsed = [];
+      for(let i = lines.length - 1; i >= 0; i--){
+        const line = lines[i].trim();
+        if(line.startsWith('| #')){
+          const parts = line.split('|').map(p=>p.trim()).filter(Boolean);
+          if(parts.length >= 6){
+            parsed.push({
+              step: parts[0],
+              timestamp: parts[1],
+              chosen: parts[2].replace(/`/g, ''),
+              optimal: parts[3].replace(/`/g, ''),
+              reward: parts[4].replace(/`/g, ''),
+              metrics: parts.slice(5, parts.length - 1).join(' | '),
+              rationale: parts[parts.length - 1]
+            });
+          }
+          if(parsed.length >= 35) break;
+        }
+      }
+      if(parsed.length) clearwinAiDecisions = parsed;
+    }
+  } catch(e){}
+
+  updateAiCommandCenter();
+  if(showToast){
+    toast('تمت مزامنة سجل وأوزان الذكاء الاصطناعي بنجاح (الخطوة #' + (clearwinAiWeights.total_training_iterations || '') + ')');
+  }
+}
+
+// Periodic Auto-refresh for continuous trainer sync (every 6 seconds)
+setInterval(() => {
+  if(activePage === 'dashboard' || activePage === 'ai'){
+    refreshAiTelemetry(false);
+  }
+}, 6000);
+
+
+
+function toggleDecisionDrawer(btn){
+  const scrollWrap = document.querySelector('.cw-feed-table-scroll');
+  if(!scrollWrap) return;
+  const isExp = scrollWrap.classList.toggle('expanded');
+  if(btn){
+    btn.textContent = isExp ? 'طي السجل ▲' : 'عرض السجل الكامل ▼';
+  }
 }
 
 </script>

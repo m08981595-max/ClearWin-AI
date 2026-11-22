@@ -1,20 +1,42 @@
-# ClearWin 2.7.7 — Smart Windows Optimizer & Glass UI
+# ClearWin 2.7.2 GlassUI V21 — Autonomous AI Windows Optimizer & Fluent 2.0 Glass UI
 
-[![ClearWin Version](https://img.shields.io/badge/ClearWin-v2.7.7-blue.svg)](https://github.com)
+[![ClearWin Version](https://img.shields.io/badge/ClearWin-v2.7.2%20GlassUI%20V21-blue.svg)](https://github.com)
+[![AI Policy Engine](https://img.shields.io/badge/AI%20Engine-Autonomous%20RL%20Policy%20(+1796.8%20pts)-brightgreen.svg)](clearwin_ai_weights.json)
 [![Build Status](https://img.shields.io/badge/Build-Passing%20(173%2F173)-brightgreen.svg)](build-tests.ps1)
 [![Platform](https://img.shields.io/badge/Platform-Windows%2010%20%2F%2011%20x64-lightgrey.svg)](https://microsoft.com)
-[![UI Engine](https://img.shields.io/badge/UI-WPF%20%2B%20WebView2-teal.svg)](Resources/WebUI)
+[![UI Engine](https://img.shields.io/badge/UI-Fluent%202.0%20Mica%20%2B%20Acrylic%20WebView2-teal.svg)](Resources/WebUI)
 [![Security Hardened](https://img.shields.io/badge/Security-SEC--01%20to%20SEC--11%20Hardened-success.svg)](ENGINEERING_AUDIT_REPORT_AR.md)
 
 > **Arabic & English Documentation / توثيق ثنائي اللغة (العربية والإنجليزية)**
+> **Supreme Director:** Eng. Abdullah Mohamed (`maher`)
+
+---
+
+## 🌟 What's New in ClearWin 2.7.2 GlassUI V21 / الجديد في الإصدار
+
+1. **Autonomous RL Policy Engine (نظام التحكم بالتعلم المعزز الحقيقي):**
+   - High-performance neural decision policy trained on real hardware telemetry over **1,775+ continuous cycles** (`+1,796.8` cumulative reward).
+   - Strict physical reward functions penalizing thrashing, unneeded RAM trims, and PCIe bus instability.
+   - 10-Minute Continuous Supervisor Daemon auditing decisions and maintaining zero-freeze stability.
+
+2. **Windows 11 Fluent 2.0 Mica / Acrylic Architecture (واجهة زجاجية هادئة ومنظمة):**
+   - Reorganized 4-tier dashboard:
+     - **Tier 1 (Serene AI Hero Bar):** Live status, operational mode switcher, and neural pulse dot.
+     - **Tier 2 (Vital Hardware HUD):** RAM Guard with instant `تفريغ ⚡` Working Sets trim, CPU Load & 0.5ms Timer, Mechanical HDD Seek Shield, and PCIe ASPM Bus Stability.
+     - **Tier 3 (Quick Action Command Deck):** Turbo Boost, RAM Trim, Background Throttle, Bus & Power Guard.
+     - **Tier 4 (Split View):** Real-time hardware timeline chart + Collapsible AI Decision Stream drawer.
+
+3. **Native PE Resource Icon & Desktop Cleanup:**
+   - Brand new neon-blue speedometer, broom, and gear icon embedded directly into the executable binary (`RT_GROUP_ICON` & `RT_ICON`).
+   - Single unified desktop shortcut with automatic cache synchronization.
 
 ---
 
 ## 🌟 Overview / نظرة عامة
 
-**ClearWin 2.7.7** is an advanced, AI-driven Windows optimization suite combining an asynchronous WPF core with a modern Glassmorphism WebView2 UI. Powered by Double Q-Learning (RL2), Causal AI, Bayesian inference, and Multi-Agent consensus, ClearWin continuously analyzes system metrics, predicts thermal/performance bottlenecks, and provides state-preserving system tweaks with safety rollback and least-privilege administrative process separation.
+**ClearWin 2.7.2 GlassUI V21** is an advanced, AI-driven Windows optimization suite combining an asynchronous WPF core with a modern Fluent 2.0 Mica/Acrylic WebView2 UI. Powered by Double Q-Learning (RL2), Causal AI, Bayesian inference, and Multi-Agent consensus, ClearWin continuously analyzes system metrics, predicts thermal/performance bottlenecks, and provides state-preserving system tweaks with safety rollback and least-privilege administrative process separation.
 
-**ClearWin 2.7.7** هو برنامج هندسي متقدم لتحسين أداء نظام ويندوز، يجمع بين محرك WPF عالي الأداء مع واجهة زجاجية عصرية (Glassmorphism) عبر تقنية WebView2. يعتمد النظام على خوارزميات التعلم المعزز (Double Q-Learning)، والذكاء السببي (Causal AI)، والاستدلال البايزي، وتصويت الوكلاء المتعددين لتحليل النظام والتنبؤ بالاختناقات الحرارية والأداء، مع توفير تعديلات قابلة للاستعادة الكاملة وتأمين متقدم لصلاحيات المسؤول (Least-Privilege Process Separation).
+**ClearWin 2.7.2 GlassUI V21** هو برنامج هندسي متقدم لتحسين أداء نظام ويندوز، يجمع بين محرك WPF عالي الأداء مع واجهة زجاجية عصرية (Fluent 2.0 Mica/Acrylic) عبر تقنية WebView2. يعتمد النظام على خوارزميات التعلم المعزز (Double Q-Learning)، والذكاء السببي (Causal AI)، والاستدلال البايزي، وتصويت الوكلاء المتعددين لتحليل النظام والتنبؤ بالاختناقات الحرارية والأداء، مع توفير تعديلات قابلة للاستعادة الكاملة وتأمين متقدم لصلاحيات المسؤول (Least-Privilege Process Separation).
 
 ---
 
