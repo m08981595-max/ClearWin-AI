@@ -337,9 +337,9 @@ def compute_action_distribution(features, weights, biases):
     # Also forbid if Disk throughput is elevated (features[6] >= 0.33, ~20MB/s) to protect mechanical disk heads
     if features[0] <= 0.60 or features[7] > 0.5 or features[6] >= 0.33 or features[5] > 0.5 or features[2] >= 0.70:
         logits[1] = -999.0
-    # Action 2 (Defrag HDD): Forbidden unless user idle >= 15m AND defrag cooldown is clear (>= 2h) AND HDD calm (features[6] < 0.20) AND RAM healthy (features[0] < 0.65) AND CPU cool (features[2] < 0.35) AND trim cooldown clear (features[7] == 0)
+    # Action 2 (Defrag HDD): Forbidden unless user idle >= 15m AND defrag cooldown is clear (>= 2h) AND HDD calm (features[6] < 0.05, ~3MB/s) AND RAM healthy (features[0] < 0.60) AND CPU cool (features[2] < 0.35) AND trim cooldown clear (features[7] == 0)
     global _last_defrag_timestamp
-    if features[3] < 1.0 or (time.time() - _last_defrag_timestamp) < 7200.0 or features[6] >= 0.20 or features[0] >= 0.65 or features[2] >= 0.35 or features[7] > 0.5:
+    if features[3] < 1.0 or (time.time() - _last_defrag_timestamp) < 7200.0 or features[6] >= 0.05 or features[0] >= 0.60 or features[2] >= 0.35 or features[7] > 0.5:
         logits[2] = -999.0
     # Action 3 (Throttle CPU/Disk): Forbidden unless CPU is actually high (>= 68%) OR Mechanical HDD is thrashing (features[6] > 0.8)
     if features[2] < 0.68 and features[6] < 0.8:
@@ -391,8 +391,8 @@ def evaluate_decision_physics(chosen_action, features, details):
     elif free_ram < 1800.0 or ram_pct > 75.0:
         optimal_action = 4
         reasoning.append(f"RAM under critical pressure ({ram_pct}% used, {free_ram}MB free) -> Emergency RAM Recovery required")
-    # Priority 2: Safe Defrag Window (>= 15m user idle, cool CPU, RAM healthy, disk calm, cooldowns clear)
-    elif idle_min >= 15.0 and not defrag_cooldown and not cooldown and cpu_pct < 35.0 and ram_pct < 65.0 and disk_mb_s < 3.0 and disk_lat < 15.0:
+    # Priority 2: Safe Defrag Window (>= 15m user idle, cool CPU, RAM trimmed & healthy < 60%, disk calm, cooldowns clear)
+    elif idle_min >= 15.0 and not defrag_cooldown and not cooldown and cpu_pct < 35.0 and ram_pct < 60.0 and disk_mb_s < 3.0 and disk_lat < 15.0:
         optimal_action = 2
         reasoning.append(f"System idle for {idle_min:.1f}m (>= 15m) with cool CPU & calm disk -> Optimal window for HDD Defragmentation")
     # Priority 3: High CPU workload (> 70% CPU) OR Mechanical HDD Thrashing / Bottleneck Saturation
@@ -662,7 +662,7 @@ def run_step(weights_data, iter_num, apply_physical=True):
     is_crit = details.get("free_ram_mb", 4000) < 1800 or details.get("ram_used_pct", 0) > 75.0
     if details.get("ram_used_pct", 0) > 60 and not details.get("trim_cooldown_active", False) and not details.get("is_hdd_thrashing", False) and details.get("disk_io_mb_s", 0.0) < 20.0 and not is_crit:
         safe_exploratory_actions.append(1)
-    if details.get("idle_minutes", 0) >= 15.0 and not defrag_cooldown and not details.get("trim_cooldown_active", False) and details.get("cpu_load_pct", 0) < 35.0 and not details.get("is_hdd_thrashing", False) and details.get("ram_used_pct", 0) < 65.0:
+    if details.get("idle_minutes", 0) >= 15.0 and not defrag_cooldown and not details.get("trim_cooldown_active", False) and details.get("cpu_load_pct", 0) < 35.0 and not details.get("is_hdd_thrashing", False) and details.get("ram_used_pct", 0) < 60.0 and details.get("disk_io_mb_s", 0.0) < 3.0:
         safe_exploratory_actions.append(2)
     if details.get("cpu_load_pct", 0) > 70 or details.get("is_hdd_thrashing", False):
         safe_exploratory_actions.append(3)
