@@ -925,6 +925,18 @@ def run_step(weights_data, iter_num, apply_physical=True):
     if details.get("pcie_aspm_hazard", False):
         safe_exploratory_actions.append(5)
 
+    # Physics-correct exploration: Action 0 is always in the list, but when the
+    # physics target itself is corrective (RAM trim, emergency, throttle, defrag,
+    # bus guard), exploring MAINTAIN produces a spurious -0.40 "wrong decision".
+    # That false signal made the supervisor inflate Action 1's weight to 21.75
+    # with no real accuracy gain. Keep exploration, but only over valid actions.
+    try:
+        physics_target = evaluate_decision_physics(0, features, details)[1]
+        if physics_target != 0 and 0 in safe_exploratory_actions:
+            safe_exploratory_actions.remove(0)
+    except Exception:
+        pass  # exploration guard is best-effort; never break the decision loop
+
     if random.random() < 0.05 and safe_exploratory_actions:
         chosen_action = random.choice(safe_exploratory_actions)
     else:
