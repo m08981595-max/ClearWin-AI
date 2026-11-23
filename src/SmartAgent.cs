@@ -1190,9 +1190,22 @@ namespace ClearWin
 
         private string ResolveLoadPath(string path)
         {
-            string tmp = path + ".tmp";
-            if (File.Exists(tmp) && (!File.Exists(path) || File.GetLastWriteTime(tmp) > File.GetLastWriteTime(path)))
-                return tmp;
+            // AtomicWrite now uses a unique .tmp.<guid> name so concurrent writers
+            // cannot collide; recover from the newest surviving temp file.
+            try
+            {
+                string dir = Path.GetDirectoryName(path);
+                string pattern = Path.GetFileName(path) + ".tmp*";
+                string[] temps = Directory.GetFiles(dir, pattern);
+                string newest = null;
+                foreach (string t in temps)
+                    if (newest == null || File.GetLastWriteTime(t) > File.GetLastWriteTime(newest))
+                        newest = t;
+                if (newest != null && (!File.Exists(path) || File.GetLastWriteTime(newest) > File.GetLastWriteTime(path)))
+                    return newest;
+            }
+            catch { /* recovery is best-effort */ }
+
             // Try backup files if main file doesn't exist
             if (!File.Exists(path))
             {
@@ -6014,7 +6027,11 @@ namespace ClearWin
                 {
                     using (pp)
                     {
-                        try { pp.PriorityClass = PRIORITY_NORMAL; } catch (Exception ex18) { CWLog.Error("SmartAgent", ex18); }
+                        try { pp.PriorityClass = PRIORITY_NORMAL; }
+                        catch (System.ComponentModel.Win32Exception) { /* protected or terminating process — expected during rollback/shutdown */ }
+                        catch (InvalidOperationException) { /* process already exited — expected */ }
+                        catch (UnauthorizedAccessException) { /* no right to change this process's priority — expected */ }
+                        catch (Exception ex18) { CWLog.Error("SmartAgent", ex18); }
                     }
                 }
             }
@@ -6839,7 +6856,9 @@ namespace ClearWin
 
         private void AtomicWrite(string path, string content)
         {
-            string tmp = path + ".tmp";
+            // Unique temp file avoids the "file is being used by another process"
+            // error when two agent instances or a shutdown/install race save at once.
+            string tmp = path + ".tmp." + Guid.NewGuid().ToString("N");
             File.WriteAllText(tmp, content);
             // Versioned backup: rotate .bak1, .bak2, .bak3
             try
