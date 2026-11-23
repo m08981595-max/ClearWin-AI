@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -88,7 +88,9 @@ namespace ClearWin
         }
 
         // --------------------- Static glass resources ---------------------
-        private static readonly SolidColorBrush _hitBrush = new SolidColorBrush(Colors.Transparent);
+        // NOTE: no _hitBrush here anymore. A transparent brush drawn in OnRender
+        // was the original bug: it made a 22px full-height strip hit-testable and
+        // swallowed wheel/clicks that belonged to the host ScrollViewer.
         private static readonly LinearGradientBrush _railBrush;
         private static readonly LinearGradientBrush _thumbBrush;
         private static readonly Pen _railPen;
@@ -113,6 +115,7 @@ namespace ClearWin
 
         // --------------------- State ---------------------
         private ScrollViewer _host;
+        private ScrollBarVisibility _savedVerticalScrollBarVisibility = ScrollBarVisibility.Auto;
         private bool _draggingThumb;
         private double _dragStartY;
         private double _dragStartOffset;
@@ -121,11 +124,17 @@ namespace ClearWin
 
         public GlassScrollRail()
         {
-            Focusable = false;
+            // Keyboard accessibility: the rail itself is a tab stop and scrolls
+            // the host with Up/Down/PageUp/PageDown/Home/End (see OnKeyDown).
+            // The default dotted focus cue is replaced by our own glass halo.
+            Focusable = true;
+            FocusVisualStyle = null;
             SnapsToDevicePixels = true;
             ClipToBounds = true;
             MouseEnter += delegate { _hover = true; InvalidateVisual(); };
             MouseLeave += delegate { _hover = false; InvalidateVisual(); };
+            GotKeyboardFocus += delegate { InvalidateVisual(); };
+            LostKeyboardFocus += delegate { InvalidateVisual(); };
         }
 
         // =================================================================
@@ -142,6 +151,14 @@ namespace ClearWin
             if (host == null) throw new ArgumentNullException("host");
             GlassScrollRail rail = new GlassScrollRail { Mode = mode };
             rail._host = host;
+            // The overlay is a SIBLING of the host (not a descendant), so it does
+            // not inherit FlowDirection from it. Copy it explicitly for RTL.
+            rail.FlowDirection = host.FlowDirection;
+            // The glass bar replaces the native vertical bar rather than being
+            // drawn on top of it. Hidden keeps the scrollbar gutter reserved and
+            // still allows wheel/programmatic scrolling; Detach restores this.
+            rail._savedVerticalScrollBarVisibility = host.VerticalScrollBarVisibility;
+            host.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
             host.ScrollChanged += rail.OnHostScrollChanged;
 
             rail._idleTimer = new DispatcherTimer();
@@ -165,6 +182,8 @@ namespace ClearWin
             if (_host != null)
             {
                 _host.ScrollChanged -= OnHostScrollChanged;
+                // Hand the native scrollbar back exactly as we found it.
+                _host.VerticalScrollBarVisibility = _savedVerticalScrollBarVisibility;
                 _host = null;
             }
             _draggingThumb = false;
@@ -204,6 +223,41 @@ namespace ClearWin
             base.OnPropertyChanged(e);
             if (e.Property == FlowDirectionProperty)
                 InvalidateVisual();
+        }
+
+        // =================================================================
+        // Hit testing — ROOT-CAUSE FIX
+        // =================================================================
+        /// <summary>
+        /// Only the thin rail band is interactive. Returning null tells WPF to
+        /// keep hit-testing the element below (the host ScrollViewer), so wheel
+        /// and clicks over the list/content are never intercepted by the overlay.
+        /// Replaces the old 22px transparent rectangle that caused the bug.
+        /// </summary>
+        protected override HitTestResult HitTestCore(PointHitTestParameters hitTestParameters)
+        {
+            if (!IsHitTestVisible || hitTestParameters == null) return null;
+
+            double railX, thumbY, thumbH, thumbW;
+            if (!GetMetrics(out railX, out thumbY, out thumbH, out thumbW))
+                return null; // nothing scrollable -> invisible AND non-interactive
+
+            Point p = hitTestParameters.HitPoint;
+            if (p.X < 0.0 || p.X > ActualWidth || p.Y < 0.0 || p.Y > ActualHeight)
+                return null;
+
+            // Keep move/up events flowing while a thumb drag is captured, even
+            // if the cursor briefly wanders outside the narrow band.
+            if (_draggingThumb) return new PointHitTestResult(this, p);
+
+            // Interactive band == the drawn rail width + 2px grab tolerance,
+            // clamped to the rail gutter (never the old 6px-per-side 22px strip).
+            const double grabPad = 2.0;
+            double bandLeft = Math.Max(0.0, railX - grabPad);
+            double bandRight = Math.Min(ActualWidth, railX + thumbW + grabPad);
+            if (p.X < bandLeft || p.X > bandRight) return null;
+
+            return new PointHitTestResult(this, p);
         }
 
         // =================================================================
@@ -308,13 +362,15 @@ namespace ClearWin
             base.OnMouseDown(e);
             if (_host == null) return;
 
-            double y = e.GetPosition(this).Y;
+            Point pos = e.GetPosition(this);
+            double y = pos.Y;
             double railX, thumbY, thumbH, thumbW;
             if (!GetMetrics(out railX, out thumbY, out thumbH, out thumbW))
-            {
-                e.Handled = true;
-                return;
-            }
+                return; // not interactive -> let the host ScrollViewer handle it
+
+            // Belt-and-braces: react only inside the rail band even if a
+            // synthetic event bypassed HitTestCore().
+            if (pos.X < railX - 2.0 || pos.X > railX + thumbW + 2.0) return;
 
             if (y >= thumbY - 4.0 && y <= thumbY + thumbH + 4.0)
             {
@@ -359,14 +415,43 @@ namespace ClearWin
 
         protected override void OnMouseWheel(MouseWheelEventArgs e)
         {
+            // ROOT-CAUSE FIX (part 2): the rail is a sibling overlay, so a wheel
+            // event whose target is the rail never reaches the host ScrollViewer
+            // by normal routing. Re-raise it on the host and let WPF's native
+            // ScrollViewer do the scrolling with system delta/line semantics,
+            // instead of the old custom math that could stop short of the bottom.
+            if (_host != null && e.MouseDevice != null)
+            {
+                MouseWheelEventArgs forwarded = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta);
+                forwarded.RoutedEvent = MouseWheelEvent;
+                _host.RaiseEvent(forwarded);
+                e.Handled = true; // stop an enclosing ScrollViewer double-scrolling
+                Wake();
+                return;
+            }
             base.OnMouseWheel(e);
-            if (_host == null) return;
+        }
 
-            double pixelsPerNotch = _host.ViewportHeight / 5.0;
-            if (pixelsPerNotch < 40.0) pixelsPerNotch = 40.0;
+        /// <summary>
+        /// Keyboard scrolling for the focusable rail (Up/Down/Page/Home/End).
+        /// </summary>
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (_host == null) { base.OnKeyDown(e); return; }
 
-            int dir = (e.Delta > 0) ? -1 : 1;
-            ScrollHostTo(_host.VerticalOffset + dir * pixelsPerNotch);
+            double line = 48.0;
+            double page = Math.Max(line, _host.ViewportHeight * 0.9);
+            double cur = _host.VerticalOffset;
+            switch (e.Key)
+            {
+                case Key.Up: ScrollHostTo(cur - line); break;
+                case Key.Down: ScrollHostTo(cur + line); break;
+                case Key.PageUp: ScrollHostTo(cur - page); break;
+                case Key.PageDown: ScrollHostTo(cur + page); break;
+                case Key.Home: ScrollHostTo(0.0); break;
+                case Key.End: ScrollHostTo(Math.Max(0.0, _host.ScrollableHeight)); break;
+                default: base.OnKeyDown(e); return;
+            }
             e.Handled = true;
             Wake();
         }
@@ -390,14 +475,11 @@ namespace ClearWin
             if (!GetMetrics(out railX, out thumbY, out thumbH, out thumbW))
                 return; // nothing to scroll → invisible + non-interactive
 
-            // Hit area: a narrow strip around the rail edge only, so the rest
-            // of the cell (buttons, clicks, wheel over content) stays
-            // fully interactive. Transparent ≠ null → hittable.
-            const double hitPad = 6.0;
-            double hitW = RailWidth + 2.0 * hitPad;
-            double hitX = IsRightEdge() ? Math.Max(0.0, ActualWidth - hitW) : 0.0;
-            dc.DrawRectangle(_hitBrush, null, new Rect(hitX, 0.0, hitW, ActualHeight));
-
+            // No transparent hit rectangle here anymore. Input hit-testing is
+            // handled exclusively by HitTestCore(), which accepts only the thin
+            // rail band. Drawing a transparent brush used to make a 22px
+            // full-height strip hit-testable and swallow wheel/clicks meant for
+            // the ScrollViewer underneath — that was the original defect.
             double trackTop = RailPadding;
             double trackLen = Math.Max(0.0, ActualHeight - 2.0 * RailPadding);
             double railR = Math.Max(2.0, RailWidth / 2.0);
@@ -408,7 +490,7 @@ namespace ClearWin
 
             // Thumb (+ soft halo when hovered or dragging)
             double thumbR = Math.Max(2.0, thumbW / 2.0);
-            bool glow = _draggingThumb || _hover;
+            bool glow = _draggingThumb || _hover || IsKeyboardFocused;
             if (glow)
             {
                 double haloX = Math.Max(0.0, Math.Min(railX - 3.0, Math.Max(0.0, ActualWidth - (thumbW + 6.0))));

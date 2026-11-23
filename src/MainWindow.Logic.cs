@@ -292,8 +292,8 @@ namespace ClearWin
                             var procs = Process.GetProcesses();
                             int pCount = procs.Length;
                             int tc = 0;
-                            try { foreach (var p in procs) { try { tc += p.Threads.Count; } catch (Exception ex27) { CWLog.Error("MainWindow.Logic", ex27); } } }
-                            finally { foreach (var p in procs) { try { p.Dispose(); } catch (Exception ex28) { CWLog.Error("MainWindow.Logic", ex28); } } }
+                            try { foreach (var p in procs) { try { tc += p.Threads.Count; } catch (System.ComponentModel.Win32Exception) { /* Access denied on protected system process — expected, ignore safely */ } catch (Exception ex27) { CWLog.Error("MainWindow.Logic", ex27); } } }
+                            finally { foreach (var p in procs) { try { p.Dispose(); } catch (System.ComponentModel.Win32Exception) { /* expected on protected processes */ } catch (Exception ex28) { CWLog.Error("MainWindow.Logic", ex28); } } }
                             var disp3 = Dispatcher;
                             disp3.BeginInvoke(new Action(() =>
                             {
@@ -899,55 +899,9 @@ namespace ClearWin
                         }
                     }
                 } catch (Exception ex58) { CWLog.Error("MainWindow.Logic", ex58); }
-                // Section 4c: Premium DashboardView (real data, every tick)
-                try
-                {
-                    if (_dashboardView != null)
-                    {
-                        // Always REAL live machine values from MainWindow's own counters
-                        // (PerformanceCounter + GlobalMemoryStatusEx + real frame tracker).
-                        // These update every tick and are never affected by the AI sandbox
-                        // simulation mode, so the dashboard stays real-time and truthful.
-                        double fpsNow = _frameTracker != null ? _frameTracker.CurrentFps : 0;
-                        _dashboardView.UpdateMetrics(_realCpu, _realRam, _realGpu, _realTemp, fpsNow, _healthScore);
-                        _dashboardView.UpdateFpsStabilizer(
-                            _agent.FpsStabilizerCurrentFps,
-                            _agent.FpsStabilizerAvgFps10,
-                            _agent.FpsStabilizer1Low,
-                            _agent.FpsStabilizerFrameTimeMs,
-                            _agent.FpsStabilizerStability,
-                            _agent.FpsStabilizerPreventedDrops);
-                        _dashboardView.UpdateIntegrity(
-                            FormatOrigValue(0, _realCpu),
-                            FormatOrigValue(1, _realRam),
-                            FormatOrigValue(2, _realGpu),
-                            FormatOrigValue(3, _realTemp),
-                            FormatOrigValue(4, fpsNow),
-                            FormatOrigValue(5, _healthScore));
-                        string woaAction = _agent.WinOptAILastAction;
-                        double woaConfPct = _agent.WinOptAILastConfidence * 100.0;
-                        string aiStatus = _agent.Mode == AgentMode.Off ? "Off"
-                            : (_agent.WinOptAI != null && _agent.WinOptAI.IsRunning && _agent.WinOptAI.TotalInferences > 0) ? "Active"
-                            : (_agent.WinOptAI != null && _agent.WinOptAI.IsRunning) ? "Active - waiting" : "Off (enable AI Agent)";
-                        var ast = _agent.Stats;
-                        int decisions = ast != null ? ast.TotalDecisions : 0;
-                        double latencyMs = _agent.GetSelfProfileTickMs();
-                        double accuracy = _agent.GetTrainingAccuracy() * 100.0;
-                        _dashboardView.UpdateAiState(aiStatus, woaAction, woaConfPct, decisions, _agent.GetActiveBoosterCount(), latencyMs / 1000.0, accuracy);
-                        string lastAction = null;
-                        double lastConf = 0;
-                        ParseLastDecision(ref lastAction, ref lastConf);
-                        if (lastAction != null)
-                        {
-                            _dashboardView.UpdateRecommendation(lastAction, TranslateAction(lastAction), lastConf * 100.0);
-                            DateTime ts = DateTime.Now;
-                            if (ast != null && ast.LastDecisionTime != default(DateTime)) ts = ast.LastDecisionTime;
-                            _dashboardView.UpdateActivity(TranslateAction(lastAction), string.Format("الثقة: {0:F0}%", lastConf * 100.0), ts);
-                        }
-                        string modeStr = _agent.Mode == AgentMode.Off ? "الوضع المتوقف" : _agent.Mode == AgentMode.AutoPilot ? "الطيار الآلي" : _agent.Mode == AgentMode.GameMode ? "وضع الألعاب" : "الوضع الذكي";
-                        _dashboardView.UpdateFooter(modeStr, (_agent.WinOptAI != null && _agent.WinOptAI.IsRunning) ? "محرك التحسين نشط" : "بانتظار تفعيل محرك التحسين");
-                    }
-                } catch (Exception ex59) { CWLog.Error("MainWindow.Logic", ex59); }
+                // Section 4c: DashboardView was never instantiated (field removed from
+                // MainWindow), so this block was dead code. Live dashboard values are
+                // updated by the fallback TextBlocks in Sections 4b and 5 below.
                 // Section 5: AI Summary + Agent Mode (always, cheap)
                 try
                 {
@@ -2570,7 +2524,11 @@ namespace ClearWin
                                 if (name.Contains(safeNames[i])) { safe = true; break; }
                             }
                             if (safe) EmptyWorkingSet(p.Handle);
-                        } catch (Exception ex122) { CWLog.Error("MainWindow.Logic", ex122); }
+                        }
+                        catch (System.ComponentModel.Win32Exception) { /* Access denied on protected system process — expected, ignore safely */ }
+                        catch (InvalidOperationException) { /* Process exited between enumeration and property access — expected at boot, ignore safely */ }
+                        catch (UnauthorizedAccessException) { /* Expected, ignore safely */ }
+                        catch (Exception ex122) { CWLog.Error("MainWindow.Logic", ex122); }
                     }
                 }
                 finally { foreach (var p in procs) { try { p.Dispose(); } catch (Exception ex123) { CWLog.Error("MainWindow.Logic", ex123); } } }
@@ -2920,7 +2878,11 @@ namespace ClearWin
                                 p.PriorityClass = ProcessPriorityClass.BelowNormal;
                                 throttled++;
                             }
-                        } catch (Exception ex134) { CWLog.Error("MainWindow.Logic", ex134); }
+                        }
+                        catch (System.ComponentModel.Win32Exception) { /* Access denied on protected system process — expected, ignore safely */ }
+                        catch (InvalidOperationException) { /* Process exited between enumeration and property access — expected at boot, ignore safely */ }
+                        catch (UnauthorizedAccessException) { /* Expected, ignore safely */ }
+                        catch (Exception ex134) { CWLog.Error("MainWindow.Logic", ex134); }
                     }
                 }
                 finally { foreach (var p in procs) { try { p.Dispose(); } catch (Exception ex135) { CWLog.Error("MainWindow.Logic", ex135); } } }

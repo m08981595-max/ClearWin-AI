@@ -267,6 +267,10 @@ namespace ClearWin
         private Queue<AgentLog> _logs = new Queue<AgentLog>();
         private AgentStats _stats = new AgentStats();
         private string _dataDir;
+        // When false, the constructor skips loading a user's persisted ML checkpoint.
+        // Used by rule-curriculum / hardware-simulation tests so their expectations
+        // do not depend on machine-local training state. Production always uses true.
+        private bool _loadPersistedMLModel = true;
         private Random _rnd = new Random();
         private Random _mlRnd = new Random();
         private int _tickCount = 0;
@@ -1034,8 +1038,15 @@ namespace ClearWin
             _simulatedState = state;
         }
 
-        public SmartAgent()
+        public SmartAgent() : this(true) { }
+
+        /// <summary>
+        /// loadPersistedMLModel=false builds a deterministic, rule-only agent for
+        /// curriculum and hardware-simulation tests. It never touches user data.
+        /// </summary>
+        public SmartAgent(bool loadPersistedMLModel)
         {
+            _loadPersistedMLModel = loadPersistedMLModel;
             Instance = this;
             try
             {
@@ -1100,7 +1111,7 @@ namespace ClearWin
             LoadLongTermMemory();
             LoadCalibrationData();
             InitializeUserProfile();
-            InitializeMLModel();
+            if (_loadPersistedMLModel) InitializeMLModel(); else InitializeMLModelFresh();
             InitializeWindowsOptimizationAI();
             InitializeFpsStabilizer();
             InitializeMetaLearning();
@@ -3083,6 +3094,16 @@ namespace ClearWin
             }
         }
 
+        // === Category Exploration (epsilon-greedy on learned category boosts) ===
+        // Penalized categories are occasionally re-neutralized during ranking so
+        // their learned value keeps being re-measured instead of staying frozen
+        // (prevents a permanently collapsed policy that only repeats its two
+        // historically-winning actions). Complements the A/B EXPLORATION_RATE
+        // which only handles low-confidence decisions, not boost penalties.
+        private const double CATEGORY_EXPLORATION_RATE = 0.02; // 2% chance per ranked decision
+        private const int CATEGORY_EXPLORATION_COOLDOWN_MS = 600000; // max one exploration per 10 minutes
+        private DateTime _lastCategoryExplorationUtc = DateTime.MinValue;
+
         private void RankAndFilter(List<AgentDecision> decisions)
         {
             // Sigmoid-based dynamic weights (smooth transitions, normalized)
@@ -3109,7 +3130,18 @@ namespace ClearWin
                 else if (d.Category == DecisionCategory.MemoryClean || d.Category == DecisionCategory.PurgeStandby) dynWeight = weightMemory;
                 else if (d.Category == DecisionCategory.ProcessPriority || d.Category == DecisionCategory.GameBoost) dynWeight = weightGame;
                 else if (d.Category == DecisionCategory.CpuAffinity) dynWeight = weightCpu;
-                dynWeight += GetCategoryLearnedBoost(d.Category.ToString());
+                // Epsilon-greedy category exploration: occasionally neutralize a
+                // learned penalty so the category keeps getting re-measured.
+                double catBoost = GetCategoryLearnedBoost(d.Category.ToString());
+                if (catBoost < 0 &&
+                    (DateTime.UtcNow - _lastCategoryExplorationUtc).TotalMilliseconds >= CATEGORY_EXPLORATION_COOLDOWN_MS &&
+                    _exploreRnd.NextDouble() < CATEGORY_EXPLORATION_RATE)
+                {
+                    _lastCategoryExplorationUtc = DateTime.UtcNow;
+                    AddLog("EXPLORE", "Category", "Exploring penalized category: " + d.Category + " (frozen boost=" + catBoost.ToString("F2") + ") — neutralized for this ranking pass");
+                    catBoost = 0;
+                }
+                dynWeight += catBoost;
                 // Convert weight to additive adjustment: weight=2.0 → +0.1, weight=0.5 → -0.1
                 score += (dynWeight - 1.0) * 0.15;
 
@@ -3915,13 +3947,19 @@ namespace ClearWin
             {
                 if (!DisableRealExecution && !_simulationMode && d != null && !string.IsNullOrEmpty(d.Action) &&
                     !d.Action.StartsWith("KB_") && !d.Action.StartsWith("Scheduled_") &&
-                    !d.Action.StartsWith("PredictiveMaintenance_") && !d.Action.StartsWith("ForecastPrevent_"))
+                    !d.Action.StartsWith("PredictiveMaintenance_") && !d.Action.StartsWith("ForecastPrevent_") &&
+                    !d.Action.StartsWith("UserBehavior_"))
                 {
                     var policyRes = ActionPolicyGate.Evaluate(d.Action, ActionRequester.SmartAgent, false, AdminSessionManager.IsAdminConnected);
                     if (!policyRes.Allowed)
                     {
                         AddLog("WARN", "PolicyGate", "BLOCKED by PolicyGate: " + policyRes.ReasonAr);
-                        RecordExperience(d, false);
+                        // FIX: a policy refusal is NOT an execution failure — the action never ran.
+                        // Recording it as a failed experience taught the ML/RL layers that
+                        // OptimizeNetwork / FlushDnsCache / UserBehavior_* "fail" (1800+ fake
+                        // failures in one week) even though they were merely missing from the
+                        // ActionCatalog or required admin. Skip the experience write entirely;
+                        // only log the block so the training signal stays truthful.
                         return;
                     }
                 }

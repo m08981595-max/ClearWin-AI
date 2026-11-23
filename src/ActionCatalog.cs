@@ -196,6 +196,34 @@ namespace ClearWin
                     postVerificationDescription: "التحقق من استقرار المؤشرات وعدم حدوث تدهور في الأداء."));
             }
 
+            // FIX (gap): SmartAgent network & advanced runtime actions executed by the
+            // engine in ExecuteDecision but MISSING from this catalog. Every attempt was
+            // blocked by ActionPolicyGate as "UnregisteredAction" and recorded as a
+            // failed experience, poisoning the ML training set (field audit: 783
+            // OptimizeNetwork + 428 FlushDnsCache + 1806 total refusals in one week).
+            // Registered now as Green tier so autonomous execution is permitted, and
+            // requiresAdmin reflects the real elevation need (netsh / ipconfig / IO priority).
+            string[] greenNetworkAliases = new string[] {
+                "OptimizeNetwork", "FlushDnsCache", "ResetNetworkPriority",
+                "BalanceGameLoad", "BalanceCpuGpuLoad",
+                "FlushModifiedList", "DeepMemoryCompaction", "DeferWork", "DiskCleanup"
+            };
+            foreach (string netAlias in greenNetworkAliases)
+            {
+                bool netNeedsAdmin = (netAlias == "OptimizeNetwork" || netAlias == "FlushDnsCache" || netAlias == "ResetNetworkPriority");
+                Register(new ActionCatalogItem(
+                    netAlias,
+                    "تحسين شبكة/نظام تلقائي (" + netAlias + ")",
+                    "SmartAgent Network/Advanced Action (" + netAlias + ")",
+                    ActionTier.Green,
+                    requiresAdmin: netNeedsAdmin,
+                    isReversible: true,
+                    category: "SmartAgent",
+                    descriptionAr: "إجراء تحسين شبكة/نظام ديناميكي آمن وقابل للتراجع (ضبط TCP/Netsh، تفريغ DNS، أولويات، توازن الحمل).",
+                    preconditionDescription: "فحص الأمان والميزانية ومؤشر المخاطر أقل من الحد الحرج.",
+                    postVerificationDescription: "التحقق من استقرار المؤشرات وعدم حدوث تدهور في الأداء."));
+            }
+
             // SmartAgent Yellow Tier actions (require explicit user confirmation)
             string[] yellowAgentAliases = new string[] {
                 "SuspendBloatProcesses", "DisableGameDvr", "StartupDisable"

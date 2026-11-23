@@ -200,7 +200,9 @@ namespace ClearWin
 
         private SmartAgent _agent;
         private FrameTimeTracker _frameTracker;
-        private DashboardView _dashboardView;
+        // DashboardView.cs exists but is not part of the active UI tree; the live
+        // dashboard is updated through the fallback TextBlocks below. The former
+        // _dashboardView field was never assigned, so its update block was dead.
         private Dictionary<string, UIElement> _pageCache = new Dictionary<string, UIElement>();
         private TextBlock _topBarAgentStatus;
         private TextBlock _statusDot;
@@ -1417,9 +1419,20 @@ namespace ClearWin
             var sv = new ScrollViewer { VerticalScrollBarVisibility = ScrollBarVisibility.Auto, HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled };
             var stack = new StackPanel { Margin = new Thickness(16, 0, 16, 0) };
             sv.Content = stack;
-            // (GlassScrollRail removed: its 22px hit strip intercepted wheel/clicks
-            //  over the standard scrollbar zone and blocked scrolling to the bottom.
-            //  Standard Auto scrollbar restored — function over glass look.)
+            Grid.SetRow(sv, 0);
+            outerGrid.Children.Add(sv);
+            // GlassScrollRail RESTORED (v2.7.7). Root cause of the old removal:
+            // it drew a 22px transparent full-height rectangle, making the whole
+            // strip hit-testable; wheel and clicks meant for this list were routed
+            // to the overlay instead of the ScrollViewer. Fixed in GlassScrollRail
+            // by (a) HitTestCore() limiting input to the thin rail band and
+            // (b) forwarding MouseWheel to the host via RaiseEvent (native scroll
+            // semantics). Attach() hides the native vertical bar and keeps the
+            // gutter reserved; Detach() restores Auto. Wheel/click/drag/keyboard
+            // and RTL (host FlowDirection is copied) all remain functional.
+            var glassRail = GlassScrollRail.Attach(sv, GlassScrollRail.RailMode.Main);
+            Grid.SetRow(glassRail, 0);
+            outerGrid.Children.Add(glassRail); // added last => on top of sv in Z order
             // Brand: gradient "C" icon + "CLEARWIN" + version pill
             var brandStack = new StackPanel { Margin = new Thickness(8, 20, 8, 20) };
             var brandRow = new StackPanel { Orientation = Orientation.Horizontal };

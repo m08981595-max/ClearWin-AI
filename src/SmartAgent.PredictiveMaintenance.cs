@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -280,18 +280,23 @@ namespace ClearWin
             AlertSeverity severity = AlertSeverity.Low;
             string message = "";
 
-            if (degradation > 0.3 && currentAvg > _warningThreshold)
+            // Data points are stored in the raw metric scale (0-100 for usage
+            // percentages, °C for temperature) — thresholds were authored as
+            // 0-1 fractions, so scale them to the metric scale before comparing.
+            double warnLevel = _warningThreshold * 100.0;
+
+            if (degradation > 0.3 && currentAvg > warnLevel)
             {
                 severity = AlertSeverity.Critical;
                 message = string.Format("{0} degrading rapidly ({1:F2}/sample), current avg: {2:F1}%",
-                    _category, degradation, currentAvg * 100);
+                    _category, degradation, currentAvg);
             }
-            else if (degradation > 0.15 && currentAvg > _warningThreshold * 0.9)
+            else if (degradation > 0.15 && currentAvg > warnLevel * 0.9)
             {
                 severity = AlertSeverity.High;
                 message = string.Format("{0} showing degradation ({1:F2}/sample)", _category, degradation);
             }
-            else if (degradation > 0.05 && currentAvg > _warningThreshold * 0.8)
+            else if (degradation > 0.05 && currentAvg > warnLevel * 0.8)
             {
                 severity = AlertSeverity.Medium;
                 message = string.Format("{0} minor degradation detected ({1:F2}/sample)", _category, degradation);

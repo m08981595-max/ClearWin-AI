@@ -149,7 +149,8 @@ namespace ClearWin
             catch (System.Runtime.InteropServices.COMException comEx) when (comEx.HResult == unchecked((int)0x80070578))
             {
                 // Native window handle not ready yet; defer initialization until Dispatcher Loaded priority
-                Dispatcher.BeginInvoke(new Action(async () =>
+                // DispatcherOperation is awaitable; discard makes this intentional fire-and-forget explicit.
+                _ = Dispatcher.BeginInvoke(new Action(async () =>
                 {
                     try
                     {
@@ -232,7 +233,8 @@ namespace ClearWin
             }
             catch (System.Runtime.InteropServices.COMException comEx) when (comEx.HResult == unchecked((int)0x80070578))
             {
-                Dispatcher.BeginInvoke(new Action(() =>
+                // Intentional fire-and-forget navigation retry.
+                _ = Dispatcher.BeginInvoke(new Action(() =>
                 {
                     try { _webView.Source = new Uri(index); }
                     catch (Exception exNav) { CWLog.Error("WebUiHost.NavRetry", exNav); }

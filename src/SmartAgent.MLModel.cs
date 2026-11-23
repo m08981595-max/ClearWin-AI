@@ -563,8 +563,13 @@ namespace ClearWin
             {
                 for (int i = 0; i < F; i++)
                 {
-                    if (i < m.Length && m[i] > 0) _m[i] = m[i];
-                    if (i < s.Length && s[i] >= 0.1) _s[i] = s[i];
+                    // Any FINITE mean is legitimate, including 0 and negatives:
+                    // CpuTrend/RamTrend/TempTrend (indices 15-17) routinely have
+                    // a mean <= 0. The old "m[i] > 0" guard silently discarded
+                    // those on load and left the default 50 in place, so a saved
+                    // and reloaded model normalized the same input differently.
+                    if (i < m.Length && !double.IsNaN(m[i]) && !double.IsInfinity(m[i])) _m[i] = m[i];
+                    if (i < s.Length && s[i] >= 0.1 && !double.IsNaN(s[i]) && !double.IsInfinity(s[i])) _s[i] = s[i];
                     if (i < c.Length && c[i] >= 0) _c[i] = c[i];
                 }
             }
@@ -812,6 +817,16 @@ namespace ClearWin
 
     public partial class SmartAgent
     {
+        // === Model provenance: explicit, never implicit ===
+        // A freshly constructed SmartAgent has NO trained model. LoadMLModel()
+        // sets this so logs and callers can distinguish a random initialization
+        // from a real persisted checkpoint instead of silently assuming training.
+        // Values: NotInitialized | FreshInit_Untrained | LoadedFromDisk |
+        //         RestoredFromBackup | Corrupt_StartingFresh
+        private string _mlModelState = "NotInitialized";
+        public string MLModelState { get { lock (_mlLock) return _mlModelState; } }
+        public bool MLModelLoadedFromDisk { get { lock (_mlLock) return _mlModelState == "LoadedFromDisk" || _mlModelState == "RestoredFromBackup"; } }
+
         private Dictionary<string, MLEnsemble> _mlEns = new Dictionary<string, MLEnsemble>();
         private PrioritizedReplayBuffer _mlRP;
         private RingBuffer<MLTrainingSample> _mlTB = new RingBuffer<MLTrainingSample>(ML_MAX);
@@ -852,8 +867,43 @@ namespace ClearWin
         public bool IsTrainingInProgress { get { return _isTrainingInProgress == 1; } }
         public bool IsTrainingDeferred { get { return _trainingDeferred; } set { _trainingDeferred = value; } }
 
-        public void InitializeMLModel() { _fn = new RunningNormalizer(); _mlRP = new PrioritizedReplayBuffer(2000); _driftDetector = new PSIDriftDetector(); LoadMLModel(); }
+        public void InitializeMLModel() { InitializeMLInfrastructure(); LoadMLModel(); }
+
+        // Deterministic construction for rule-curriculum and hardware-simulation
+        // tests: full ML infrastructure is created, but no user checkpoint is read
+        // and no user data is written. With no ensembles loaded, GetMLDecision()
+        // returns null and the state-explicit rule engine is exercised in isolation.
+        public void InitializeMLModelFresh()
+        {
+            InitializeMLInfrastructure();
+            lock (_mlLock) { _mlModelState = "FreshInit_Untrained_Isolated"; }
+            AddLog("WARN", "ML.Load", "Isolated test agent: persisted checkpoint skipped (no user data read/written).");
+        }
+
+        private void InitializeMLInfrastructure()
+        {
+            _fn = new RunningNormalizer();
+            _mlRP = new PrioritizedReplayBuffer(2000);
+            _driftDetector = new PSIDriftDetector();
+        }
+
         public void CapturePreActionState() { _preAF = BuildFV(); _preAHS = SystemHealthScore; }
+
+        // Single source of truth for the checkpoint path: SaveMLModel and
+        // LoadMLModel both use this expression, so they cannot drift apart.
+        // Falls back to the same directory the constructor uses if _dataDir
+        // could not be resolved (e.g. a restricted environment).
+        private string MLModelFilePath
+        {
+            get
+            {
+                string dir = _dataDir;
+                if (string.IsNullOrEmpty(dir))
+                    dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "ClearWin", "agent");
+                return Path.Combine(dir, "ml_nn_v2.dat");
+            }
+        }
+        public string GetMLModelPath() { return MLModelFilePath; }
 
         private MLFeatureVector BuildFV()
         {
@@ -1390,8 +1440,9 @@ namespace ClearWin
         {
             lock (_mlLock)
             {
-                if (_mlEns.Count == 0) return "Ensemble not trained yet. Needs " + ML_MIN + " samples.";
+                if (_mlEns.Count == 0) return "Model state: " + _mlModelState + " | Ensemble not trained yet. Needs " + ML_MIN + " samples.";
                 var sb = new StringBuilder();
+                sb.AppendLine(string.Format("Model state: {0} | Checkpoint: {1}", _mlModelState, MLModelFilePath));
                 sb.AppendLine(string.Format("Ensembles: {0} | Samples: {1} | Replay: {2}", _mlEns.Count, _mlTB.Count, _mlRP.Count));
                 foreach (var kv in _mlEns) sb.AppendLine(string.Format("  {0}: acc={1:F1}% samples={2} lr={3:F4}", kv.Key, kv.Value.Acc * 100, kv.Value.TS, _aLR.ContainsKey(kv.Key) ? _aLR[kv.Key] : 0.12));
                 string r = GetMLRecommendation();
@@ -1406,7 +1457,7 @@ namespace ClearWin
             {
                 lock (_mlLock)
                 {
-                    string path = Path.Combine(_dataDir, "ml_nn_v2.dat");
+                    string path = MLModelFilePath;
                     var sb = new StringBuilder();
                     sb.AppendLine("V4"); sb.AppendLine(_mlEns.Count.ToString());
                     foreach (var kv in _mlEns) { var e = kv.Value; sb.AppendLine(e.Action); for (int ni = 0; ni < 3; ni++) { var n = e.Nets[ni]; sb.AppendLine(n.TS.ToString()); sb.AppendLine(n.LU.Ticks.ToString()); WA(sb, n.W1); WA(sb, n.B1); WA(sb, n.W2); WA(sb, n.B2); WA(sb, n.W3); sb.AppendLine(n.B3.ToString("F8", CultureInfo.InvariantCulture)); WA(sb, n.BN1G); WA(sb, n.BN1B); WA(sb, n.BN2G); WA(sb, n.BN2B); WA(sb, n.BN1RM); WA(sb, n.BN1RV); WA(sb, n.BN2RM); WA(sb, n.BN2RV); WA(sb, n.MW1); WA(sb, n.MB1); WA(sb, n.MW2); WA(sb, n.MB2); WA(sb, n.MW3); sb.AppendLine(n.MB3.ToString("F8", CultureInfo.InvariantCulture)); WA(sb, n.VW1); WA(sb, n.VB1); WA(sb, n.VW2); WA(sb, n.VB2); WA(sb, n.VW3); sb.AppendLine(n.VB3.ToString("F8", CultureInfo.InvariantCulture)); WA(sb, n.MBN1G); WA(sb, n.VBN1G); WA(sb, n.MBN1B); WA(sb, n.VBN1B); WA(sb, n.MBN2G); WA(sb, n.VBN2G); WA(sb, n.MBN2B); WA(sb, n.VBN2B); } }
@@ -1471,31 +1522,56 @@ namespace ClearWin
         {
             lock (_mlLock)
             {
-                string path = Path.Combine(_dataDir, "ml_nn_v2.dat");
-                if (!File.Exists(path)) return;
+                string path = MLModelFilePath;
+                if (!File.Exists(path))
+                {
+                    // EXPECTED FIRST-RUN STATE, not a load failure. MLEnsemble's
+                    // constructor has already declared fresh random weights, so
+                    // state plainly that the model is UNTRAINED instead of
+                    // leaving callers to assume a trained model is in effect.
+                    _mlModelState = "FreshInit_Untrained";
+                    string msg = "ML checkpoint not found at '" + path + "'. Expected on first run: freshly initialized (UNTRAINED) ensembles are in effect; predictions stay prior/rule-driven until real recorded outcomes train them. A checkpoint will be written to this same path at the next save point.";
+                    AddLog("WARN", "ML.Load", msg);
+                    CWLog.Warn("ML.Load", "Checkpoint absent - starting with fresh UNTRAINED ensembles at " + path);
+                    return;
+                }
+
                 bool ok = false;
                 try { ok = LoadMLModelFile(path); }
                 catch (Exception ex) { LogError("ML.Load", ex); ok = false; }
-                if (!ok)
+                if (ok)
                 {
-                    // Corrupt or unreadable model: fall back to the last known-good backup.
-                    string bak = Path.Combine(_dataDir, "ml_nn_v2.dat.bak1");
-                    if (File.Exists(bak))
+                    _mlModelState = "LoadedFromDisk";
+                    AddLog("INFO", "ML.Load", "ML checkpoint loaded from '" + path + "' (" + _mlEns.Count + " ensembles, " + _mlTB.Count + " samples).");
+                    return;
+                }
+
+                // Corrupt or unreadable model: fall back to the last known-good backup.
+                string bak = MLModelFilePath + ".bak1";
+                if (File.Exists(bak))
+                {
+                    try
                     {
-                        try
+                        File.Copy(bak, path, true);
+                        WriteChecksum(path);
+                        bool restored = LoadMLModelFile(path);
+                        if (restored)
                         {
-                            File.Copy(bak, path, true);
-                            WriteChecksum(path);
-                            bool restored = LoadMLModelFile(path);
-                            if (restored) AddLog("WARN", "WinOptAI", "Restored ML model from backup after corruption");
-                            else AddLog("WARN", "WinOptAI", "Backup model also unreadable - starting fresh");
+                            _mlModelState = "RestoredFromBackup";
+                            AddLog("WARN", "WinOptAI", "Restored ML model from backup after corruption");
                         }
-                        catch (Exception ex) { LogError("ML.LoadBackup", ex); }
+                        else
+                        {
+                            _mlModelState = "Corrupt_StartingFresh";
+                            AddLog("WARN", "WinOptAI", "Backup model also unreadable - starting fresh with UNTRAINED ensembles");
+                        }
                     }
-                    else
-                    {
-                        AddLog("WARN", "WinOptAI", "ML model file corrupt and no backup found - starting fresh");
-                    }
+                    catch (Exception ex) { LogError("ML.LoadBackup", ex); _mlModelState = "Corrupt_StartingFresh"; }
+                }
+                else
+                {
+                    _mlModelState = "Corrupt_StartingFresh";
+                    AddLog("WARN", "WinOptAI", "ML model file corrupt and no backup found - starting fresh with UNTRAINED ensembles");
                 }
             }
         }
@@ -1819,7 +1895,13 @@ namespace ClearWin
                 if (rule == null) return ml;
                 if (ml == null) return rule;
                 if (rule.Action == "EmergencyThrottle") return rule;
-                if (ml.Confidence >= rule.Confidence - 0.10)
+                // Keep the state-explicit harness in lockstep with the live pipeline
+                // (ComputeWindowsOptimizationDecision above): only a strictly more
+                // confident ML decision may override a state-explicit rule. The old
+                // lenient `>= rule.Confidence - 0.10` let a weakly confident ML
+                // model replace high-confidence GPU/gaming rules, which broke the
+                // curriculum and 1-hour stress expectations.
+                if (ml.Confidence > rule.Confidence)
                 {
                     ml.Reason = rule.Reason + " | " + ml.Reason;
                     return ml;

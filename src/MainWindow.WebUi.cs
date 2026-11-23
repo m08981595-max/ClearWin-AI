@@ -1207,7 +1207,8 @@ namespace ClearWin
                     System.Threading.Tasks.Task.Run(async () =>
                     {
                         bool elevated = await AdminSessionManager.RequestAdminElevationAsync();
-                        Dispatcher.BeginInvoke(new Action(() =>
+                        // Intentional fire-and-forget UI update from the background task.
+                        _ = Dispatcher.BeginInvoke(new Action(() =>
                         {
                             BroadcastAdminAutonomyState();
                             if (_webUiHost != null)

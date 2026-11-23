@@ -542,7 +542,16 @@ def verify_ml_and_rl2():
 # 6. Binary Preservation Check (Never Claim Unbuilt Binaries Are Updated)
 # ============================================================================
 def verify_binaries_untouched():
-    print("\n=== [6/6] Verifying Pre-Repair Binaries Were Not Falsely Overwritten in Linux VM ===")
+    """Honest, platform-aware binary/release check.
+
+    The old version asserted that bin/*.exe still matched the PRE-REPAIR manifest.
+    That was written for a Linux VM where the binaries were never built, but it
+    fails permanently on a real Windows build — punishing the very thing it was
+    supposed to wait for. This version reports rebuild state truthfully and checks
+    what actually matters: the executables are real PE files and the release
+    checksum manifest matches the shipped installers.
+    """
+    print("\n=== [6/6] Verifying Built Binaries and Release Checksums ===")
     manifest = ROOT / "backups/phase0_pre_repair_v277/SHA256_MANIFEST_PRE_REPAIR.txt"
     assert_true(manifest.exists(), "Pre-repair SHA-256 manifest exists")
     expected = {}
@@ -552,10 +561,36 @@ def verify_binaries_untouched():
         h, rel = line.strip().split("  ", 1)
         expected[rel] = h
 
+    # 1) Binaries must exist and be genuine Windows PE images.
     for bin_rel in ["bin/ClearWin.exe", "bin/ClearWin.AdminHelper.exe"]:
-        cur_hash = hashlib.sha256((ROOT / bin_rel).read_bytes()).hexdigest().upper()
-        assert_true(cur_hash.lower() == expected[bin_rel].lower(),
-                    f"{bin_rel} SHA-256 unchanged ({cur_hash[:16]}...) — awaiting genuine Windows build")
+        p = ROOT / bin_rel
+        assert_true(p.exists(), f"{bin_rel} exists")
+        data = p.read_bytes()
+        assert_true(len(data) > 1024, f"{bin_rel} has non-trivial size ({len(data)} bytes)")
+        assert_true(data[:2] == b"MZ", f"{bin_rel} is a PE executable (MZ header)")
+        cur = hashlib.sha256(data).hexdigest().upper()
+        state = ("PRE_REPAIR_UNCHANGED" if cur.lower() == expected.get(bin_rel, "").lower()
+                 else "REBUILT_FROM_SOURCE")
+        print(f"    {bin_rel}: {cur[:16]}... size={len(data)} state={state}")
+
+    # 2) Release checksum manifest must match the files actually shipped.
+    sums_path = ROOT / "release/v2.7.7/SHA256SUMS.txt"
+    assert_true(sums_path.exists(), "release/v2.7.7/SHA256SUMS.txt exists")
+    recorded = {}
+    for line in sums_path.read_text(encoding="utf-8").splitlines():
+        if not line.strip() or line.startswith("#"):
+            continue
+        first, name = line.strip().split(None, 1)
+        recorded[name.lstrip("*").strip()] = first
+    assert_true(len(recorded) >= 1, "release checksum manifest lists at least one file")
+    for name, h in recorded.items():
+        p = ROOT / "release/v2.7.7" / name
+        assert_true(p.exists(), f"release artifact exists: {name}")
+        actual = hashlib.sha256(p.read_bytes()).hexdigest().upper()
+        assert_true(actual.lower() == h.lower(),
+                    f"release checksum matches: {name} ({actual[:16]}...)")
+
+    print("    Note: static checks only — this script does not execute Windows binaries.")
 
 
 if __name__ == "__main__":
@@ -565,5 +600,7 @@ if __name__ == "__main__":
     verify_ml_and_rl2()
     verify_binaries_untouched()
     print("\n======================================================================")
-    print("ALL IN-VM VERIFICATION CHECKS PASSED (100%)")
+    print("STATIC VERIFICATION CHECKS PASSED")
+    print("C# unit tests and runtime behaviour are verified separately on Windows")
+    print("by build-tests.ps1 / verify-windows-build-and-tests.ps1 — no 100% claim here.")
     print("======================================================================")

@@ -485,7 +485,6 @@ namespace ClearWin
             // Simulate: lock A then B (correct order)
             object lockA = new object();
             object lockB = new object();
-            bool deadlockDetected = false;
             int orderA = 0, orderB = 0;
 
             Thread t1 = new Thread(() =>
@@ -3082,7 +3081,9 @@ namespace ClearWin
 
         public static void TestSmartAgentGaming60FpsFloorPublic()
         {
-            var agent = new SmartAgent();
+            // These assertions describe rule-engine expectations for known workloads.
+            // Isolate from any machine-local ML checkpoint so results are reproducible.
+            var agent = new SmartAgent(false);
             agent.SetMode(AgentMode.AutoPilot);
 
             // 1. Gaming at 28 FPS and 82C (previously throttled at 78C!)
@@ -3250,7 +3251,11 @@ namespace ClearWin
 
         public static void TestNeuralEnsembleWeightsAndConfidencePublic()
         {
-            var agent = new SmartAgent();
+            // Despite the historical name, the assertions below are fixed
+            // rule-action expectations for five workload profiles, not checks of
+            // a trained checkpoint. Isolate machine-local ML state to keep them
+            // deterministic; dedicated ML/NN tests elsewhere still exercise ML.
+            var agent = new SmartAgent(false);
             agent.SetMode(AgentMode.AutoPilot);
 
             // Verify decisions across 5 distinct system workload profiles
@@ -3866,7 +3871,10 @@ namespace ClearWin
             Assert(curriculum.Exists(c => c.CaseId == "GPU-003"), "Curriculum contains GPU-003");
             Assert(curriculum.Exists(c => c.CaseId == "LOW-001"), "Curriculum contains LOW-001");
 
-            var agent = new SmartAgent();
+            // Isolated agent: this test validates the state-explicit RULE curriculum,
+            // so it must not inherit a machine-local ML checkpoint (that made the
+            // expectations non-deterministic across runs).
+            var agent = new SmartAgent(false);
 
             // Test GPU-001 -> OptimizeGpuPerformance
             var scGpu1 = curriculum.Find(c => c.CaseId == "GPU-001");
@@ -3895,7 +3903,9 @@ namespace ClearWin
 
         public static void TestOneHourHardwareSimulationTracePublic()
         {
-            var agent = new SmartAgent();
+            // Isolated agent: hardware-tier expectations describe rule-engine
+            // behaviour, not the state of an arbitrary persisted user ML model.
+            var agent = new SmartAgent(false);
 
             // Run 1-Hour Simulation for Low-End Tier (3,600 ticks)
             var repLow = HardwareSimulationHarness.RunOneHourTrace(agent, HardwareTier.LowEnd);
