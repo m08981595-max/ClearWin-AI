@@ -942,6 +942,13 @@ def run_step(weights_data, iter_num, apply_physical=True):
     else:
         chosen_action = max(range(NUM_ACTIONS), key=lambda i: probs[i])
 
+    # Safety-critical override: emergency RAM recovery (4) and bus/power guard (5)
+    # are never optional. Observed 2026-11-23 23:12:10: RAM 79% / 1693MB free,
+    # logits gave A4 probability 1.0 yet MAINTAIN was recorded (-2.00). Force the
+    # physics target for these two actions regardless of exploration or logits.
+    if physics_target in (4, 5) and chosen_action != physics_target:
+        chosen_action = physics_target
+
     reward, optimal_action, reasoning = evaluate_decision_physics(chosen_action, features, details)
 
     update_weights(weights, biases, features, chosen_action, optimal_action, reward,
