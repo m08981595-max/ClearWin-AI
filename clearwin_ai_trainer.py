@@ -73,7 +73,42 @@ WORKSPACE_DIR = os.path.dirname(os.path.abspath(__file__))
 WEIGHTS_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_weights.json")
 LOG_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_training_log.md")
 RECENT_FEED_FILE = os.path.join(WORKSPACE_DIR, "clearwin_ai_recent_feed.json")
+INSTALL_WEBUI_DIR = r"C:\Program Files\ClearWin\Resources\WebUI"
 TRIMMER_SCRIPT = r"C:\Users\maher\bin\ram-trimmer.ps1"
+
+def mirror_telemetry_to_install():
+    """Keep the installed WebUI telemetry fresh (the supervisor only syncs every 30 min).
+
+    This trainer runs elevated (scheduled task RunLevel=Highest), so it can write
+    to Program Files. Writes are atomic and content-checked; any failure is
+    non-fatal so telemetry mirroring can never stop the decision loop.
+    """
+    try:
+        if not os.path.isdir(INSTALL_WEBUI_DIR):
+            return
+        for name in ("clearwin_ai_recent_feed.json", "clearwin_ai_weights.json",
+                     "clearwin_governor_status.json"):
+            src = os.path.join(WORKSPACE_DIR, name)
+            dst = os.path.join(INSTALL_WEBUI_DIR, name)
+            if not os.path.exists(src):
+                continue
+            try:
+                with open(src, "rb") as sf:
+                    data = sf.read()
+                if os.path.exists(dst):
+                    with open(dst, "rb") as df:
+                        if df.read() == data:
+                            continue
+                tmp = dst + ".tmp"
+                with open(tmp, "wb") as tf:
+                    tf.write(data)
+                    tf.flush()
+                    os.fsync(tf.fileno())
+                os.replace(tmp, dst)
+            except Exception:
+                pass
+    except Exception:
+        pass
 
 # Pure Windows PC Action Space (Expanded with Hardware & Bus Stability Guard)
 ACTIONS = {
@@ -217,8 +252,19 @@ def load_weights():
                     if needs_save:
                         save_weights(data)
                     return data
-        except Exception:
-            pass
+        except Exception as exc:
+            # AI-01 fix: never silently discard a trained policy. Preserve the
+            # corrupt file for forensics, log loudly, and fall back safely.
+            _log_crash(f"load_weights failed to parse {WEIGHTS_FILE}: {exc!r}")
+            try:
+                stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+                corrupt_path = f"{WEIGHTS_FILE}.corrupt-{stamp}"
+                os.replace(WEIGHTS_FILE, corrupt_path)
+                _log_crash(f"Preserved unreadable weights file as {corrupt_path}")
+            except Exception as move_exc:
+                _log_crash(f"Could not preserve corrupt weights file: {move_exc!r}")
+    else:
+        _log_crash(f"load_weights: {WEIGHTS_FILE} missing, starting from defaults")
     data = json.loads(json.dumps(DEFAULT_WEIGHTS))
     hw, hb, ow, ob = init_deep_mlp(data["weights"])
     data["mlp_hidden_weights"] = hw
@@ -228,9 +274,27 @@ def load_weights():
     return data
 
 def save_weights(weights_data):
+    """Atomic weights persistence (AI-02 fix): write to .tmp, fsync, then os.replace.
+
+    Prevents partial/corrupted JSON if the process is killed or power is lost
+    mid-write. Works atomically on NTFS via os.replace.
+    """
     weights_data["updated_at"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    with open(WEIGHTS_FILE, "w", encoding="utf-8") as f:
-        json.dump(weights_data, f, indent=2)
+    tmp_file = WEIGHTS_FILE + ".tmp"
+    try:
+        with open(tmp_file, "w", encoding="utf-8") as f:
+            json.dump(weights_data, f, indent=2)
+            f.flush()
+            os.fsync(f.fileno())
+        os.replace(tmp_file, WEIGHTS_FILE)
+    except Exception as exc:
+        _log_crash(f"save_weights atomic write failed: {exc!r}")
+        try:
+            if os.path.exists(tmp_file):
+                os.remove(tmp_file)
+        except Exception:
+            pass
+        raise
 
 def collect_pc_telemetry():
     """Extract real live hardware & OS telemetry from THIS Windows PC."""
@@ -417,6 +481,9 @@ def compute_action_distribution(features, weights, biases,
             z = mlp_hidden_biases[h] if mlp_hidden_biases and h < len(mlp_hidden_biases) else 0.0
             for f in range(NUM_FEATURES):
                 z += mlp_hidden_weights[h][f] * features[f]
+            # Stability guard: an unbounded MLP can overflow into ±1e9 logits and
+            # permanently override every physics guardrail. Clip pre-activation.
+            z = max(-8.0, min(8.0, z))
             hidden_z.append(z)
             act = z if z > 0 else 0.1 * z  # LeakyReLU(0.1)
             hidden_a.append(act)
@@ -426,6 +493,8 @@ def compute_action_distribution(features, weights, biases,
             zo = mlp_output_biases[a] if mlp_output_biases and a < len(mlp_output_biases) else 0.0
             for h in range(num_h):
                 zo += mlp_output_weights[a][h] * hidden_a[h]
+            # Bound the residual contribution so the linear physics policy stays decisive.
+            zo = max(-12.0, min(12.0, zo))
             logits.append(linear_logits[a] + residual_scale * zo)
     else:
         logits = linear_logits
@@ -587,12 +656,16 @@ def update_weights(weights, biases, features, chosen_action, optimal_action, rew
             delta_out[optimal_action] += lr * 1.0
             delta_out[chosen_action] -= lr * 0.6
 
+        # Clip the output error signal before backprop: with unbounded W_o the
+        # hidden gradient explodes and corrupts the whole policy in a few steps.
+        delta_out = [max(-0.5, min(0.5, d)) for d in delta_out]
+
         # Hidden layer delta: delta_h = (W_o^T * delta_out) * LeakyReLU'(z)
         delta_h = [0.0] * num_h
         for h in range(num_h):
             grad_sum = sum(mlp_output_weights[a][h] * delta_out[a] for a in range(NUM_ACTIONS))
             deriv = 1.0 if hidden_z[h] > 0 else 0.1
-            delta_h[h] = grad_sum * deriv
+            delta_h[h] = max(-0.5, min(0.5, grad_sum * deriv))
 
         # Update Output Layer (W_o, b_o)
         for a in range(NUM_ACTIONS):
@@ -607,6 +680,19 @@ def update_weights(weights, biases, features, chosen_action, optimal_action, rew
                 mlp_hidden_weights[h][f] += delta_h[h] * features[f] * 0.5
             if mlp_hidden_biases and h < len(mlp_hidden_biases):
                 mlp_hidden_biases[h] += delta_h[h] * 0.05
+
+        # Final parameter clamp: keeps every MLP parameter inside a bounded
+        # envelope even if an earlier checkpoint arrived already diverged.
+        for a in range(NUM_ACTIONS):
+            for h in range(num_h):
+                mlp_output_weights[a][h] = max(-3.0, min(3.0, mlp_output_weights[a][h]))
+            if mlp_output_biases and a < len(mlp_output_biases):
+                mlp_output_biases[a] = max(-3.0, min(3.0, mlp_output_biases[a]))
+        for h in range(num_h):
+            for f in range(NUM_FEATURES):
+                mlp_hidden_weights[h][f] = max(-3.0, min(3.0, mlp_hidden_weights[h][f]))
+            if mlp_hidden_biases and h < len(mlp_hidden_biases):
+                mlp_hidden_biases[h] = max(-3.0, min(3.0, mlp_hidden_biases[h]))
 
 _last_trim_timestamp = 0.0
 _last_defrag_timestamp = 0.0
@@ -799,6 +885,7 @@ def record_log(iteration, chosen_action, optimal_action, reward, details, reason
                     feed.extend(old_feed[:34])
         with open(RECENT_FEED_FILE, "w", encoding="utf-8") as ff:
             json.dump(feed, ff, indent=2, ensure_ascii=False)
+        mirror_telemetry_to_install()
     except Exception:
         pass
 
