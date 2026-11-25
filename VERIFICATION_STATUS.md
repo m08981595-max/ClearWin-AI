@@ -42,9 +42,10 @@ The self-signed certificate `CN=ClearWin Technologies` (thumbprint `DF4A1FD31F8E
 |---|---|
 | `_ClearWin_Engine/bin/Release/net472/ClearWin.exe` | **Valid** — `Signature verified.` Signer `CN=ClearWin Technologies`, DigiCert timestamp |
 | `_ClearWin_Engine/bin/Release/net472/ClearWin.AdminHelper.exe` | **Valid** — `Signature verified.` Same signer and timestamp |
-| `clearwin_v19_scrollbar_control/ClearWin-Setup.exe` | **NotSigned** |
+| `_ClearWin_Engine/release/v2.7.7/ClearWin-Setup-2.7.7.exe` | **Valid** — `Signature verified.` Same signer and DigiCert timestamp; rebuilt from the SDK Release output |
+| `_ClearWin_Engine/ClearWin-Setup.exe` (web bootstrapper) | **NotSigned** |
 
-**Impact and limits:** local SmartScreen/UAC trust warnings are bypassed **on this machine only**, because the self-signed root is in the current user's Trusted Root store. This does **not** transfer to other machines: a CA-issued certificate is still required for distribution. The AdminHelper binary was copied from the legacy `bin/` output into `bin/Release/net472/` before signing, because the SDK-style project does not yet emit that second executable. The installer has not been rebuilt or signed yet.
+**Impact and limits:** local SmartScreen/UAC trust warnings are bypassed **on this machine only**, because the self-signed root is in the current user's Trusted Root store. This does **not** transfer to other machines: a CA-issued certificate is still required for distribution. The AdminHelper binary was copied from the legacy `bin/` output into `bin/Release/net472/` before signing, because the SDK-style project does not yet emit that second executable. `installer.iss` now packages `bin\Release\net472` (including `Resources\AI`) and `SHA256SUMS.txt` was refreshed after the rebuild; the web bootstrapper remains unsigned.
 
 Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitute for signing): ephemeral 32-byte bridge token with Origin/Referer checks in `LocalWebBridge.cs`, web-action allowlist in `WebUiHost.cs`, and AdminHelper named-pipe parent-PID authentication in `AdminHelperProgram.cs`.
 
@@ -75,8 +76,8 @@ Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitut
 | # | Action | Why |
 |---|---|---|
 | P1 | Decide whether to retire `build.ps1` | SDK build is green with zero warnings |
-| P0 | Rebuild the Inno Setup installer with the signed binaries, then sign the installer itself | Installers are still unsigned and package stale binaries |
-| P1 | Add AdminHelper to the SDK build and replace the local self-signed root with a CA-issued certificate for distribution | Current trust is local-only |
+| P1 | Sign the root web bootstrapper and replace the local self-signed root with a CA-issued certificate for distribution | Current trust is local-only; bootstrapper is still unsigned |
+| P1 | Add AdminHelper as a second SDK project instead of copying the legacy binary | Release packaging currently depends on a legacy build artifact |
 | P0 | Inject a trained `ml_nn_v2.dat` into fresh install packages | Cold-start neural behaviour is unvalidated |
 | P1 | Re-run `build-tests.ps1` and record the actual pass/fail count | No current test evidence |
 | P1 | VM-validate the 4 locked tweaks | 4/27 tweaks are still unverified |

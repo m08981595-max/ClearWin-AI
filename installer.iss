@@ -16,6 +16,7 @@
 #define MyAppVersion "2.7.7"
 #define MyAppPublisher "Abdullah Mohamed"
 #define MyAppExeName "ClearWin.exe"
+#define BuildDir "bin\Release\net472"
 #define MyAppId "{{8D2F7C31-6A5B-4C89-9E37-C1B9A7D6E2F4}}"
 
 [Setup]
@@ -46,20 +47,22 @@ RestartIfNeededByRun=no
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-; Core executable + WebView2 runtime + app icon
-Source: "bin\ClearWin.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\ClearWin.AdminHelper.exe"; DestDir: "{app}"; Flags: ignoreversion
+; Core executable + WebView2 runtime + app icon (SDK Release output)
+Source: "{#BuildDir}\ClearWin.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\ClearWin.AdminHelper.exe"; DestDir: "{app}"; Flags: ignoreversion
 #if DirExists(AddBackslash(SourcePath) + "bin\python")
 Source: "bin\python\*"; DestDir: "{app}\python"; Flags: ignoreversion recursesubdirs createallsubdirs
 #endif
-Source: "bin\app.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Microsoft.Web.WebView2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\Microsoft.Web.WebView2.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "bin\runtimes\win-x64\native\WebView2Loader.dll"; DestDir: "{app}\runtimes\win-x64\native"; Flags: ignoreversion
+Source: "{#BuildDir}\app.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\Microsoft.Web.WebView2.Core.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\Microsoft.Web.WebView2.Wpf.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{#BuildDir}\runtimes\win-x64\native\WebView2Loader.dll"; DestDir: "{app}\runtimes\win-x64\native"; Flags: ignoreversion
 ; Web UI (WebView2 page)
-Source: "bin\Resources\WebUI\*"; DestDir: "{app}\Resources\WebUI"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#BuildDir}\Resources\WebUI\*"; DestDir: "{app}\Resources\WebUI"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Tweak engine: apply.ps1 + undo.ps1 + meta.json per tweak
-Source: "bin\Resources\tweaks\*"; DestDir: "{app}\Resources\tweaks"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{#BuildDir}\Resources\tweaks\*"; DestDir: "{app}\Resources\tweaks"; Flags: ignoreversion recursesubdirs createallsubdirs
+; Hybrid AI audited weights baseline
+Source: "{#BuildDir}\Resources\AI\*"; DestDir: "{app}\Resources\AI"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; Legal + post-install runtime check
 Source: "LICENSE"; DestDir: "{app}"; Flags: ignoreversion
 Source: "EULA.txt"; DestDir: "{app}"; Flags: ignoreversion
