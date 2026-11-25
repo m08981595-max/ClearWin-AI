@@ -30,21 +30,21 @@ The Hybrid SmartAgent architecture is present in source and committed at `ecfef0
 - Native WPF-UI 4.0.3 Mica backdrop is implemented in `src/MainWindow.NativeUI.cs` via DWM / `WindowBackdropType.Mica`.
 - XAML views and ViewModels are present and committed: `Views/AiSettingsPage.xaml(.cs)`, `Views/GameBoostPage.xaml(.cs)`, `Views/SettingsPage.xaml(.cs)`, `src/ViewModels/GameBoostViewModel.cs`, plus `src/MainWindow.HybridAI.cs` code-behind.
 - **Build system (updated 2026-11-25, after this report was committed):** an SDK-style `ClearWin.csproj` now exists at `_ClearWin_Engine/ClearWin.csproj` with `net472`, `UseWPF=true`, `Views\**\*.xaml` Page items, WPF-UI 4.0.3 and WebView2 1.0.4191.47. The three Views XAML files now carry `x:Class`, and `src/MainWindow.NativeUI.cs` instantiates compiled pages instead of using `XamlReader.Load`.
-- **Build verification (`MEASURED`, 2026-11-25):** .NET SDK **8.0.428** was installed with winget. `dotnet build ClearWin.csproj -c Release` **succeeded** (exit 0, 1m00s, **0 errors / 1 warning** — `CS0169 UI._cachedGlassShadow` unused). Output: `bin/Release/net472/ClearWin.exe` (1,804,800 bytes). The WPF markup compiler generated `Views/{GameBoostPage,AiSettingsPage,SettingsPage}.baml` plus matching `.g.cs` files containing `InitializeComponent()`, confirming the XAML views are now compiled (BAML) instead of parsed at runtime. `build.ps1` remains only as a legacy fallback.
+- **Build verification (`MEASURED`, 2026-11-25):** .NET SDK **8.0.428** was installed with winget. `dotnet build ClearWin.csproj -c Release` **succeeded** (exit 0; first run 1m00s with 1 warning, then **0 errors / 0 warnings** after removing the unused `_cachedGlassShadow` field; incremental rebuild 12s). Output: `bin/Release/net472/ClearWin.exe` (1,804,800 bytes). The WPF markup compiler generated `Views/{GameBoostPage,AiSettingsPage,SettingsPage}.baml` plus matching `.g.cs` files containing `InitializeComponent()`, confirming the XAML views are now compiled (BAML) instead of parsed at runtime. `build.ps1` remains only as a legacy fallback.
 
 ---
 
-## 3. Security — BINARIES UNSIGNED (`MEASURED`)
+## 3. Security — MAIN BINARIES SIGNED, INSTALLERS STILL UNSIGNED (`MEASURED`)
 
-`Get-AuthenticodeSignature` executed on 2026-11-25 returned:
+The self-signed certificate `CN=ClearWin Technologies` (thumbprint `DF4A1FD31F8ECC91E237492EBBBF45DAC675DAA6`, valid to 2027-11-25) was added to **CurrentUser\Root** on this machine. `Get-AuthenticodeSignature` then returned:
 
 | File | Status |
 |---|---|
-| `_ClearWin_Engine/bin/ClearWin.exe` | **NotSigned** |
-| `_ClearWin_Engine/bin/ClearWin.AdminHelper.exe` | **NotSigned** |
+| `_ClearWin_Engine/bin/Release/net472/ClearWin.exe` | **Valid** — `Signature verified.` Signer `CN=ClearWin Technologies`, DigiCert timestamp |
+| `_ClearWin_Engine/bin/Release/net472/ClearWin.AdminHelper.exe` | **Valid** — `Signature verified.` Same signer and timestamp |
 | `clearwin_v19_scrollbar_control/ClearWin-Setup.exe` | **NotSigned** |
 
-**Impact:** no publisher identity, likely SmartScreen / Defender warnings on fresh machines.
+**Impact and limits:** local SmartScreen/UAC trust warnings are bypassed **on this machine only**, because the self-signed root is in the current user's Trusted Root store. This does **not** transfer to other machines: a CA-issued certificate is still required for distribution. The AdminHelper binary was copied from the legacy `bin/` output into `bin/Release/net472/` before signing, because the SDK-style project does not yet emit that second executable. The installer has not been rebuilt or signed yet.
 
 Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitute for signing): ephemeral 32-byte bridge token with Origin/Referer checks in `LocalWebBridge.cs`, web-action allowlist in `WebUiHost.cs`, and AdminHelper named-pipe parent-PID authentication in `AdminHelperProgram.cs`.
 
@@ -63,8 +63,8 @@ Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitut
 ## 5. Source control state (`MEASURED`)
 
 - Git repository root: `_ClearWin_Engine` (the project root is **not** a Git repository).
-- Latest commit: `ecfef03 feat(ai-engine): integrate Hybrid SmartAgent with native WPF-UI (Mica) and ViewModels` — 80 files, 64,433 insertions, 95 deletions. This secured the previously untracked Hybrid AI source, ViewModels, XAML views and WPF-UI package.
-- Working tree was clean immediately before this status update; **no push was performed**. Remote: `https://github.com/m08981595-max/ClearWin-AI.git`.
+- Local commits made in this session: `ecfef03` (Hybrid AI source secured), `f042537` (fake verification claims purged), `5a1dbfe` (SDK-style csproj + compiled XAML). **No push was performed.** Remote: `https://github.com/m08981595-max/ClearWin-AI.git`.
+- The `CS0169` fix in `src/ClearWin.Controls.cs` and the updated signature status below are staged for the next cumulative commit in this cleanup sequence.
 - The fake independent-verification document `_ClearWin_Engine/reports/ClearWin_AI_v2.7.7_Independent_Verification_Report.md` has been **deleted** (deletion staged in Git). Its original text was never a separate audit: it was a byte-identical copy of the internal engineering audit, later rewritten only to confess that fact. No unique evidence was lost.
 - Duplicate audit resolved: `_ClearWin_Engine/reports/ClearWin_AI_v2.7.7_Engineering_Audit_Report.md` was byte-identical to `_ClearWin_Engine/ENGINEERING_AUDIT_REPORT_AR.md` and has been deleted; the root AR file is canonical (it is linked from README and product-readiness-report). `FINAL_PRODUCTION_LAUNCH_REPORT.md` has been rewritten: the fake quad-agent sign-offs, certificate codes and "100% independent" claims were removed and replaced with factual internal-review statements.
 
@@ -74,8 +74,9 @@ Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitut
 
 | # | Action | Why |
 |---|---|---|
-| P1 | Remove the `CS0169` warning and decide whether to retire `build.ps1` | Release build is green; this is cleanup, not a blocker |
-| P0 | Authenticode-sign `ClearWin.exe`, `ClearWin.AdminHelper.exe`, installers | SmartScreen / Defender trust |
+| P1 | Decide whether to retire `build.ps1` | SDK build is green with zero warnings |
+| P0 | Rebuild the Inno Setup installer with the signed binaries, then sign the installer itself | Installers are still unsigned and package stale binaries |
+| P1 | Add AdminHelper to the SDK build and replace the local self-signed root with a CA-issued certificate for distribution | Current trust is local-only |
 | P0 | Inject a trained `ml_nn_v2.dat` into fresh install packages | Cold-start neural behaviour is unvalidated |
 | P1 | Re-run `build-tests.ps1` and record the actual pass/fail count | No current test evidence |
 | P1 | VM-validate the 4 locked tweaks | 4/27 tweaks are still unverified |

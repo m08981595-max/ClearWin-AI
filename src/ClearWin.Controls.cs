@@ -20,7 +20,6 @@ namespace ClearWin
         // Cached frozen brushes/effects - prevents 529+ allocations per tick (GC/flicker fix)
         private static LinearGradientBrush _cachedGlassFill;
         private static LinearGradientBrush _cachedGlassBorder;
-        private static DropShadowEffect _cachedGlassShadow;
 
         // Glass fill: translucent dark-purple/blue frosted body with subtle top reflection highlight
         public static LinearGradientBrush GlassFill()
