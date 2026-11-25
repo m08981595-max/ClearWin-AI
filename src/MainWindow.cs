@@ -976,7 +976,7 @@ namespace ClearWin
                 CornerRadius = new CornerRadius(16),
                 Margin = new Thickness(0, 6, 0, 0),
                 MaxHeight = 304,
-                Effect = new DropShadowEffect { Color = Colors.Black, BlurRadius = 16, ShadowDepth = 4, Opacity = 0.15, Direction = 315 }
+                Effect = null
             };
             resultsBorder.Child = _searchResults;
             _searchResults.KeyDown += SearchResults_KeyDown;
@@ -1290,14 +1290,14 @@ namespace ClearWin
                 Background = new SolidColorBrush(isOn ? trackOn : Theme.BorderClr),
                 Cursor = Cursors.Hand, Margin = new Thickness(0, 0, 8, 0),
                 HorizontalAlignment = HorizontalAlignment.Right, VerticalAlignment = VerticalAlignment.Center,
-                Effect = isOn ? new DropShadowEffect { Color = trackOn, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.4 } : null
+                Effect = null
             };
             var thumb = new Border {
                 Width = 18, Height = 18, CornerRadius = new CornerRadius(9),
                 Background = new SolidColorBrush(Colors.White),
                 Margin = new Thickness(isOn ? 23 : 3, 0, 0, 0),
                 HorizontalAlignment = HorizontalAlignment.Left, VerticalAlignment = VerticalAlignment.Center,
-                Effect = new DropShadowEffect { Color = Colors.Black, BlurRadius = 6, ShadowDepth = 1, Opacity = 0.5 }
+                Effect = null
             };
             track.Child = thumb;
             track.MouseDown += (s, e) =>
@@ -1305,7 +1305,7 @@ namespace ClearWin
                 bool newState = !(track.Background is SolidColorBrush && ((SolidColorBrush)track.Background).Color == trackOn);
                 track.Background = new SolidColorBrush(newState ? trackOn : Theme.BorderClr);
                 thumb.Margin = new Thickness(newState ? 23 : 3, 0, 0, 0);
-                track.Effect = newState ? new DropShadowEffect { Color = trackOn, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.4 } : null;
+                track.Effect = null;
                 onToggle(newState);
             };
             return track;
@@ -1360,7 +1360,7 @@ namespace ClearWin
 
         private void BuildUI()
         {
-            CWLog.Info("UI", "Building ClearWin Modern Web Glass UI");
+            CWLog.Info("UI", "Building ClearWin Light WebView2 Glass UI (Mica, no CPU shadows)");
             try
             {
                 _mainContent = new ContentControl { Visibility = Visibility.Collapsed };
@@ -1373,13 +1373,15 @@ namespace ClearWin
                 Grid.SetRow(titleBar, 0);
                 root.Children.Add(titleBar);
 
-                // Main workspace: Embedded modern WebView2 UI
+                // Main workspace: WebView2 dashboard restored, but kept light:
+                // DWM Mica backdrop + no CPU-rendered WPF shadow effects.
+                ApplyNativeBackdrop();
                 _webUiHost = new WebUiHost(this);
                 Grid.SetRow(_webUiHost, 1);
                 root.Children.Add(_webUiHost);
 
                 Content = root;
-                CWLog.Info("UI", "ClearWin Modern Web Glass UI loaded successfully as primary interface");
+                CWLog.Info("UI", "ClearWin Light WebView2 Glass UI loaded successfully as primary interface");
             }
             catch (Exception ex)
             {
@@ -1440,7 +1442,7 @@ namespace ClearWin
             logoGrad.GradientStops.Add(new GradientStop(Theme.Accent, 0));
             logoGrad.GradientStops.Add(new GradientStop(Theme.Green, 1));
             var logoBg = new Border { Width = 42, Height = 42, CornerRadius = new CornerRadius(12), Background = logoGrad,
-                Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 16, ShadowDepth = 0, Opacity = 0.35 } };
+                Effect = null };
             var logoChar = MakeText("C", 21, Colors.White, true);
             logoChar.HorizontalAlignment = HorizontalAlignment.Center; logoChar.VerticalAlignment = VerticalAlignment.Center;
             logoBg.Child = logoChar;
@@ -1512,7 +1514,7 @@ namespace ClearWin
             var modeCard = new Border { Margin = new Thickness(10, 8, 10, 14), Padding = new Thickness(14, 12, 14, 12), CornerRadius = new CornerRadius(14),
                 Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop(Color.FromArgb(28, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B), 0), new GradientStop(Color.FromArgb(12, Theme.CardClr.R, Theme.CardClr.G, Theme.CardClr.B), 1) } },
                 BorderBrush = new SolidColorBrush(Color.FromArgb(90, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B)), BorderThickness = new Thickness(1),
-                Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 18, ShadowDepth = 0, Opacity = 0.18 } };
+                Effect = null };
             var modeStack = new StackPanel();
             var modeHead = new StackPanel { Orientation = Orientation.Horizontal };
             modeHead.Children.Add(MakeText("الوضع الحالي", 10.5, Theme.TextMuted, false));
@@ -1552,7 +1554,7 @@ namespace ClearWin
                 border.Background = Theme.NavActiveGradient;
                 border.BorderBrush = new SolidColorBrush(Color.FromArgb(90, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B));
                 border.BorderThickness = new Thickness(1);
-                border.Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.25 };
+                border.Effect = null;
             }
             var dock = new DockPanel();
             var iconCol = active ? Theme.Accent : Color.FromArgb(150, 255, 255, 255);
@@ -1635,7 +1637,7 @@ namespace ClearWin
                 item.Background = Theme.NavActiveGradient;
                 item.BorderBrush = new SolidColorBrush(Color.FromArgb(90, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B));
                 item.BorderThickness = new Thickness(1);
-                item.Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.25 };
+                item.Effect = null;
                 // Add active indicator bar to new nav
                 var dock = item.Child as DockPanel;
                 if (dock != null)
@@ -1715,7 +1717,7 @@ namespace ClearWin
                 Padding = new Thickness(12, 6, 12, 6),
                 Cursor = Cursors.Hand,
                 Margin = new Thickness(0, 0, 8, 0),
-                Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 10, ShadowDepth = 0, Opacity = 0.2 }
+                Effect = null
             };
             var aiTransRow = new StackPanel { Orientation = Orientation.Horizontal };
             aiTransRow.Children.Add(MakeText("\uE9CE", 12, Theme.Accent, false));
@@ -1736,7 +1738,7 @@ namespace ClearWin
                 Padding = new Thickness(12, 6, 12, 6),
                 Cursor = Cursors.Hand,
                 Margin = new Thickness(0, 0, 8, 0),
-                Effect = new DropShadowEffect { Color = Theme.Green, BlurRadius = 10, ShadowDepth = 0, Opacity = 0.2 }
+                Effect = null
             };
             var boostRow = new StackPanel { Orientation = Orientation.Horizontal };
             boostRow.Children.Add(MakeText("\uE768", 12, Theme.Green, false));
@@ -1766,7 +1768,7 @@ namespace ClearWin
                 Padding = new Thickness(12, 6, 12, 6),
                 Cursor = Cursors.Hand,
                 Margin = new Thickness(0, 0, 8, 0),
-                Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 10, ShadowDepth = 0, Opacity = 0.15 }
+                Effect = null
             };
             var aiRow = new StackPanel { Orientation = Orientation.Horizontal };
             aiRow.Children.Add(MakeText("\uE99A", 12, Theme.Accent, false));

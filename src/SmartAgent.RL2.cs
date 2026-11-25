@@ -350,6 +350,8 @@ namespace ClearWin
         /// </summary>
         private void ApplyDoubleQUpdateLocked(string stateKey, string action, double reward, string nextStateKey, double lr, bool updateA)
         {
+            // HYBRID FREEZE: hard gate on every Double-Q weight mutation.
+            if (_hybridInferenceFrozen) return;
             if (updateA)
             {
                 double nextVal = 0.0;

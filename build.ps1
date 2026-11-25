@@ -146,6 +146,12 @@ if ($iconArg) { $compilerArgs += $iconArg }
 $compilerArgs += $refArgs
 $compilerArgs += "/reference:$($wvCore.FullName)"
 $compilerArgs += "/reference:$($wvWpf.FullName)"
+# WPF-UI 4.0.3 (native DWM Mica/Acrylic controls), net472 asset for .NET Framework.
+$wpfUiDir = Join-Path $projectRoot "tools\wpfui-4.0.3\lib\net472"
+$wpfUiCore = Join-Path $wpfUiDir "Wpf.Ui.dll"
+$wpfUiAbstractions = Join-Path $wpfUiDir "Wpf.Ui.Abstractions.dll"
+if (Test-Path $wpfUiCore) { $compilerArgs += "/reference:$wpfUiCore" }
+if (Test-Path $wpfUiAbstractions) { $compilerArgs += "/reference:$wpfUiAbstractions" }
 $compilerArgs += $csFiles
 Write-Host "Compiling ClearWin.exe..."
 & $csc @compilerArgs
@@ -187,6 +193,8 @@ if (Test-Path $exePath) {
     Copy-Item -Path "$projectRoot\Resources\app.ico" -Destination $outDir -Force -ErrorAction SilentlyContinue
     Copy-Item -Path $wvCore.FullName -Destination $outDir -Force -ErrorAction SilentlyContinue
     Copy-Item -Path $wvWpf.FullName -Destination $outDir -Force -ErrorAction SilentlyContinue
+    Copy-Item -Path $wpfUiCore -Destination $outDir -Force -ErrorAction SilentlyContinue
+    Copy-Item -Path $wpfUiAbstractions -Destination $outDir -Force -ErrorAction SilentlyContinue
     $loaderDest = Join-Path $outDir "runtimes\win-x64\native"
     if (-not (Test-Path $loaderDest)) { New-Item -ItemType Directory -Path $loaderDest -Force | Out-Null }
     Copy-Item -Path $wvLoader.FullName -Destination (Join-Path $loaderDest "WebView2Loader.dll") -Force -ErrorAction SilentlyContinue
@@ -194,6 +202,19 @@ if (Test-Path $exePath) {
     if (Test-Path $webDest) { Remove-Item $webDest -Recurse -Force }
     New-Item -ItemType Directory -Path $webDest -Force | Out-Null
     Copy-Item -Path "$projectRoot\Resources\WebUI\*" -Destination $webDest -Recurse -Force
+    # Hybrid AI immutable baseline (audited weights) must ship with the executable.
+    $aiDest = Join-Path $outDir "Resources\AI"
+    if (Test-Path "$projectRoot\Resources\AI") {
+        if (-not (Test-Path $aiDest)) { New-Item -ItemType Directory -Path $aiDest -Force | Out-Null }
+        Copy-Item -Path "$projectRoot\Resources\AI\*" -Destination $aiDest -Recurse -Force
+    }
+    # Native WPF-UI pages are parsed at runtime with XamlReader.Load.
+    $viewsSrc = Join-Path $projectRoot "Views"
+    $viewsDest = Join-Path $outDir "Views"
+    if (Test-Path $viewsSrc) {
+        if (Test-Path $viewsDest) { Remove-Item $viewsDest -Recurse -Force }
+        Copy-Item -Path $viewsSrc -Destination $viewsDest -Recurse -Force
+    }
     $tweaksDest = Join-Path $outDir "Resources\tweaks"
     if (Test-Path "$projectRoot\Resources\tweaks") {
         if (-not (Test-Path $tweaksDest)) { New-Item -ItemType Directory -Path $tweaksDest -Force | Out-Null }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,14 +59,11 @@ namespace ClearWin
             return b;
         }
 
-        // Soft light shadow for glass bubbles with glowing purple tint
+        // Light mode: no CPU-rendered WPF shadow. Mica/DWM supplies the depth.
+        // Kept as a method so all existing call sites stay source-compatible.
         public static DropShadowEffect GlassShadow()
         {
-            if (_cachedGlassShadow != null) return _cachedGlassShadow;
-            var e = new DropShadowEffect { Color = Color.FromRgb(139, 92, 246), BlurRadius = 14, ShadowDepth = 2, Opacity = 0.12, Direction = 315 };
-            if (e.CanFreeze) e.Freeze();
-            _cachedGlassShadow = e;
-            return e;
+            return null;
         }
 
         public static Border GlassCard(double radius, Color? accentColor, Thickness margin)
@@ -260,12 +257,7 @@ namespace ClearWin
             dot.Background = new SolidColorBrush(dotColor);
             dot.Margin = new Thickness(0, 0, 6, 0);
             dot.VerticalAlignment = VerticalAlignment.Center;
-            var effect = new DropShadowEffect();
-            effect.Color = dotColor;
-            effect.BlurRadius = 6;
-            effect.ShadowDepth = 0;
-            effect.Opacity = 0.6;
-            dot.Effect = effect;
+            dot.Effect = null; // light mode: no CPU shadow
             sp.Children.Add(dot);
             sp.Children.Add(Text(text, 11, dotColor, true));
             return sp;
@@ -345,12 +337,7 @@ namespace ClearWin
             dot.CornerRadius = new CornerRadius(5);
             dot.Background = new SolidColorBrush(iconClr);
             dot.HorizontalAlignment = HorizontalAlignment.Center;
-            var dotEffect = new DropShadowEffect();
-            dotEffect.Color = iconClr;
-            dotEffect.BlurRadius = 8;
-            dotEffect.ShadowDepth = 0;
-            dotEffect.Opacity = 0.5;
-            dot.Effect = dotEffect;
+            dot.Effect = null; // light mode: no CPU shadow
             dotCol.Children.Add(dot);
             sp.Children.Add(dotCol);
 
@@ -428,15 +415,7 @@ namespace ClearWin
             node.BorderThickness = new Thickness(isActive ? 2 : 1);
             node.Margin = new Thickness(0, 0, 0, 4);
             node.Padding = new Thickness(14, 8, 14, 8);
-            if (isActive)
-            {
-                var glow = new DropShadowEffect();
-                glow.Color = accent;
-                glow.BlurRadius = 12;
-                glow.ShadowDepth = 0;
-                glow.Opacity = 0.3;
-                node.Effect = glow;
-            }
+            // Light mode: active state is expressed by border/background only.
             node.Child = Text(text, 12, isActive ? Theme.TextPrimary : Theme.TextSecondary, isActive);
             return node;
         }
@@ -454,15 +433,7 @@ namespace ClearWin
                 : new SolidColorBrush(Theme.CardClr);
             btn.BorderBrush = new SolidColorBrush(isSelected ? accent : Theme.BorderClr);
             btn.BorderThickness = new Thickness(1.5);
-            if (isSelected)
-            {
-                var glow = new DropShadowEffect();
-                glow.Color = accent;
-                glow.BlurRadius = 10;
-                glow.ShadowDepth = 0;
-                glow.Opacity = 0.25;
-                btn.Effect = glow;
-            }
+            // Light mode: selection is expressed by border/background only.
 
             var row = new StackPanel { Orientation = Orientation.Horizontal };
             var ico = Text(icon, 16, accent, false);

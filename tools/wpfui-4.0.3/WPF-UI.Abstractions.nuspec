@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>WPF-UI.Abstractions</id>
+    <version>4.0.3</version>
+    <authors>lepo.co</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <icon>Icon.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://github.com/lepoco/wpfui</projectUrl>
+    <iconUrl>https://github.com/lepoco/wpfui/main/build/nuget.png</iconUrl>
+    <description>Abstractions for the WPF UI.</description>
+    <releaseNotes>https://github.com/lepoco/wpfui/releases</releaseNotes>
+    <copyright>Copyright (C) 2021-2025 Leszek Pomianowski and WPF UI Contributors</copyright>
+    <tags>lepoco toolkit wpf fluent navigation controls design icons system accent theme winui abstractions standard .NET</tags>
+    <repository type="git" url="https://github.com/lepoco/wpfui" branch="main" commit="7535b9135b24acae83b7097023928a8efbd153aa" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.6.2" />
+      <group targetFramework=".NETFramework4.7.2" />
+      <group targetFramework="net6.0" />
+      <group targetFramework="net8.0" />
+      <group targetFramework="net9.0" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework=".NETStandard2.1" />
+    </dependencies>
+  </metadata>
+</package>

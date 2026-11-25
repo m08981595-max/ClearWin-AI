@@ -278,7 +278,7 @@ namespace ClearWin
                         HorizontalAlignment = HorizontalAlignment.Right,
                         VerticalAlignment = VerticalAlignment.Bottom,
                         Margin = new Thickness(0, 0, 24, 60),
-                        Effect = new DropShadowEffect { BlurRadius = 24, Opacity = 0.25, ShadowDepth = 0, Color = Colors.Black }
+                        Effect = null
                     };
                     var toastGrid = new Grid();
                     toastGrid.ColumnDefinitions.Add(new ColumnDefinition());

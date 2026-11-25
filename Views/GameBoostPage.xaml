@@ -1,0 +1,36 @@
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Game Boost" Foreground="White">
+    <Grid Margin="24">
+        <StackPanel>
+            <TextBlock Text="Engine Optimization" FontSize="28" FontWeight="Bold" Margin="0,0,0,24"/>
+            
+            <ui:CardControl Margin="0,0,0,16" Background="#11FFFFFF" BorderBrush="#22FFFFFF">
+                <ui:CardControl.Header>
+                    <StackPanel>
+                        <TextBlock Text="Hybrid SmartAgent" FontWeight="SemiBold" FontSize="16"/>
+                        <TextBlock Text="80% Hardcoded Rules | 20% Neural Inference" FontSize="12" Opacity="0.6" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </ui:CardControl.Header>
+                <StackPanel Orientation="Horizontal">
+                    <ui:ToggleSwitch IsChecked="{Binding AggressiveMode}" Content="Aggressive Mode (Force-kill Edge/Teams)" />
+                </StackPanel>
+            </ui:CardControl>
+
+            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                <ui:Button Command="{Binding BoostCommand}" Content="Activate Game Boost" Appearance="Primary" Icon="{ui:SymbolIcon Rocket24}" Margin="0,0,12,0" Padding="20,10"/>
+                <ui:Button Command="{Binding CancelCommand}" Content="Stop" Appearance="Danger" Icon="{ui:SymbolIcon Stop24}" Margin="0,0,12,0"/>
+                <ui:Button Command="{Binding RestoreAiCommand}" Content="Restore AI Baseline" Appearance="Secondary" Icon="{ui:SymbolIcon History24}"/>
+            </StackPanel>
+
+            <ui:Card Margin="0,24,0,0" Background="#0AFFFFFF" BorderThickness="0">
+                <StackPanel>
+                    <TextBlock Text="Live Status" FontWeight="SemiBold" Margin="0,0,0,8" Opacity="0.8"/>
+                    <TextBlock Text="{Binding Status}" FontSize="14" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                    <TextBlock Text="{Binding LastReport}" FontSize="12" Opacity="0.5" TextWrapping="Wrap" FontFamily="Consolas"/>
+                </StackPanel>
+            </ui:Card>
+        </StackPanel>
+    </Grid>
+</Page>

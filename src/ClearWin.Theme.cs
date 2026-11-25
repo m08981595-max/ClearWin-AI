@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 
@@ -121,7 +121,7 @@ namespace ClearWin
 
         private static Brush FreezeBrush(Brush b) { if (b.CanFreeze) b.Freeze(); return b; }
         private static LinearGradientBrush FreezeBrush(LinearGradientBrush b) { if (b.CanFreeze) b.Freeze(); return b; }
-        private static DropShadowEffect FreezeEffect(DropShadowEffect e) { if (e.CanFreeze) e.Freeze(); return e; }
+        private static DropShadowEffect FreezeEffect(DropShadowEffect e) { if (e != null && e.CanFreeze) e.Freeze(); return e; }
 
         public static LinearGradientBrush AccentGradient = FreezeBrush(new LinearGradientBrush
         {
@@ -144,14 +144,9 @@ namespace ClearWin
             GradientStops = { new GradientStop(Color.FromArgb(120, 170, 210, 245), 0), new GradientStop(Color.FromArgb(95, 140, 185, 235), 1) }
         });
 
-        public static DropShadowEffect CardShadow = FreezeEffect(new DropShadowEffect
-        {
-            Color = Color.FromRgb(139, 92, 246), BlurRadius = 24, ShadowDepth = 0, Opacity = 0.24
-        });
-        public static DropShadowEffect GlowShadow = FreezeEffect(new DropShadowEffect
-        {
-            Color = Color.FromRgb(139, 92, 246), BlurRadius = 32, ShadowDepth = 0, Opacity = 0.32
-        });
+        // Light mode: no CPU-rendered shadows; depth comes from DWM/Mica.
+        public static DropShadowEffect CardShadow = null;
+        public static DropShadowEffect GlowShadow = null;
 
         // === Modern nav (sidebar) ===
         public static LinearGradientBrush NavActiveGradient = FreezeBrush(new LinearGradientBrush

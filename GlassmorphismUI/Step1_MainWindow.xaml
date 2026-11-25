@@ -23,10 +23,7 @@
             BorderBrush="#40FFFFFF"
             BorderThickness="1">
         
-        <!-- Blur Effect (Simulating Acrylic/Mica) -->
-        <Border.Effect>
-            <BlurEffect Radius="50" KernelType="Gaussian"/>
-        </Border.Effect>
+        <!-- Native DWM Mica/Acrylic backdrop replaces CPU-rendered effects. -->
 
         <!-- Main Layout Grid: Sidebar + Content -->
         <Grid>

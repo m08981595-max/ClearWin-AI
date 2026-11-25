@@ -1,0 +1,25 @@
+<Page xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+      Title="Smart Agent" Foreground="White">
+    <Grid Margin="24">
+        <StackPanel>
+            <TextBlock Text="Smart Agent Neural Core" FontSize="28" FontWeight="Bold" Margin="0,0,0,8"/>
+            <TextBlock Text="Causal Neural Network is frozen in Inference Mode for maximum stability." Opacity="0.6" Margin="0,0,0,24"/>
+
+            <ui:CardAction Margin="0,0,0,12" Background="#11FFFFFF" BorderBrush="#22FFFFFF" Icon="{ui:SymbolIcon ShieldCheckmark24}">
+                <StackPanel>
+                    <TextBlock Text="Neural Trust Level" FontWeight="SemiBold"/>
+                    <TextBlock Text="Audited weights perfectly match the architecture." Opacity="0.6" FontSize="12"/>
+                </StackPanel>
+            </ui:CardAction>
+
+            <ui:CardAction Background="#11FFFFFF" BorderBrush="#22FFFFFF" Icon="{ui:SymbolIcon Server24}">
+                <StackPanel>
+                    <TextBlock Text="Rule-Based Overrides" FontWeight="SemiBold"/>
+                    <TextBlock Text="Critical Windows services are handled via safe Sc.exe stops." Opacity="0.6" FontSize="12"/>
+                </StackPanel>
+            </ui:CardAction>
+        </StackPanel>
+    </Grid>
+</Page>

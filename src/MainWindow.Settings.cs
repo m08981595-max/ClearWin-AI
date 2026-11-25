@@ -200,8 +200,8 @@ namespace ClearWin
                 int cIdx = ci;
                 var dot = new Ellipse { Width = 32, Height = 32, Fill = new SolidColorBrush(colorOpts[ci]), Margin = new Thickness(3), Cursor = Cursors.Hand, StrokeThickness = 2.5 };
                 dot.Stroke = _accentColor == colorOpts[ci] ? new SolidColorBrush(Colors.White) : new SolidColorBrush(Colors.Transparent);
-                dot.Effect = _accentColor == colorOpts[ci] ? new DropShadowEffect { Color = colorOpts[ci], BlurRadius = 12, ShadowDepth = 0, Opacity = 0.5 } : null;
-                dot.MouseDown += (s4, e4) => { _accentColor = colorOpts[cIdx]; foreach (var child in colorGrid.Children) { var e = child as Ellipse; if (e != null) { e.Stroke = new SolidColorBrush(Colors.Transparent); e.Effect = null; } } dot.Stroke = new SolidColorBrush(Colors.White); dot.Effect = new DropShadowEffect { Color = colorOpts[cIdx], BlurRadius = 12, ShadowDepth = 0, Opacity = 0.5 }; SaveColorSetting(); RebuildUI(); };
+                dot.Effect = null;
+                dot.MouseDown += (s4, e4) => { _accentColor = colorOpts[cIdx]; foreach (var child in colorGrid.Children) { var e = child as Ellipse; if (e != null) { e.Stroke = new SolidColorBrush(Colors.Transparent); e.Effect = null; } } dot.Stroke = new SolidColorBrush(Colors.White); dot.Effect = null; SaveColorSetting(); RebuildUI(); };
                 Grid.SetColumn(dot, ci); colorGrid.Children.Add(dot);
             }
             lookInner.Children.Add(colorGrid);

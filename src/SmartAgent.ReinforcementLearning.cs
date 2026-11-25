@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -306,6 +306,9 @@ namespace ClearWin
         // === NEW: Adaptive Learning Rate ===
         private void AdaptLearningRate(string action)
         {
+            // HYBRID FREEZE: inference mode pins the learning rate at zero so a
+            // late success/failure sample cannot restart weight drift.
+            if (_hybridInferenceFrozen) { _adaptiveLearningRate = 0.0; return; }
             int successCount, failureCount;
             _actionSuccessCount.TryGetValue(action, out successCount);
             _rlFailureCount.TryGetValue(action, out failureCount);
@@ -323,6 +326,8 @@ namespace ClearWin
         // === Target Network soft update ===
         private void UpdateTargetNetworks()
         {
+            // HYBRID FREEZE: target networks must not track drifted weights.
+            if (_hybridInferenceFrozen) return;
             foreach (var kv in _actionValues)
             {
                 RLActionValue target;
@@ -345,6 +350,8 @@ namespace ClearWin
         // === Experience Replay Training ===
         private void ReplayTrainRL()
         {
+            // HYBRID FREEZE: no gradient / TD update may run in inference mode.
+            if (_hybridInferenceFrozen) return;
             int count = _rlReplayBuffer.Count;
             for (int s = 0; s < RL_REPLAY_BATCH; s++)
             {
@@ -369,6 +376,8 @@ namespace ClearWin
         // Q-value decay: pull all Q-values toward neutral (0.5) over time
         public void DecayRLValues()
         {
+            // HYBRID FREEZE: decay is a weight update — disabled in inference mode.
+            if (_hybridInferenceFrozen) return;
             double decayRate = 0.02;
             foreach (var kv in _actionValues)
             {

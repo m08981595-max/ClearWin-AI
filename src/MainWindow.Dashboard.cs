@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Windows;
@@ -104,8 +104,8 @@ namespace ClearWin
                     Grid.SetRow(sp, 1);
                     outer.Children.Add(sp);
                     card.Child = outer;
-                    card.MouseEnter += (se, ee) => { card.RenderTransform = new TranslateTransform(0, -2); card.Effect = new DropShadowEffect { Color = c, BlurRadius = 22, ShadowDepth = 0, Opacity = 0.22 }; };
-                    card.MouseLeave += (se, ee) => { card.RenderTransform = new TranslateTransform(0, 0); card.Effect = new DropShadowEffect { Color = c, BlurRadius = 14, ShadowDepth = 0, Opacity = 0.07 }; };
+                    card.MouseEnter += (se, ee) => { card.RenderTransform = new TranslateTransform(0, -2); card.Effect = null; };
+                    card.MouseLeave += (se, ee) => { card.RenderTransform = new TranslateTransform(0, 0); card.Effect = null; };
                     metricsGrid.Children.Add(card);
                     Grid.SetColumn(card, idx);
                     _dashMetricTxts[idx] = valTxt;
@@ -142,12 +142,12 @@ namespace ClearWin
                     Margin = new Thickness(14, 0, 0, 0),
                     VerticalAlignment = VerticalAlignment.Center,
                     Cursor = Cursors.Hand,
-                    Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.2 }
+                    Effect = null
                 };
                 _woaActivateBtn.Child = MakeText("تفعيل الذكاء الاصطناعي", 11, Colors.White, true);
                 _woaActivateBtn.MouseDown += (s, e) => ActivateLocalModel();
-                _woaActivateBtn.MouseEnter += (s, e) => { _woaActivateBtn.Background = new SolidColorBrush(Color.FromArgb(55, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B)); _woaActivateBtn.Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 18, ShadowDepth = 0, Opacity = 0.35 }; };
-                _woaActivateBtn.MouseLeave += (s, e) => { _woaActivateBtn.Background = new SolidColorBrush(Color.FromArgb(28, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B)); _woaActivateBtn.Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 12, ShadowDepth = 0, Opacity = 0.2 }; };
+                _woaActivateBtn.MouseEnter += (s, e) => { _woaActivateBtn.Background = new SolidColorBrush(Color.FromArgb(55, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B)); _woaActivateBtn.Effect = null; };
+                _woaActivateBtn.MouseLeave += (s, e) => { _woaActivateBtn.Background = new SolidColorBrush(Color.FromArgb(28, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B)); _woaActivateBtn.Effect = null; };
                 woaHdr.Children.Add(_woaActivateBtn);
                 woaPanel.Children.Add(woaHdr);
 

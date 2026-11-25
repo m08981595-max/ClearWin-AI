@@ -352,7 +352,7 @@ namespace ClearWin
             {
                 var hRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 6, 0, 0) };
                 _healthDots[hi] = new Border { Width = 8, Height = 8, CornerRadius = new CornerRadius(4), Background = new SolidColorBrush(Theme.Green), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center,
-                    Effect = new DropShadowEffect { Color = Theme.Green, BlurRadius = 4, ShadowDepth = 0, Opacity = 0.4 } };
+                    Effect = null };
                 hRow.Children.Add(_healthDots[hi]);
                 _healthLabels[hi] = MakeText(healthNames[hi], 11, Theme.TextSecondary, false);
                 hRow.Children.Add(_healthLabels[hi]);
@@ -372,7 +372,7 @@ namespace ClearWin
             DockPanel.SetDock(_statusTxt, Dock.Right); statusDock.Children.Add(_statusTxt);
             var sysProtRow = new StackPanel { Orientation = Orientation.Horizontal };
             _sysProtDot = new Border { Width = 8, Height = 8, CornerRadius = new CornerRadius(4), Background = new SolidColorBrush(Theme.Green), Margin = new Thickness(0, 0, 8, 0), VerticalAlignment = VerticalAlignment.Center,
-                Effect = new DropShadowEffect { Color = Theme.Green, BlurRadius = 6, ShadowDepth = 0, Opacity = 0.5 } };
+                Effect = null };
             sysProtRow.Children.Add(_sysProtDot);
             _sysProtTxt = MakeText("جارٍ الفحص...", 11, Theme.TextMuted, true);
             sysProtRow.Children.Add(_sysProtTxt);
@@ -467,7 +467,7 @@ namespace ClearWin
             }
             inner.Children.Add(checkList);
 
-            var optBtn = new Border { Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop(Theme.Accent, 0), new GradientStop(Theme.Purple, 1) } }, CornerRadius = new CornerRadius(12), Padding = new Thickness(24, 16, 24, 16), Width = 280, HorizontalAlignment = HorizontalAlignment.Left, Cursor = Cursors.Hand, BorderBrush = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(Color.FromArgb(80, 47, 139, 255), 0), new GradientStop(Color.FromArgb(60, 139, 92, 246), 1) } }, BorderThickness = new Thickness(1), Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 20, ShadowDepth = 0, Opacity = 0.35 } };
+            var optBtn = new Border { Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop(Theme.Accent, 0), new GradientStop(Theme.Purple, 1) } }, CornerRadius = new CornerRadius(12), Padding = new Thickness(24, 16, 24, 16), Width = 280, HorizontalAlignment = HorizontalAlignment.Left, Cursor = Cursors.Hand, BorderBrush = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(Color.FromArgb(80, 47, 139, 255), 0), new GradientStop(Color.FromArgb(60, 139, 92, 246), 1) } }, BorderThickness = new Thickness(1), Effect = null };
             var ot = MakeText("تشغيل التحسين الكامل", 15, Colors.White, true); ot.HorizontalAlignment = HorizontalAlignment.Center; optBtn.Child = ot;
             optBtn.MouseDown += (s2, e2) => RunAllOptimizations();
             inner.Children.Add(optBtn);
@@ -974,7 +974,7 @@ namespace ClearWin
             fpsCard.Child = fpsInner; stack.Children.Add(fpsCard);
 
             // One-Click Optimize button
-            var optBtn = new Border { Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop(Theme.Accent, 0), new GradientStop(Theme.Purple, 1) } }, CornerRadius = new CornerRadius(14), Padding = new Thickness(24, 16, 24, 16), Margin = new Thickness(0, 0, 0, 16), Cursor = Cursors.Hand, HorizontalAlignment = HorizontalAlignment.Stretch, BorderBrush = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(Color.FromArgb(80, 47, 139, 255), 0), new GradientStop(Color.FromArgb(60, 139, 92, 246), 1) } }, BorderThickness = new Thickness(1), Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 24, ShadowDepth = 0, Opacity = 0.35 } };
+            var optBtn = new Border { Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 1), GradientStops = { new GradientStop(Theme.Accent, 0), new GradientStop(Theme.Purple, 1) } }, CornerRadius = new CornerRadius(14), Padding = new Thickness(24, 16, 24, 16), Margin = new Thickness(0, 0, 0, 16), Cursor = Cursors.Hand, HorizontalAlignment = HorizontalAlignment.Stretch, BorderBrush = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(Color.FromArgb(80, 47, 139, 255), 0), new GradientStop(Color.FromArgb(60, 139, 92, 246), 1) } }, BorderThickness = new Thickness(1), Effect = null };
             var optBtnStack = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Center };
             optBtnStack.Children.Add(MakeText("\u2728 ", 16, Colors.White, false));
             optBtnStack.Children.Add(MakeText("تحسين سريع — كل شيء", 15, Colors.White, true));
@@ -2513,7 +2513,7 @@ namespace ClearWin
             var tempBarOuter = new Border { Height = 10, CornerRadius = new CornerRadius(5), Background = new SolidColorBrush(Theme.SubCard), Margin = new Thickness(0, 12, 0, 4) };
             double tempPercent = Math.Min(100, cpuTemp);
             Color tempBarColor = cpuTemp > 80 ? Theme.Error : cpuTemp > 65 ? Theme.Warning : Theme.Green;
-            _hsTempBar = new Border { Width = tempPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(tempBarColor, 0), new GradientStop(Color.FromArgb(180, tempBarColor.R, tempBarColor.G, tempBarColor.B), 1) } }, Effect = new DropShadowEffect { Color = tempBarColor, BlurRadius = 8, ShadowDepth = 0, Opacity = 0.4 } };
+            _hsTempBar = new Border { Width = tempPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(tempBarColor, 0), new GradientStop(Color.FromArgb(180, tempBarColor.R, tempBarColor.G, tempBarColor.B), 1) } }, Effect = null };
             tempBarOuter.Child = _hsTempBar; thermalInner.Children.Add(tempBarOuter);
             thermalInner.Children.Add(MakeText(string.Format("الحد الأقصى: 80°C — الحالة: {0}", thermalOk ? "آمن" : "محدود"), 11, Theme.TextMuted, false));
             thermalCard.Child = thermalInner; panel.Children.Add(thermalCard);
@@ -2539,7 +2539,7 @@ namespace ClearWin
                 // Battery progress bar
                 var batBarOuter = new Border { Height = 10, CornerRadius = new CornerRadius(5), Background = new SolidColorBrush(Theme.SubCard), Margin = new Thickness(0, 12, 0, 4) };
                 Color batBarColor = _agent.BatteryPercent > 50 ? Theme.Green : _agent.BatteryPercent > 20 ? Theme.Warning : Theme.Error;
-                _hsBatBar = new Border { Width = _agent.BatteryPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new SolidColorBrush(batBarColor), Effect = new DropShadowEffect { Color = batBarColor, BlurRadius = 8, ShadowDepth = 0, Opacity = 0.4 } };
+                _hsBatBar = new Border { Width = _agent.BatteryPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new SolidColorBrush(batBarColor), Effect = null };
                 batBarOuter.Child = _hsBatBar; batteryInner.Children.Add(batBarOuter);
             }
             batteryCard.Child = batteryInner; panel.Children.Add(batteryCard);
@@ -2554,7 +2554,7 @@ namespace ClearWin
             _hsDiskStatus = MakeText(_agent.DiskHealthStatus, 13, Theme.TextSecondary, false);
             diskInner.Children.Add(_hsDiskStatus);
             var diskBarOuter = new Border { Height = 10, CornerRadius = new CornerRadius(5), Background = new SolidColorBrush(Theme.SubCard), Margin = new Thickness(0, 12, 0, 4) };
-            _hsDiskBar = new Border { Width = _agent.DiskHealthPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(diskColor, 0), new GradientStop(Theme.Purple, 1) } }, Effect = new DropShadowEffect { Color = diskColor, BlurRadius = 8, ShadowDepth = 0, Opacity = 0.4 } };
+            _hsDiskBar = new Border { Width = _agent.DiskHealthPercent * 2.2, Height = 10, CornerRadius = new CornerRadius(5), HorizontalAlignment = HorizontalAlignment.Left, Background = new LinearGradientBrush { StartPoint = new Point(0, 0), EndPoint = new Point(1, 0), GradientStops = { new GradientStop(diskColor, 0), new GradientStop(Theme.Purple, 1) } }, Effect = null };
             diskBarOuter.Child = _hsDiskBar; diskInner.Children.Add(diskBarOuter);
             diskCard.Child = diskInner; panel.Children.Add(diskCard);
 

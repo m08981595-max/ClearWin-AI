@@ -1121,6 +1121,9 @@ namespace ClearWin
             InitializeSmartScheduling();
             InitializePerformanceComparison();
             InitializeUserBehaviorLearning();
+            // Hybrid layer: audit the audited baseline once at startup and freeze
+            // learning. If the file is absent/corrupt the agent stays rules-only.
+            try { LoadAndAuditWeights(); } catch (Exception ex) { LogError("Ctor.HybridAudit", ex); }
             // Tweak Knowledge Base
             try
             {

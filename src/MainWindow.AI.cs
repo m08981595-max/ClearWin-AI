@@ -50,12 +50,7 @@ namespace ClearWin
             brainGrad.GradientStops.Add(new GradientStop(Theme.Blue, 0));
             brainGrad.GradientStops.Add(new GradientStop(Theme.Accent, 1));
             brainGlow.Background = brainGrad;
-            var brainGlowFx = new DropShadowEffect();
-            brainGlowFx.Color = Theme.Accent;
-            brainGlowFx.BlurRadius = 24;
-            brainGlowFx.ShadowDepth = 0;
-            brainGlowFx.Opacity = 0.5;
-            brainGlow.Effect = brainGlowFx;
+            // Light mode: glow comes from the gradient brush, not a CPU effect.
             var brainTxt = UI.Icon("\uE9CE", 24, Colors.White);
             brainTxt.HorizontalAlignment = HorizontalAlignment.Center;
             brainTxt.VerticalAlignment = VerticalAlignment.Center;
@@ -216,12 +211,7 @@ namespace ClearWin
             brainBig.Background = brainBg;
             brainBig.BorderBrush = new SolidColorBrush(Color.FromArgb(60, Theme.Accent.R, Theme.Accent.G, Theme.Accent.B));
             brainBig.BorderThickness = new Thickness(1.5);
-            var brainBigFx = new DropShadowEffect();
-            brainBigFx.Color = Theme.Accent;
-            brainBigFx.BlurRadius = 30;
-            brainBigFx.ShadowDepth = 0;
-            brainBigFx.Opacity = 0.4;
-            brainBig.Effect = brainBigFx;
+            // Light mode: no CPU shadow on the large brain glyph.
             var brainBigIco = UI.Icon("\uE9CE", 44, Theme.Accent);
             brainBigIco.HorizontalAlignment = HorizontalAlignment.Center;
             brainBigIco.VerticalAlignment = VerticalAlignment.Center;
@@ -473,6 +463,9 @@ namespace ClearWin
             }
             monitorCard.Child = monitorGrid;
             leftStack.Children.Add(monitorCard);
+
+            // ===== HYBRID AI: rules + frozen neural net + UI fallback =====
+            AddHybridAiControls(leftStack);
 
             // ===== PHASE 15: AI MONITOR =====
             leftStack.Children.Add(UI.SectionHeader("مراقب الذكاء الاصطناعي", Theme.Purple, "مراقبة سلوك الوكيل واكتشاف الشذوذ"));
@@ -3155,7 +3148,7 @@ namespace ClearWin
                         new GradientStop(Color.FromRgb(168, 85, 247), 1)
                     }
                 },
-                Effect = new DropShadowEffect { Color = Theme.Accent, BlurRadius = 16, ShadowDepth = 0, Opacity = 0.4 },
+                Effect = null,
                 Margin = new Thickness(0, 0, 14, 0)
             };
             var iconTxt = MakeText("\uE9CE", 20, Colors.White, true);
