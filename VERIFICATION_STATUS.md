@@ -6,7 +6,7 @@
 
 > **Evidence policy.** Every statement below is tagged with how it was obtained:
 > `SOURCE-CONFIRMED` (read from code/config), `MEASURED` (command executed in this review), or `UNVERIFIED` (not re-run here).
-> **No independent verification was performed in this review.** No build, installer, runtime test, performance benchmark or visual UI check was executed. Nothing in this file should be cited as a third-party audit.
+> **No independent verification was performed in this review.** A Release build was executed on 2026-11-25 and is recorded below; no installer run, runtime test, performance benchmark or visual UI check was executed. Nothing in this file should be cited as a third-party audit.
 
 ---
 
@@ -29,8 +29,8 @@ The Hybrid SmartAgent architecture is present in source and committed at `ecfef0
 
 - Native WPF-UI 4.0.3 Mica backdrop is implemented in `src/MainWindow.NativeUI.cs` via DWM / `WindowBackdropType.Mica`.
 - XAML views and ViewModels are present and committed: `Views/AiSettingsPage.xaml(.cs)`, `Views/GameBoostPage.xaml(.cs)`, `Views/SettingsPage.xaml(.cs)`, `src/ViewModels/GameBoostViewModel.cs`, plus `src/MainWindow.HybridAI.cs` code-behind.
-- **Build blocker:** the repository has **no `.sln` and no `.csproj`**. `_ClearWin_Engine/build.ps1` calls Roslyn `csc.exe` directly and contains **no MSBuild / WPF XAML→BAML compilation step** (no `PresentationBuildTasks`, no WPF SDK targets). Therefore the XAML views are **not compiled or linked into MSIL/BAML by the current build**; the shipped executable still relies on code-behind WPF UI.
-- Required next step: introduce an MSBuild `.csproj` with `Microsoft.NET.Sdk.WindowsDesktop` / `UseWPF=true` so the XAML views are actually linked. Until then UI status is **source-complete, build-unlinked**. No post-change visual validation was performed (`UNVERIFIED`).
+- **Build system (updated 2026-11-25, after this report was committed):** an SDK-style `ClearWin.csproj` now exists at `_ClearWin_Engine/ClearWin.csproj` with `net472`, `UseWPF=true`, `Views\**\*.xaml` Page items, WPF-UI 4.0.3 and WebView2 1.0.4191.47. The three Views XAML files now carry `x:Class`, and `src/MainWindow.NativeUI.cs` instantiates compiled pages instead of using `XamlReader.Load`.
+- **Build verification (`MEASURED`, 2026-11-25):** .NET SDK **8.0.428** was installed with winget. `dotnet build ClearWin.csproj -c Release` **succeeded** (exit 0, 1m00s, **0 errors / 1 warning** — `CS0169 UI._cachedGlassShadow` unused). Output: `bin/Release/net472/ClearWin.exe` (1,804,800 bytes). The WPF markup compiler generated `Views/{GameBoostPage,AiSettingsPage,SettingsPage}.baml` plus matching `.g.cs` files containing `InitializeComponent()`, confirming the XAML views are now compiled (BAML) instead of parsed at runtime. `build.ps1` remains only as a legacy fallback.
 
 ---
 
@@ -74,7 +74,7 @@ Positive controls that **do** exist in code (`SOURCE-CONFIRMED`, not a substitut
 
 | # | Action | Why |
 |---|---|---|
-| P0 | Add MSBuild `.csproj` with WPF targets and link the XAML views | UI source exists but is not compiled into the shipped binary |
+| P1 | Remove the `CS0169` warning and decide whether to retire `build.ps1` | Release build is green; this is cleanup, not a blocker |
 | P0 | Authenticode-sign `ClearWin.exe`, `ClearWin.AdminHelper.exe`, installers | SmartScreen / Defender trust |
 | P0 | Inject a trained `ml_nn_v2.dat` into fresh install packages | Cold-start neural behaviour is unvalidated |
 | P1 | Re-run `build-tests.ps1` and record the actual pass/fail count | No current test evidence |

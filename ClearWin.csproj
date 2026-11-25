@@ -1,0 +1,60 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net472</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>ClearWin</AssemblyName>
+    <RootNamespace>ClearWin</RootNamespace>
+    <ApplicationManifest>src\app.manifest</ApplicationManifest>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <StartupObject>ClearWin.Program</StartupObject>
+    <LangVersion>7.3</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <EnableDefaultPageItems>false</EnableDefaultPageItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3" PrivateAssets="all" />
+    <PackageReference Include="WPF-UI" Version="4.0.3" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4191.47" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Management" />
+  </ItemGroup>
+
+  <!-- Views are the only XAML pages to markup-compile. The draft under
+       GlassmorphismUI is a design sketch and must not be compiled. -->
+  <ItemGroup>
+    <Page Include="Views\**\*.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <!-- Source is auto-discovered; only test/helper programs and non-source
+       directories are removed. -->
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <Compile Remove="obj\**" />
+    <Compile Remove="tools\**" />
+    <Compile Remove="release\**" />
+    <Compile Remove="backups\**" />
+    <Compile Remove="graphify-out\**" />
+    <Compile Remove="GlassmorphismUI\**" />
+    <Compile Remove="src\TestEntry.cs" />
+    <Compile Remove="src\UnitTests.cs" />
+    <Compile Remove="src\AIDecisionDemo.cs" />
+    <Compile Remove="src\NeuralNetworkTest.cs" />
+    <Compile Remove="src\OptimizationAITest.cs" />
+    <Compile Remove="src\AdminHelper\**" />
+    <Compile Remove="src\WebInstaller\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Resources\WebUI\**\*;Resources\tweaks\**\*;Resources\AI\**\*;Resources\app.ico" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
